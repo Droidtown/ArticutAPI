@@ -2,7 +2,6 @@
 
 ### [Articut API Website](https://api.droidtown.co/)
 ### [Document](https://api.droidtown.co/document/)
-
 ### [![Articut Demo](https://img.youtube.com/vi/AnvdKmVLlcA/0.jpg)](https://youtu.be/AnvdKmVLlcA "Articut Demo")
 
 ----------------------
@@ -78,6 +77,7 @@ result = articut.parse(inputSTR, level="lv1")
 print(result)
 ```
 ### 回傳結果 lv1 
+極致斷詞，適合 NLU 或機器自動翻譯使用。呈現結果將句子中的每個元素都儘量細分出來。
 ```
 {'exec_time': 0.04814624786376953,
  'level': 'lv1',
@@ -89,7 +89,8 @@ print(result)
  'word_count_balance': 9997,...}
 ```
 
-### 回傳結果 lv2
+### 回傳結果 lv2 
+詞組斷詞，適合文本分析、特徵值計算、關鍵字擷取…等應用。呈現結果將以具意義的最小單位呈現。
 ```
 {'exec_time': 0.04195523262023926,
  'level': 'lv2',
