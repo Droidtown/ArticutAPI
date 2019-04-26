@@ -3,8 +3,12 @@
 ### [Articut API Website](https://api.droidtown.co/)
 ### [Document](https://api.droidtown.co/document/)
 
+### [![Articut Demo](https://img.youtube.com/vi/AnvdKmVLlcA/0.jpg)](https://youtu.be/AnvdKmVLlcA "Articut Demo")
+
+----------------------
+
 ## 使用方法
-### Articut CWS
+### Articut CWS (Chinese word segmentation)
 ```
 from ArticutAPI import Articut
 
@@ -21,11 +25,11 @@ articut.parse()
  'level': 'lv2',
  'msg': 'Success!',
  
- 'result_pos': ['<MODAL>會</MODAL><ACTION_lightVerb>被</ACTION_lightVerb><ENTITY_nouny>大家</ENTITY_nouny><ACTION_verb>盯</ACTION_verb><RANGE_locality>上</RANGE_locality>',
+ 'result_pos': ['<MODAL>會</MODAL><ACTION_lightVerb>被</ACTION_lightVerb><ENTITY_nouny>大家</ENTITY_nouny><ACTION_verb>盯上</ACTION_verb>',
                 '，',
                 '<MODAL>才</MODAL><ACTION_verb>證明</ACTION_verb><ENTITY_pronoun>你</ENTITY_pronoun><ACTION_verb>有</ACTION_verb><ENTITY_noun>實力</ENTITY_noun>',
                 '。'],
- 'result_segmentation': '會/被/大家/盯/上/，/才/證明/你/有/實力/。/',
+ 'result_segmentation': '會/被/大家/盯上/，/才/證明/你/有/實力/。/',
  'status': True,
  'version': 'v118',
  'word_count_balance': 9985,
@@ -56,14 +60,11 @@ articut.versions()
                'version': 'v118'},
               {'level': ['lv1', 'lv2'],
                'release_date': '2019-04-24',
-               'version': 'v117'},
-              {'level': ['lv1', 'lv2'],
-               'release_date': '2019-04-23',
-               'version': 'v116'},...],
- 'product': 'https://api.droidtown.co/product/',
- 'document': 'https://api.droidtown.co/document/'
+               'version': 'v117'},...
 }
 ```
+
+----------------------
 
 ## 進階用法
 ### Articut Level (預設: lv2)
@@ -85,9 +86,7 @@ print(result)
  'result_segmentation': '小/紅/帽/',
  'status': True,
  'version': 'v118',
- 'word_count_balance': 9997,
- 'product': 'https://api.droidtown.co/product/',
- 'document': 'https://api.droidtown.co/document/'}
+ 'word_count_balance': 9997,...}
 ```
 
 ### 回傳結果 lv2
@@ -99,7 +98,5 @@ print(result)
  'result_segmentation': '小紅帽/',
  'status': True,
  'version': 'v118',
- 'word_count_balance': 9997,
- 'product': 'https://api.droidtown.co/product/',
- 'document': 'https://api.droidtown.co/document/'}
+ 'word_count_balance': 9997,...}
 ```
