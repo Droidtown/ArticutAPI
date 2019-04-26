@@ -15,7 +15,11 @@ class Articut:
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level=self.level):
+    def parse(self, inputSTR, level=""):
+        if level=="":
+            level = self.level
+        else:
+            pass
         url = "{}/Articut/API/".format(self.url)
         payload = {"input_str": inputSTR,
                    "username": self.username,
