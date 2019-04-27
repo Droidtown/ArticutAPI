@@ -37,7 +37,7 @@ articut.parse()
 }
 ```
 
-### 取得 Articut 版本
+### 取得 Articut 版本列表
 ```
 from ArticutAPI import Articut
 
