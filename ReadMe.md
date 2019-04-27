@@ -66,7 +66,7 @@ articut.versions()
 ----------------------
 
 ## 進階用法
-### Articut Level (預設: lv2)
+### Articut Level :斷詞的深度。數字愈小，切得愈細 (預設: lv2)。
 ```
 from pprint import pprint
 
