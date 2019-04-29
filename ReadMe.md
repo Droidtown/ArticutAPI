@@ -16,7 +16,7 @@ inputSTR = "會被大家盯上，才證明你有實力。"
 articut = Articut()
 
 result = articut.parse(inputSTR)
-print("articut.parse()\n", result)
+pprint("articut.parse()\n", result)
 ```
 ### 回傳結果
 ```
@@ -45,7 +45,7 @@ from ArticutAPI import Articut
 articut = Articut()
 
 result = articut.versions()
-print("articut.versions()\n", result)
+pprint("articut.versions()\n", result)
 ```
 ### 回傳結果
 ```
@@ -75,7 +75,7 @@ inputSTR = "小紅帽"
 articut = Articut()
 
 result = articut.parse(inputSTR, level="lv1")
-print(result)
+pprint(result)
 ```
 ### 回傳結果 lv1 
 極致斷詞，適合 NLU 或機器自動翻譯使用。呈現結果將句子中的每個元素都儘量細分出來。
