@@ -1,32 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+import json
+import os
 import requests
 
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
+        self.url = "https://api.droidtown.co"
         self.username = username
         self.apikey = apikey
         self.version = version
         self.level = level
 
-        self.url = "https://api.droidtown.co"
+        self.file = None
+        self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level=""):
+    def parse(self, inputSTR, level="", file=None):
         if level=="":
             level = self.level
-        else:
-            pass
+
         url = "{}/Articut/API/".format(self.url)
         payload = {"input_str": inputSTR,
                    "username": self.username,
                    "api_key": self.apikey,
                    "version": self.version,
                    "level": level}
-        result = requests.post(url, data=payload)
+
+        if file:
+            try:
+                if os.path.getsize(file) <= self.fileSizeLimit:
+                    userDefinedFile = json.load(open(file, "r", encoding="utf8"))
+                    if type(userDefinedFile) == list:
+                        payload["file"] = userDefinedFile
+                else:
+                    print("Maximum file size limit is 10 MB.")
+            except Exception as e:
+                print("User Defined List File Loading Error.")
+                print(str(e))
+
+        result = requests.post(url, json=payload)
         if result.status_code == 200:
             result = result.json()
             result["product"] = "{}/product/".format(self.url)
@@ -55,4 +71,3 @@ if __name__ == "__main__":
 
     result = articut.versions()
     pprint(result)
-
