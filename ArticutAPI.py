@@ -13,13 +13,13 @@ class Articut:
         self.version = version
         self.level = level
 
-        self.file = None
+        self.userDefinedDictFILE = None
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level="", file=None):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None):
         if level=="":
             level = self.level
 
@@ -30,10 +30,10 @@ class Articut:
                    "version": self.version,
                    "level": level}
 
-        if file:
+        if userDefinedDictFILE:
             try:
-                if os.path.getsize(file) <= self.fileSizeLimit:
-                    userDefinedFile = json.load(open(file, "r", encoding="utf8"))
+                if os.path.getsize(userDefinedDictFILE) <= self.fileSizeLimit:
+                    userDefinedFile = json.load(open(userDefinedDictFILE, "r", encoding="utf8"))
                     if type(userDefinedFile) == dict:
                         payload["file"] = userDefinedFile
                     else:
