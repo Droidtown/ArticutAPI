@@ -70,7 +70,7 @@ if __name__ == "__main__":
     inputSTR = "我要重修計概"
     articut = Articut()
 
-    result = articut.parse(inputSTR, "./UserDefinedFile.json")
+    result = articut.parse(inputSTR, userDefinedDictFILE="./UserDefinedFile.json")
     pprint(result)
 
     result = articut.versions()
