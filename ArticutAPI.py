@@ -34,13 +34,17 @@ class Articut:
             try:
                 if os.path.getsize(file) <= self.fileSizeLimit:
                     userDefinedFile = json.load(open(file, "r", encoding="utf8"))
-                    if type(userDefinedFile) == list:
+                    if type(userDefinedFile) == dict:
                         payload["file"] = userDefinedFile
+                    else:
+                        print("User Defined File must be dict type.")
+                        return {"status": False, "msg": "UserDefinedDICT Parsing ERROR. Please check your the format and encoding."}
                 else:
                     print("Maximum file size limit is 10 MB.")
             except Exception as e:
-                print("User Defined List File Loading Error.")
+                print("User Defined File Loading Error.")
                 print(str(e))
+                return {"status": False, "msg": "UserDefinedDICT Parsing ERROR. Please check your the format and encoding."}
 
         result = requests.post(url, json=payload)
         if result.status_code == 200:
@@ -63,10 +67,10 @@ class Articut:
 if __name__ == "__main__":
     from pprint import pprint
 
-    inputSTR = "努力才能成功"
+    inputSTR = "我要重修計概"
     articut = Articut()
 
-    result = articut.parse(inputSTR)
+    result = articut.parse(inputSTR, "./UserDefinedFile.json")
     pprint(result)
 
     result = articut.versions()
