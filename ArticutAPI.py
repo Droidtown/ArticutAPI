@@ -22,6 +22,8 @@ class Articut:
         self.userDefinedDictFILE = None
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
+        self.verbPPat = "(?<=<VerbP>)[^<]*?(?=.</VerbP>)"
+
         self.verbPat = "(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)"
         self.nounPat = "(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)"
         self.modifierPat = "(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)"
@@ -78,11 +80,31 @@ class Articut:
         else:
             return None
         contentWordLIST = []
-        contentPat = "|".join([self.verbPat, self.nounPat, self.modifierPat])
+        contentPat = "|".join([self.verbPat, self.nounPat, self.modifierPat, self.verbPPat])
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in reversed(list(re.finditer(contentPat, p)))])
         return contentWordLIST
+
+    def getVerbStemLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 verb。此處指的是 ACTION_verb 標記的動詞詞彙。
+        每個句子內的 verb word 為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        verbLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                if "VerbP" in p:
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPPat, p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPat, p)))])
+                else:
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPat, p)))])
+        verbLIST = [v for v in verbLIST if v]
+        return verbLIST
 
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
@@ -98,16 +120,21 @@ class Articut:
 if __name__ == "__main__":
     from pprint import pprint
 
-    inputSTR = "我的計劃是讓你計劃人類補完計劃。"
+    #inputSTR = "我的計劃是讓你計劃人類補完計劃。"
+    inputSTR = "你計劃過人類補完計劃"
     articut = Articut()
 
     #取得斷詞結果
-    result = articut.parse(inputSTR, level="lv1")
+    result = articut.parse(inputSTR, level="lv2")
     pprint(result)
 
     #列出所有的 content word.
     contentWordLIST = articut.getContentWordLIST(result)
     pprint(contentWordLIST)
+
+    #列出所有的 verb word. (動詞)
+    verbStemLIST = articut.getVerbStemLIST(result)
+    pprint(verbStemLIST)
 
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
