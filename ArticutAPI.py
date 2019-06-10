@@ -9,7 +9,7 @@ import requests
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
         '''
-        username = "你註冊時的 email。若留空，則會使用每日 10 萬字的公用帳號。
+        username = "你註冊時的 email。若留空，則會使用每日 1 萬字的公用帳號。
         apikey = "您完成付費後取得的 apikey 值。若留空，則會使用每日 10 萬字的公用帳號。
         '''
 
