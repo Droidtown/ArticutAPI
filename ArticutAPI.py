@@ -9,8 +9,8 @@ import requests
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
         '''
-        username = "你註冊時的 email。若留空，則會使用每日 1 萬字的公用帳號。
-        apikey = "您完成付費後取得的 apikey 值。若留空，則會使用每日 10 萬字的公用帳號。
+        username = ""    # 你註冊時的 email。若留空，則會使用每日 1 萬字的公用帳號。
+        apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每日 10 萬字的公用帳號。
         '''
 
         self.url = "https://api.droidtown.co"
@@ -69,7 +69,6 @@ class Articut:
             result["document"] = "{}/document/".format(self.url)
         return result
 
-
     def getContentWordLIST(self, parseResultDICT):
         '''
         取出斷詞結果中的 content word。
@@ -106,6 +105,38 @@ class Articut:
         verbLIST = [v for v in verbLIST if v]
         return verbLIST
 
+    def getNounStemLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 noun。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
+        每個句子內的 noun word 為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        nounLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in reversed(list(re.finditer(self.nounPat, p)))])
+        nounLIST = [n for n in nounLIST if n]
+        return nounLIST
+
+    def getLocationStemLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 LOCATION。此處指的是 LOCATION 標記的地名詞彙，可能是實體地方名稱或在句子中表示地方的詞彙。
+        每個句子內的 location word 為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        locationLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(re.finditer(self.locationPat, p)))])
+        locationLIST = [l for l in locationLIST if l]
+        return locationLIST
+
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
@@ -121,7 +152,7 @@ if __name__ == "__main__":
     from pprint import pprint
 
     #inputSTR = "我的計劃是讓你計劃人類補完計劃。"
-    inputSTR = "你計劃過人類補完計劃"
+    inputSTR = "你計劃過地球人類補完計劃"
     articut = Articut()
 
     #取得斷詞結果
@@ -136,6 +167,13 @@ if __name__ == "__main__":
     verbStemLIST = articut.getVerbStemLIST(result)
     pprint(verbStemLIST)
 
+    #列出所有的 noun word. (名詞)
+    nounStemLIST = articut.getNounStemLIST(result)
+    pprint(nounStemLIST)
+
+    #列出所有的 location word. (地方名稱)
+    locationStemLIST = articut.getLocationStemLIST(result)
+    pprint(locationStemLIST)
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
     versions = articut.versions()
