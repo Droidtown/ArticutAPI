@@ -11,16 +11,15 @@
 ### Articut CWS (Chinese word segmentation)
 ```
 from ArticutAPI import Articut
+from pprint import pprint
 
-inputSTR = "會被大家盯上，才證明你有實力。"
 articut = Articut()
-
+inputSTR = "會被大家盯上，才證明你有實力。"
 result = articut.parse(inputSTR)
-pprint("articut.parse()\n", result)
+pprint(result)
 ```
 ### 回傳結果
 ```
-articut.parse()
 {'exec_time': 0.06723856925964355,
  'level': 'lv2',
  'msg': 'Success!',
@@ -38,18 +37,55 @@ articut.parse()
 }
 ```
 
+### 列出斷詞結果所有詞性標記的內容詞 ###
+可以依需求找出「名詞」、「動詞」或是「形容詞」…等詞彙語意本身已經完整的詞彙。
+```
+inputSTR = "你計劃過地球人類補完計劃"
+result = articut.parse(inputSTR, level="lv1")
+pprint(result['result_pos'])
+
+#列出所有的 content word.
+contentWordLIST = articut.getContentWordLIST(result)
+pprint(contentWordLIST)
+
+#列出所有的 verb word. (動詞)
+verbStemLIST = articut.getVerbStemLIST(result)
+pprint(verbStemLIST)
+
+#列出所有的 noun word. (名詞)
+nounStemLIST = articut.getNounStemLIST(result)
+pprint(nounStemLIST)
+
+#列出所有的 location word. (地方名稱)
+locationStemLIST = articut.getLocationStemLIST(result)
+pprint(locationStemLIST)
+```
+
+### 回傳結果 ###
+```
+#result['result_pos']
+['<ENTITY_pronoun>你</ENTITY_pronoun><ACTION_verb>計劃</ACTION_verb><ASPECT>過</ASPECT><LOCATION>地球</LOCATION><ENTITY_oov>人類</ENTITY_oov><ACTION_verb>補完</ACTION_verb><ENTITY_nounHead>計劃</ENTITY_nounHead>']
+
+#列出所有的 content word.
+[[(177, 179, '計劃'), (144, 146, '補完'), (116, 118, '人類'), (47, 49, '計劃')]]
+
+#列出所有的 verb word. (動詞)
+[[(144, 146, '補完'), (47, 49, '計劃')]]
+
+#列出所有的 noun word. (名詞)
+[[(177, 179, '計劃'), (116, 118, '人類')]]
+
+#列出所有的 location word. (地方名稱)
+[[(91, 93, '地球')]]
+```
+
 ### 取得 Articut 版本列表
 ```
-from ArticutAPI import Articut
-
-articut = Articut()
-
 result = articut.versions()
-pprint("articut.versions()\n", result)
+pprint(result)
 ```
 ### 回傳結果
 ```
-articut.versions()
 {'msg': 'Success!',
  'status': True,
  'versions': [{'level': ['lv1', 'lv2'],
@@ -69,11 +105,7 @@ articut.versions()
 ## 進階用法
 ### Articut Level :斷詞的深度。數字愈小，切得愈細 (預設: lv2)。
 ```
-from pprint import pprint
-
 inputSTR = "小紅帽"
-articut = Articut()
-
 result = articut.parse(inputSTR, level="lv1")
 pprint(result)
 ```
@@ -101,4 +133,52 @@ pprint(result)
  'status': True,
  'version': 'v118',
  'word_count_balance': 9997,...}
+```
+
+----------------------
+### UserDefinedDictFile :使用者自定詞典。
+因為 Articut 只處理「語言知識」而不處理「百科知識」。
+我們提供「使用者自定義」詞彙表的功能，使用 Dictionary 格式，請自行編寫。
+
+UserDefinedFile.json
+```
+{"雷姆":["小老婆"],
+ "艾蜜莉亞":["大老婆"],
+ "初音未來": ["初音", "只是個軟體"],
+ "李敏鎬": ["全民歐巴", "歐巴"]}
+```
+
+runArticut.py
+```
+from ArticutAPI import Articut
+from pprint import pprint
+
+articut = Articut()
+userDefined = "./UserDefinedFile.json"
+inputSTR = "我的最愛是小老婆，不是初音未來。"
+
+# 使用自定義詞典
+result = articut.parse(inputSTR, userDefinedDictFILE=userDefined)
+pprint(result)
+
+# 未使用自定義詞典
+result = articut.parse(inputSTR)
+pprint(result)
+```
+
+### 回傳結果
+```
+# 使用自定義詞典
+{'result_pos': ['<ENTITY_pronoun>我</ENTITY_pronoun><FUNC_inner>的</FUNC_inner><ACTION_verb>最愛</ACTION_verb><AUX>是</AUX><UserDefined>小老婆</UserDefined>',
+                '，',
+                '<FUNC_negation>不</FUNC_negation><AUX>是</AUX><UserDefined>初音未來</UserDefined>',
+                '。'],
+ 'result_segmentation': '我/的/最愛/是/小老婆/，/不/是/初音未來/。/',...}
+
+# 未使用自定義詞典
+{'result_pos': ['<ENTITY_pronoun>我</ENTITY_pronoun><FUNC_inner>的</FUNC_inner><ACTION_verb>最愛</ACTION_verb><AUX>是</AUX><ENTITY_nouny>小老婆</ENTITY_nouny>',
+                '，',
+                '<FUNC_negation>不</FUNC_negation><AUX>是</AUX><ENTITY_nouny>初音</ENTITY_nouny><TIME_justtime>未來</TIME_justtime>',
+                '。'],
+ 'result_segmentation': '我/的/最愛/是/小老婆/，/不/是/初音/未來/。/',...}
 ```

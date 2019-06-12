@@ -152,7 +152,7 @@ class Articut:
 if __name__ == "__main__":
     from pprint import pprint
 
-    #inputSTR = "我的計劃是讓你計劃人類補完計劃。"
+    #inputSTR = "我的計劃是讓你計劃人類補完計劃"
     inputSTR = "你計劃過地球人類補完計劃"
     articut = Articut()
 
