@@ -51,7 +51,7 @@ class Articut:
                 if os.path.getsize(userDefinedDictFILE) <= self.fileSizeLimit:
                     userDefinedFile = json.load(open(userDefinedDictFILE, "r", encoding="utf8"))
                     if type(userDefinedFile) == dict:
-                        payload["file"] = userDefinedFile
+                        payload["user_defined_dict_file"] = userDefinedFile
                     else:
                         print("User Defined File must be dict type.")
                         return {"status": False, "msg": "UserDefinedDICT Parsing ERROR. Please check your the format and encoding."}
