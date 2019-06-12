@@ -22,15 +22,15 @@ class Articut:
         self.userDefinedDictFILE = None
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
-        self.verbPPat = "(?<=<VerbP>)[^<]*?(?=.</VerbP>)"
+        self.verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
 
-        self.verbPat = "(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)"
-        self.nounPat = "(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)"
-        self.modifierPat = "(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)"
-        self.funcPat = "(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)"
-        self.personPat = "(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)|(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)"
-        self.locationPat = "(?<=<LOCATION>)[^<]*?(?=</LOCATION>)"
-        self.timePat = "(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)"
+        self.verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
+        self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
+        self.modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
+        self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
+        self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)|(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
+        self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
+        self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
 
     def __str__(self):
         return "Articut API"
@@ -79,10 +79,10 @@ class Articut:
         else:
             return None
         contentWordLIST = []
-        contentPat = "|".join([self.verbPat, self.nounPat, self.modifierPat, self.verbPPat])
+        contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in reversed(list(re.finditer(contentPat, p)))])
+                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in reversed(list(contentPat.finditer(p)))])
         return contentWordLIST
 
     def getVerbStemLIST(self, parseResultDICT):
@@ -95,13 +95,14 @@ class Articut:
         else:
             return None
         verbLIST = []
+
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 if "VerbP" in p:
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPPat, p)))])
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPat, p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPPat.finditer(p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPat.finditer(p)))])
                 else:
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(re.finditer(self.verbPat, p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPat.finditer(p)))])
         verbLIST = [v for v in verbLIST if v]
         return verbLIST
 
@@ -117,7 +118,7 @@ class Articut:
         nounLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in reversed(list(re.finditer(self.nounPat, p)))])
+                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in reversed(list(self.nounPat.finditer(p)))])
         nounLIST = [n for n in nounLIST if n]
         return nounLIST
 
@@ -133,7 +134,7 @@ class Articut:
         locationLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(re.finditer(self.locationPat, p)))])
+                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.locationPat.finditer(p)))])
         locationLIST = [l for l in locationLIST if l]
         return locationLIST
 
