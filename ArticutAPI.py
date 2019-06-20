@@ -20,6 +20,7 @@ class Articut:
         self.level = level
 
         self.userDefinedDictFILE = None
+        self.openDataPlaceAccessBOOL=False
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
         self.verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
@@ -30,21 +31,24 @@ class Articut:
         self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
         self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)|(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
+        self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
+
 
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False):
         if level=="":
             level = self.level
-
+        self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
         url = "{}/Articut/API/".format(self.url)
-        payload = {"input_str": inputSTR,
-                   "username": self.username,
-                   "api_key": self.apikey,
-                   "version": self.version,
-                   "level": level}
+        payload = {"input_str": inputSTR,                         #要做斷詞處理的中文句子。
+                   "username": self.username,                     #使用者帳號 email
+                   "api_key": self.apikey,                        #使用者 api key。若未提供，預設使用每日公用一萬字的額度。
+                   "version": self.version,                       #指定斷詞引擎版本號。預設為最新版 "latest"
+                   "level": level,                                #指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                   "opendata_place":self.openDataPlaceAccessBOOL} #
 
         if userDefinedDictFILE:
             try:
@@ -124,7 +128,7 @@ class Articut:
 
     def getLocationStemLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 LOCATION。此處指的是 LOCATION 標記的地名詞彙，可能是實體地方名稱或在句子中表示地方的詞彙。
+        取出斷詞結果中的 LOCATION。此處指的是 LOCATION 標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
         每個句子內的 location word 為一個 list.
         '''
         if "result_pos" in parseResultDICT:
@@ -137,6 +141,22 @@ class Articut:
                 locationLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.locationPat.finditer(p)))])
         locationLIST = [l for l in locationLIST if l]
         return locationLIST
+
+    def getOpenDataPlaceLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 KNOWLEDGE_place。此處指的是 KNOWLEDGE_place 標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
+        每個句子內的 location word 為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        placeLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                placeLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.placePat.finditer(p)))])
+        placeLIST = [l for l in placeLIST if l]
+        return placeLIST
 
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
@@ -152,30 +172,41 @@ class Articut:
 if __name__ == "__main__":
     from pprint import pprint
 
-    #inputSTR = "我的計劃是讓你計劃人類補完計劃"
     inputSTR = "你計劃過地球人類補完計劃"
+    inputSTR = "阿美族民俗中心以東海岸人數最眾的原住民族群阿美族為主題"
     articut = Articut()
 
     #取得斷詞結果
     result = articut.parse(inputSTR, level="lv2")
     pprint(result)
 
+    #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
+    versions = articut.versions()
+    print("\n##Avaliable Versions:")
+    pprint(versions)
+
     #列出所有的 content word.
     contentWordLIST = articut.getContentWordLIST(result)
+    print("\n##ContentWord:")
     pprint(contentWordLIST)
 
     #列出所有的 verb word. (動詞)
     verbStemLIST = articut.getVerbStemLIST(result)
+    print("\n##Verb:")
     pprint(verbStemLIST)
 
     #列出所有的 noun word. (名詞)
     nounStemLIST = articut.getNounStemLIST(result)
+    print("\n##Noun:")
     pprint(nounStemLIST)
 
     #列出所有的 location word. (地方名稱)
     locationStemLIST = articut.getLocationStemLIST(result)
+    print("\n##Location:")
     pprint(locationStemLIST)
 
-    #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
-    versions = articut.versions()
-    pprint(versions)
+    #允許 Articut 調用字典，列出所有政府開放資料中列為觀光地點名稱的字串。(地點名稱)
+    placeLIST = articut.getOpenDataPlaceLIST(result)
+    print("\n##Place:")
+    pprint(placeLIST)
+
