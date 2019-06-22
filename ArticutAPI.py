@@ -43,12 +43,12 @@ class Articut:
             level = self.level
         self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
         url = "{}/Articut/API/".format(self.url)
-        payload = {"input_str": inputSTR,                         #要做斷詞處理的中文句子。
-                   "username": self.username,                     #使用者帳號 email
-                   "api_key": self.apikey,                        #使用者 api key。若未提供，預設使用每日公用一萬字的額度。
-                   "version": self.version,                       #指定斷詞引擎版本號。預設為最新版 "latest"
-                   "level": level,                                #指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
-                   "opendata_place":self.openDataPlaceAccessBOOL} #
+        payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
+                   "username": self.username,                     #String Type：使用者帳號 email
+                   "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每日公用一萬字的額度。
+                   "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
+                   "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                   "opendata_place":self.openDataPlaceAccessBOOL} #Bool Type：為 True 或 False，表示是否允許 Articut 存取 OpenData 中的地點名稱。
 
         if userDefinedDictFILE:
             try:
@@ -151,6 +151,12 @@ class Articut:
             pass
         else:
             return None
+
+        if self.openDataPlaceAccessBOOL==True:
+            pass
+        else:
+            return None
+
         placeLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
@@ -172,12 +178,12 @@ class Articut:
 if __name__ == "__main__":
     from pprint import pprint
 
-    inputSTR = "你計劃過地球人類補完計劃"
+    #inputSTR = "你計劃過地球人類補完計劃"
     inputSTR = "阿美族民俗中心以東海岸人數最眾的原住民族群阿美族為主題"
     articut = Articut()
 
     #取得斷詞結果
-    result = articut.parse(inputSTR, level="lv2")
+    result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
     pprint(result)
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
