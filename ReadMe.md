@@ -137,7 +137,7 @@ pprint(result)
 
 ----------------------
 ### 進階用法 02 >> UserDefinedDictFile :使用者自定詞典。
-[![Articut UserDefined Demo](http://i3.ytimg.com/vi/fOyyQyVkZ2k/maxresdefault.jpg)](https://youtu.be/fOyyQyVkZ2k "Articut UserDefined Demo")
+[![Articut UserDefined Demo](http://i3.ytimg.com/vi/fOyyQyVkZ2k/hqdefault.jpg)](https://youtu.be/fOyyQyVkZ2k "Articut UserDefined Demo")
 
 因為 Articut 只處理「語言知識」而不處理「百科知識」。
 我們提供「使用者自定義」詞彙表的功能，使用 Dictionary 格式，請自行編寫。
