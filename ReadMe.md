@@ -103,7 +103,7 @@ pprint(result)
 ----------------------
 
 ## 進階用法
-### Articut Level :斷詞的深度。數字愈小，切得愈細 (預設: lv2)。
+### 進階用法01 >> Articut Level :斷詞的深度。數字愈小，切得愈細 (預設: lv2)。
 ```
 inputSTR = "小紅帽"
 result = articut.parse(inputSTR, level="lv1")
@@ -136,7 +136,9 @@ pprint(result)
 ```
 
 ----------------------
-### UserDefinedDictFile :使用者自定詞典。
+### 進階用法 02 >> UserDefinedDictFile :使用者自定詞典。
+[![Articut UserDefined Demo]https://youtu.be/fOyyQyVkZ2k](https://youtu.be/fOyyQyVkZ2k)
+
 因為 Articut 只處理「語言知識」而不處理「百科知識」。
 我們提供「使用者自定義」詞彙表的功能，使用 Dictionary 格式，請自行編寫。
 
@@ -182,3 +184,30 @@ pprint(result)
                 '。'],
  'result_segmentation': '我/的/最愛/是/小老婆/，/不/是/初音/未來/。/',...}
 ```
+----------------------
+### 進階用法 03 - 調用資料觀光資訊資料庫
+政府開放平台中存有「交通部觀光局蒐集各政府機關所發佈空間化觀光資訊」。Articut 可取用其中的資訊，並標記為 \<KNOWLEDGE_place>
+
+**上傳內容 (JSON 格式)**
+
+	{
+		"username": "test@email.com",
+		"api_key": "anapikeyfordocthatdoesnwork@all",
+		"input_str": "花蓮的原野牧場有一間餐廳",
+		"version": "v137",
+		"level": "lv1",
+		"opendata_place": true
+	}
+
+**回傳內容 (JSON 格式)**
+
+	{
+		"exec_time": 0.013453006744384766,
+		"level": "lv1",
+		"msg": "Success!",
+		"result_pos": ["<LOCATION>花蓮</LOCATION><FUNC_inner>的</FUNC_inner><KNOWLEDGE_place>原野牧場</KNOWLEDGE_place><ACTION_verb>有</ACTION_verb><ENTITY_classifier>一間</ENTITY_classifier><ENTITY_noun>餐廳</ENTITY_noun>"],
+		"result_segmentation": "花蓮/的/原野牧場/有/一間/餐廳/",
+		"status": True,
+		"version": "v137",
+		"word_count_balance": 99987
+	}
