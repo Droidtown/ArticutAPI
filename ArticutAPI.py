@@ -126,10 +126,26 @@ class Articut:
         nounLIST = [n for n in nounLIST if n]
         return nounLIST
 
+    def getTimeLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 TIME。
+        每個句子內的 TIME word 列為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        timeLIST = []
+        for t in parseResultDICT["result_pos"]:
+            if len(t) > 1:
+                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.timePat.finditer(t)))])
+        timeLIST = [t for t in timeLIST if t]
+        return timeLIST
+
     def getLocationStemLIST(self, parseResultDICT):
         '''
         取出斷詞結果中的 LOCATION。此處指的是 LOCATION 標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
-        每個句子內的 location word 為一個 list.
+        每個句子內的 location word 列為一個 list.
         '''
         if "result_pos" in parseResultDICT:
             pass

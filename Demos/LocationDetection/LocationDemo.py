@@ -33,5 +33,5 @@ for c in contentLIST:
     else:
         pass
 
-with open("./LocationDetectionResultLIST.json", "w") as f:
+with open("./LocationDetectionResultLIST.json", "w", encoding="utf-8") as f:
     json.dump(resultLIST, f, ensure_ascii=False)
