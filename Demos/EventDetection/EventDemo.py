@@ -12,7 +12,7 @@ try:
     sys.path.append("../..")
     from ArticutAPI import Articut
 except:
-    from ArticutAPi import Articut
+    from ArticutAPI import Articut
 
 import json
 
@@ -22,38 +22,61 @@ atc = Articut()
 #載入 Demo 用的文字
 with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
+#contentLIST=["這張地圖是不死兔這次到澎湖玩耍所記錄的景點與美食喔!"]
 
 resultLIST = []
+
 for c in contentLIST:
     print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
     resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
 
+    eventDICT = {"time":[],
+                 "site":[],
+                 "event":[]
+    }
+
     tmpLIST = []
     timeLIST = atc.getTimeLIST(resultDICT)
+    timeLIST.sort()
     if timeLIST!=None:
-        tmpLIST.append("".join([t[-1] for t in timeLIST]))
+        for tm in timeLIST:
+            eventDICT["time"].append("".join([t[-1] for t in tm]))
     else:
         pass
-    actionLIST = atc.getVerbStemLIST(resultDICT)
-    if actionLIST!=None:
-        tmpLIST.append("".join([a[-1] for a in actionLIST]))
-    else:
-        pass
+
+    siteLIST = []
     locationLIST = atc.getLocationStemLIST(resultDICT)
+    locationLIST.sort()
     if locationLIST!=None:
-        tmpLIST.append("".join([l[-1] for l in locationLIST]))
+        siteLIST.extend(locationLIST)
+        for location in locationLIST:
+            eventDICT["site"].append("".join([l[-1] for l in location]))
     else:
         pass
 
     placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
+    placeLIST.sort()
     if placeLIST!=None:
-        tmpLIST.append("".join([p[-1] for p in placeLIST]))
+        siteLIST.extend(placeLIST)
+        for place in placeLIST:
+            eventDICT["site"].append("".join([p[-1] for p in place]))
     else:
         pass
 
-    for t in tmpLIST:
-        if len(t)>=2: #在「時間」、「地點」和「活動」中，至少佔了兩個。
-            resultLIST.extend(t)
+    eventLIST = atc.getEventLIST(resultDICT)
+    eventLIST.sort()
+    if eventLIST!=None:
+        if len(siteLIST)>0:
+            anchorIndex = min([l[0][0] for l in siteLIST])
+            for event in eventLIST:
+                if event[1]<anchorIndex:
+                    pass
+                else:
+                    eventDICT["event"].append("".join(event[-1]))
+    else:
+        pass
+    if eventDICT["site"]!=[] and eventDICT["event"]!=[]:
+        resultLIST.append(eventDICT)
 
-with open("./LocationDetectionResultLIST.json", "w", encoding="utf-8") as f:
+with open("./EventDetectionResultLIST.json", "w", encoding="utf-8") as f:
     json.dump(resultLIST, f, ensure_ascii=False)
