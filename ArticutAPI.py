@@ -33,7 +33,8 @@ class Articut:
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-
+        self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
+        self.stripPat = re.compile("(?<=>).*?(?=<)")
 
     def __str__(self):
         return "Articut API"
@@ -126,6 +127,24 @@ class Articut:
         nounLIST = [n for n in nounLIST if n]
         return nounLIST
 
+    def getEventLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中的 event (事件)。一個 event 包含「一個動詞」以及受詞 (若有的話)。
+        每個句子內的 event 列為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        eventLIST = []
+        for e in parseResultDICT["result_pos"]:
+            if len(e) > 1:
+                tmpEvent = [(e.start(), e.end(), e.group(0)) for e in reversed(list(self.eventPat.finditer(e)))]
+                for t in tmpEvent:
+                    eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
+        return eventLIST
+
+
     def getTimeLIST(self, parseResultDICT):
         '''
         取出斷詞結果中的 TIME。
@@ -195,7 +214,8 @@ if __name__ == "__main__":
     from pprint import pprint
 
     #inputSTR = "你計劃過地球人類補完計劃"
-    inputSTR = "阿美族民俗中心以東海岸人數最眾的原住民族群阿美族為主題"
+    #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
+    inputSTR = "傍晚可以到觀音亭去看夕陽喔!"
     articut = Articut()
 
     #取得斷詞結果
