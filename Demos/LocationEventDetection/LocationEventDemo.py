@@ -22,14 +22,13 @@ atc = Articut()
 #載入 Demo 用的文字
 with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
-#contentLIST=["這張地圖是不死兔這次到澎湖玩耍所記錄的景點與美食喔!"]
+contentLIST=["得知435藝文特區是個遛小孩的好地方。!", "傍晚可以到觀音亭去看夕陽喔"]
 
 resultLIST = []
 
 for c in contentLIST:
     print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
     resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
-
     eventDICT = {"time":[],
                  "site":[],
                  "event":[]
@@ -43,7 +42,6 @@ for c in contentLIST:
             eventDICT["time"].append("".join([t[-1] for t in tm]))
     else:
         pass
-
     siteLIST = []
     locationLIST = atc.getLocationStemLIST(resultDICT)
     locationLIST.sort()
@@ -53,7 +51,6 @@ for c in contentLIST:
             eventDICT["site"].append("".join([l[-1] for l in location]))
     else:
         pass
-
     placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
     placeLIST.sort()
     if placeLIST!=None:
@@ -62,7 +59,6 @@ for c in contentLIST:
             eventDICT["site"].append("".join([p[-1] for p in place]))
     else:
         pass
-
     eventLIST = atc.getEventLIST(resultDICT)
     eventLIST.sort()
     if eventLIST!=None:
@@ -78,5 +74,6 @@ for c in contentLIST:
     if eventDICT["site"]!=[] and eventDICT["event"]!=[]:
         resultLIST.append(eventDICT)
 
-with open("./EventDetectionResultLIST.json", "w", encoding="utf-8") as f:
+print("DetectionResult:\n", resultLIST)
+with open("./LocationEventDetectionResultLIST.json", "w", encoding="utf-8") as f:
     json.dump(resultLIST, f, ensure_ascii=False)
