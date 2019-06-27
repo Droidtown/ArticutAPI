@@ -76,8 +76,8 @@ class Articut:
 
     def getContentWordLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 content word。
-        每個句子內的 content word 為一個 list.
+        取出斷詞結果中的實詞 (content word)。
+        每個句子內的實詞為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -92,8 +92,8 @@ class Articut:
 
     def getVerbStemLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 verb。此處指的是 ACTION_verb 標記的動詞詞彙。
-        每個句子內的 verb word 為一個 list.
+        取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
+        每個句子內的動詞為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -113,8 +113,8 @@ class Articut:
 
     def getNounStemLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 noun。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
-        每個句子內的 noun word 為一個 list.
+        取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
+        每個句子內的名詞為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -129,8 +129,8 @@ class Articut:
 
     def getEventLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 event (事件)。一個 event 包含「一個動詞」以及受詞 (若有的話)。
-        每個句子內的 event 列為一個 list.
+        取出斷詞結果中的事件 (event)。一個事件包含「一個動詞」以及受詞 (若有的話)。
+        每個句子內事件列為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -148,8 +148,8 @@ class Articut:
 
     def getTimeLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 TIME。
-        每個句子內的 TIME word 列為一個 list.
+        取出斷詞結果中的時間 (time)。
+        每個句子內的「時間」詞列為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -164,8 +164,8 @@ class Articut:
 
     def getLocationStemLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 LOCATION。此處指的是 LOCATION 標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
-        每個句子內的 location word 列為一個 list.
+        取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
+        每個句子內的地理位置列為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
