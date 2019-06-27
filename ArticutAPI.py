@@ -180,8 +180,8 @@ class Articut:
 
     def getOpenDataPlaceLIST(self, parseResultDICT):
         '''
-        取出斷詞結果中的 KNOWLEDGE_place。此處指的是 KNOWLEDGE_place 標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
-        每個句子內的 location word 為一個 list.
+        取出斷詞結果中的景點 (KNOWLEDGE_place)。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
+        每個句子內的景點為一個 list.
         '''
         if "result_pos" in parseResultDICT:
             pass
