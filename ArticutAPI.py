@@ -136,6 +136,7 @@ class Articut:
             pass
         else:
             return None
+
         eventLIST = []
         for e in parseResultDICT["result_pos"]:
             if len(e) > 1:

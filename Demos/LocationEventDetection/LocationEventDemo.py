@@ -16,6 +16,19 @@ except:
 
 import json
 
+
+############################ 定義及說明 ############################
+# LocationEvent 定義為「某時 - 某地 - 發生某事」。
+# 其中「某時」為可有可無。
+# 本 Demo 利用 ArticutAPI 的斷詞結果，搭配
+# getTimeLIST() 取出「某時」
+# getLocationStemLIST() 和 getOpenDataPlaceLIST() 取出「某地」
+# getEventLIST() 取出「發生某事」
+# 再將以上三者結合成符合 LocationEvent 定義之「某時 - 某地 - 發生某事」
+# 的結果，並另存之。
+###################################################################
+
+
 #實體化 Articut()
 atc = Articut()
 
