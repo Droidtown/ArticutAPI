@@ -35,6 +35,7 @@ class Articut:
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
         self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
+        self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
 
     def __str__(self):
         return "Articut API"
@@ -145,7 +146,6 @@ class Articut:
                     eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
         return eventLIST
 
-
     def getTimeLIST(self, parseResultDICT):
         '''
         取出斷詞結果中的時間 (time)。
@@ -200,6 +200,33 @@ class Articut:
         placeLIST = [l for l in placeLIST if l]
         return placeLIST
 
+    def getQuestionLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中含有 <CLAUSE_Q> 標籤的句子。
+        此處指的是
+            <CLAUSE_AnotAQ>: A-not-A 問句
+            <CLAUSE_YesNoQ>: 是非問句
+            <CLAUSE_WhoQ">: 「誰」問句
+            <CLAUSE_WhatQ>: 「物」問句
+            <CLAUSE_WhereQ>: 「何地」問句
+            <CLAUSE_WhenQ>: 「何時」問句
+            <CLAUSE_HowQ>: 「程度/過程」問句
+            <CLAUSE_WhyQ>: 「原因」問句
+        每個句子內若有 <CLAUSE_Q> 標籤，整個句子將會存進 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+
+        questionLIST = []
+        for i, p in enumerate(parseResultDICT["result_pos"]):
+            if len(p) > 1:
+                for q in reversed(list(self.clausePat.finditer(p))):
+                    questionLIST.append([[q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])] for q in reversed(list(self.clausePat.finditer(p)))])
+        questionLIST = [q for q in questionLIST if q]
+        return questionLIST
+
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
@@ -216,7 +243,7 @@ if __name__ == "__main__":
 
     #inputSTR = "你計劃過地球人類補完計劃"
     #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
-    inputSTR = "傍晚可以到觀音亭去看夕陽喔!"
+    inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
     articut = Articut()
 
     #取得斷詞結果
@@ -252,4 +279,9 @@ if __name__ == "__main__":
     placeLIST = articut.getOpenDataPlaceLIST(result)
     print("\n##Place:")
     pprint(placeLIST)
+
+    #列出所有的 CLAUSE 問句
+    questionLIST = articut.getQuestionLIST(result)
+    print("\n##Question:")
+    pprint(questionLIST)
 
