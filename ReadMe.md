@@ -226,10 +226,4 @@ pprint(result)
 
 關鍵詞抽取範例
 
-<https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/TfidfDemo.py>
-
-關鍵詞抽取所使用逆向文件頻率 (IDF) 語料庫可以切換成自定義語料庫的路徑
-
-* 用法：arituct.analyse.set_idf_path(file_name) # file_name 為自定義語料庫路徑
-* 自定義語料庫範例：<https://github.com/Droidtown/ArticutAPI/blob/master/Toolkit/data/idf.json>
-* 使用範例：[TF-IDF Example](https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L295)
+<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L295>
