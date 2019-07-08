@@ -6,6 +6,8 @@ import os
 import re
 import requests
 
+from Toolkit.analyse import KeywordExtraction
+
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
         '''
@@ -36,6 +38,9 @@ class Articut:
         self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
+
+        # Toolkit
+        self.analyse = KeywordExtraction()
 
     def __str__(self):
         return "Articut API"
@@ -238,6 +243,7 @@ class Articut:
             result["document"] = "{}/document/".format(self.url)
         return result
 
+
 if __name__ == "__main__":
     from pprint import pprint
 
@@ -285,3 +291,6 @@ if __name__ == "__main__":
     print("\n##Question:")
     pprint(questionLIST)
 
+    # 使用 TF-IDF 演算法
+    tfidfResult = articut.analyse.extract_tags(result)
+    pprint(tfidfResult)
