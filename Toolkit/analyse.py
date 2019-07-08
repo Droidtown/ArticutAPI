@@ -6,7 +6,7 @@ from math import log10
 class KeywordExtraction(object):
     def __init__(self):
         self.thd = 0.06
-        self.idfDICT, self.docCount = self._getIdfDict("2005-04.json")
+        self.idfDICT, self.docCount = self._getIdfDict("idf.json")
 
     def __str__(self):
         return "Articut API KeywordExtraction"
@@ -95,9 +95,8 @@ class KeywordExtraction(object):
             pass
         else:
             return None
-        inputSTR = parseResultDICT["result_segmentation"]
         try:
-            result = self.extractKeyword(inputSTR)
+            result = self.extractKeyword(parseResultDICT["result_segmentation"])
             return result
         except Exception as e:
             print(str(e))
