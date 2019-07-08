@@ -213,3 +213,54 @@ pprint(result)
 	"word_count_balance": 99987
 }
 ```
+----------------------
+
+### 進階用法 04 - 基於 TF-IDF 算法的關鍵詞抽取
+
+* articut.analyse.extract_tags(sentence, topK=20, withWeight=False, allowPOS=())
+	* sentence 為要提取關鍵詞的文本
+	* topK 為提取幾個 TF-IDF 的關鍵詞，預設值為 20
+	* withWeight 為是否返回關鍵詞權重值，預設值為 False
+	* allowPOS 僅抽取指定詞性的詞，預設值為空，亦即全部抽取
+* articut.analyse.TFIDF(idf_path=None) 新建 TFIDF 物件，idf_path 為 IDF 語料庫路徑
+
+關鍵詞抽取範例
+
+<https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/TfidfDemo.py>
+
+關鍵詞抽取所使用逆向文件頻率 (IDF) 語料庫可以切換成自定義語料庫的路徑
+
+* 用法：arituct.analyse.set_idf_path(file_name) # file_name 為自定義語料庫路徑
+* 自定義語料庫範例：<https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/idf.txt>
+* 使用範例：[TF-IDF/Idf.py](https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/Idf.py)
+
+關鍵詞抽取所使用的停止詞 (Stop Words) 語料庫可以切換成自定義語料庫的路徑
+
+* 用法：articut.analyse.set_stop_words(file_name) # file_name 為自定義語料庫路徑
+* 自定義語料庫範例：<https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/stop_words.txt>
+* 使用範例：[TF-IDF/IdfStopWordsDemo.py](https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/IdfStopWordsDemo.py)
+
+返回關鍵詞權重值範例
+
+* 操作範例：[TF-IDF/IdfWithWeight.py](https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/IdfWithWeight.py>)
+
+---
+
+### 進階用法 05 - 基於 TextRank 算法的關鍵詞抽取
+
+* articut.analyse.textrank(sentence, topK=20, withWeight=False, allowPOS=())
+	* sentence 為要提取關鍵詞的文本
+	* topK 為提取幾個 TF-IDF 的關鍵詞，預設值為 20
+	* withWeight 為是否返回關鍵詞權重值，預設值為 False
+	* allowPOS 僅抽取指定詞性的詞，預設值為空，亦即全部抽取
+* articut.analyse.TextRank() 新建 TextRank 物件
+
+算法論文：[TextRank: Bringing Order into Texts](http://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf)
+
+### 基本思想：
+
+1. 將待抽取關鍵詞的文本斷詞
+2. 以固定的窗格大小 (預設值為 5，通過 span 屬性調整)，詞之間的共現關係，建構出不帶權圖
+3. 計算途中節點的 PageRank
+
+### 使用範例：[TF-IDF/TextRankDemo.py](https://github.com/Droidtown/ArticutAPI/blob/master/Demos/TF-IDF/)
