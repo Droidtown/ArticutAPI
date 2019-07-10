@@ -28,6 +28,7 @@ for c in contentLIST:
     print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
     resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
     placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
+    placeLIST.sort()
     if placeLIST!=None:
         resultLIST.extend(placeLIST)
     else:

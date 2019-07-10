@@ -87,7 +87,7 @@ class Articut:
         contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in reversed(list(contentPat.finditer(p)))])
+                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(contentPat.finditer(p))])
         return contentWordLIST
 
     def getVerbStemLIST(self, parseResultDICT):
@@ -104,10 +104,10 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 if "VerbP" in p:
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPPat.finditer(p)))])
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPat.finditer(p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPPat.finditer(p))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
                 else:
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in reversed(list(self.verbPat.finditer(p)))])
+                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
         verbLIST = [v for v in verbLIST if v]
         return verbLIST
 
@@ -123,7 +123,7 @@ class Articut:
         nounLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in reversed(list(self.nounPat.finditer(p)))])
+                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in list(self.nounPat.finditer(p))])
         nounLIST = [n for n in nounLIST if n]
         return nounLIST
 
@@ -140,7 +140,7 @@ class Articut:
         eventLIST = []
         for e in parseResultDICT["result_pos"]:
             if len(e) > 1:
-                tmpEvent = [(e.start(), e.end(), e.group(0)) for e in reversed(list(self.eventPat.finditer(e)))]
+                tmpEvent = [(e.start(), e.end(), e.group(0)) for e in list(self.eventPat.finditer(e))]
                 for t in tmpEvent:
                     eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
         return eventLIST
@@ -158,7 +158,7 @@ class Articut:
         timeLIST = []
         for t in parseResultDICT["result_pos"]:
             if len(t) > 1:
-                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.timePat.finditer(t)))])
+                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.timePat.finditer(t))])
         timeLIST = [t for t in timeLIST if t]
         return timeLIST
 
@@ -174,7 +174,7 @@ class Articut:
         locationLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.locationPat.finditer(p)))])
+                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.locationPat.finditer(p))])
         locationLIST = [l for l in locationLIST if l]
         return locationLIST
 
@@ -196,7 +196,7 @@ class Articut:
         placeLIST = []
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                placeLIST.append([(l.start(), l.end(), l.group(0)) for l in reversed(list(self.placePat.finditer(p)))])
+                placeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.placePat.finditer(p))])
         placeLIST = [l for l in placeLIST if l]
         return placeLIST
 

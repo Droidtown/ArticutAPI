@@ -22,6 +22,7 @@ atc = Articut()
 #載入 Demo 用的文字
 with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
+contentLIST = ["新竹市北區最強陸軍！"]
 
 resultLIST = []
 for c in contentLIST:

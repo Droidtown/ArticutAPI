@@ -35,7 +35,7 @@ atc = Articut()
 #載入 Demo 用的文字
 with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
-contentLIST=["得知435藝文特區是個遛小孩的好地方。!", "傍晚可以到觀音亭去看夕陽喔"]
+contentLIST=["得知435藝文特區是個遛小孩的好地方。!", "明天傍晚可以到觀音亭去看夕陽喔"]
 
 resultLIST = []
 
@@ -49,27 +49,24 @@ for c in contentLIST:
 
     tmpLIST = []
     timeLIST = atc.getTimeLIST(resultDICT)
-    timeLIST.sort()
     if timeLIST!=None:
         for tm in timeLIST:
-            eventDICT["time"].append("".join([t[-1] for t in tm]))
+            eventDICT["time"].append([t[-1] for t in tm])
     else:
         pass
     siteLIST = []
     locationLIST = atc.getLocationStemLIST(resultDICT)
-    locationLIST.sort()
     if locationLIST!=None:
         siteLIST.extend(locationLIST)
         for location in locationLIST:
-            eventDICT["site"].append("".join([l[-1] for l in location]))
+            eventDICT["site"].append([l[-1] for l in location])
     else:
         pass
     placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
-    placeLIST.sort()
     if placeLIST!=None:
         siteLIST.extend(placeLIST)
         for place in placeLIST:
-            eventDICT["site"].append("".join([p[-1] for p in place]))
+            eventDICT["site"].append([p[-1] for p in place])
     else:
         pass
     eventLIST = atc.getEventLIST(resultDICT)
