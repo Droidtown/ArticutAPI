@@ -227,8 +227,8 @@ class Articut:
         questionLIST = []
         for i, p in enumerate(parseResultDICT["result_pos"]):
             if len(p) > 1:
-                for q in reversed(list(self.clausePat.finditer(p))):
-                    questionLIST.append([[q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])] for q in reversed(list(self.clausePat.finditer(p)))])
+                for q in list(self.clausePat.finditer(p)):
+                    questionLIST.append([[q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])] for q in list(self.clausePat.finditer(p))])
         questionLIST = [q for q in questionLIST if q]
         return questionLIST
 
