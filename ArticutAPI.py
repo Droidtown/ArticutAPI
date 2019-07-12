@@ -6,7 +6,10 @@ import os
 import re
 import requests
 
-from Toolkit.analyse import KeywordExtraction
+try:
+    from Toolkit.analyse import KeywordExtraction
+except: #供外部載入時使用。
+    from .Toolkit.analyse import KeywordExtraction
 
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
