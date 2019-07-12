@@ -38,6 +38,7 @@ class Articut:
         self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
+        self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
 
         # Toolkit
         self.analyse = KeywordExtraction()
@@ -90,10 +91,9 @@ class Articut:
         else:
             return None
         contentWordLIST = []
-        contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(contentPat.finditer(p))])
+                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.contentPat.finditer(p))])
         return contentWordLIST
 
     def getVerbStemLIST(self, parseResultDICT):

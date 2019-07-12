@@ -33,19 +33,19 @@ import json
 atc = Articut()
 
 #載入 Demo 用的文字
+contentLIST = []
 with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
-contentLIST=["得知435藝文特區是個遛小孩的好地方。!", "明天傍晚可以到觀音亭去看夕陽喔"]
 
 resultLIST = []
 
 for c in contentLIST:
     print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
     resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
+
     eventDICT = {"time":[],
                  "site":[],
-                 "event":[]
-    }
+                 "event":[]}
 
     tmpLIST = []
     timeLIST = atc.getTimeLIST(resultDICT)
@@ -85,5 +85,6 @@ for c in contentLIST:
         resultLIST.append(eventDICT)
 
 print("DetectionResult:\n", resultLIST)
+
 with open("./LocationEventDetectionResultLIST.json", "w", encoding="utf-8") as f:
     json.dump(resultLIST, f, ensure_ascii=False)
