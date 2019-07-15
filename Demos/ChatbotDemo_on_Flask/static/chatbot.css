@@ -1,0 +1,19 @@
+#chatbotMessage {
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+}
+
+#chatbotText {
+    width: 100%;
+    height: 100px;
+}
+
+#chatbotSenderText {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: none;
+    resize: none;
+}
