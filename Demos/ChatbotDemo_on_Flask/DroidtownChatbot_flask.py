@@ -15,9 +15,9 @@ def home():
     return render_template("chatbotDemo.html")
     #return render_template('index.html')
 
-@app.route("/ask")
+@app.route("/ask", methods=["POST"])
 def bot():
-    responseSTR = "RECEIVED:{}".format(request.args.get("inputSTR"))
+    responseSTR = "RECEIVED:{}".format(request.values["inputSTR"])
 
     return responseSTR
 
