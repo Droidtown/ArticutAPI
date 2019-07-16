@@ -50,7 +50,7 @@ def bot():
     if len(ansCandidateLIST)>0:
         responseSTR = "\n".join([a[0] for a in ansCandidateLIST])
     else:
-        responseSTR = "抱歉，我不太明白你的意思。你要不要試試看換個方法問？"
+        responseSTR = "嗯，還有別的症狀嗎？"
     #</後檢查:程式邏輯>
     return responseSTR
 

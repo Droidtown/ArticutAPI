@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from ..ArticutAPI.ArticutAPI import Articut
+from ArticutAPI.ArticutAPI import Articut
 import json
 
 denormalizedFILE = "facts_as_lines.txt"
