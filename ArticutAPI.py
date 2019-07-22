@@ -313,6 +313,7 @@ if __name__ == "__main__":
 
     # 使用 TF-IDF 演算法
     tfidfResult = articut.analyse.extract_tags(result)
+    print("\n##TF-IDF:")
     pprint(tfidfResult)
 
     #列出所有的台灣地址
