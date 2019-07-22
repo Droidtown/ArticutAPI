@@ -39,6 +39,7 @@ class Articut:
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
         self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
+        self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
         self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
@@ -235,6 +236,21 @@ class Articut:
         questionLIST = [q for q in questionLIST if q]
         return questionLIST
 
+    def getAddTWLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中含有 <KNOWLEDGE_addTW> 標籤的字串。
+        該字串為一台灣地址。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        addTWLIST = []
+        for add in parseResultDICT["result_pos"]:
+            addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.addTWPat.finditer(add))])
+        addTWLIST = [a for a in addTWLIST if a]
+        return addTWLIST
+
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
@@ -253,6 +269,7 @@ if __name__ == "__main__":
     #inputSTR = "你計劃過地球人類補完計劃"
     #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
     inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
+    inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路111號"
     articut = Articut()
 
     #取得斷詞結果
@@ -297,3 +314,8 @@ if __name__ == "__main__":
     # 使用 TF-IDF 演算法
     tfidfResult = articut.analyse.extract_tags(result)
     pprint(tfidfResult)
+
+    #列出所有的台灣地址
+    addTWLIST = articut.getAddTWLIST(result)
+    print("\n##Address:")
+    pprint(addTWLIST)

@@ -49,6 +49,7 @@ def bot():
     ansCandidateLIST = segTokenMatchListFinder(inputDICT["result_pos"], articut)
     if len(ansCandidateLIST)>0:
         responseSTR = "\n".join([a[0] for a in ansCandidateLIST])
+        #responseSTR = "您可以考慮掛 "+"".join([a[0].split("負責")[0] for a in ansCandidateLIST])
     else:
         responseSTR = "嗯，還有別的症狀嗎？"
     #</後檢查:程式邏輯>
