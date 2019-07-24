@@ -38,7 +38,7 @@ class Articut:
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-        self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
+        self.eventPat = re.compile("<ACTION_verb>[^<有]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>")
         self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
@@ -269,52 +269,57 @@ if __name__ == "__main__":
     #inputSTR = "你計劃過地球人類補完計劃"
     #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
     inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
-    inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路111號"
+    inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
     articut = Articut()
+
+    print("inputSTR:{}\n".format(inputSTR))
 
     #取得斷詞結果
     result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
-    pprint(result)
+    print("斷詞結果：")
+    pprint(result["result_segmentation"])
+    print("\n標記結果：")
+    pprint(result["result_pos"])
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
     versions = articut.versions()
-    print("\n##Avaliable Versions:")
-    pprint(versions)
+    #print("\n##Avaliable Versions:")
+    #pprint(versions)
 
     #列出所有的 content word.
     contentWordLIST = articut.getContentWordLIST(result)
-    print("\n##ContentWord:")
-    pprint(contentWordLIST)
+    #print("\n##ContentWord:")
+    #pprint(contentWordLIST)
 
     #列出所有的 verb word. (動詞)
     verbStemLIST = articut.getVerbStemLIST(result)
-    print("\n##Verb:")
-    pprint(verbStemLIST)
+    #print("\n##Verb:")
+    #pprint(verbStemLIST)
 
     #列出所有的 noun word. (名詞)
     nounStemLIST = articut.getNounStemLIST(result)
-    print("\n##Noun:")
-    pprint(nounStemLIST)
+    #print("\n##Noun:")
+    #pprint(nounStemLIST)
 
     #列出所有的 location word. (地方名稱)
     locationStemLIST = articut.getLocationStemLIST(result)
-    print("\n##Location:")
-    pprint(locationStemLIST)
+    #print("\n##Location:")
+    #pprint(locationStemLIST)
 
     #允許 Articut 調用字典，列出所有政府開放資料中列為觀光地點名稱的字串。(地點名稱)
     placeLIST = articut.getOpenDataPlaceLIST(result)
-    print("\n##Place:")
-    pprint(placeLIST)
+    #print("\n##Place:")
+    #pprint(placeLIST)
 
     #列出所有的 CLAUSE 問句
     questionLIST = articut.getQuestionLIST(result)
-    print("\n##Question:")
-    pprint(questionLIST)
+    #print("\n##Question:")
+    #pprint(questionLIST)
 
     # 使用 TF-IDF 演算法
     tfidfResult = articut.analyse.extract_tags(result)
-    print("\n##TF-IDF:")
-    pprint(tfidfResult)
+    #print("\n##TF-IDF:")
+    #pprint(tfidfResult)
 
     #列出所有的台灣地址
     addTWLIST = articut.getAddTWLIST(result)
