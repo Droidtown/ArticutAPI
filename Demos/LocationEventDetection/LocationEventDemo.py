@@ -62,6 +62,12 @@ for c in contentLIST:
             eventDICT["site"].append([l[-1] for l in location])
     else:
         pass
+    addressLIST = atc.getAddTWLIST(resultDICT)
+    if addressLIST !=None:
+        siteLIST.extend(addressLIST)
+        for address in addressLIST:
+            eventDICT["site"].append([a[-1] for a in address])
+
     placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
     if placeLIST!=None:
         siteLIST.extend(placeLIST)
