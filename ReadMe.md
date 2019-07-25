@@ -222,8 +222,29 @@ pprint(result)
 	* topK 為提取幾個 TF-IDF 的關鍵詞，預設值為 20
 	* withWeight 為是否返回關鍵詞權重值，預設值為 False
 	* allowPOS 僅抽取指定詞性的詞，預設值為空，亦即全部抽取
-* articut.analyse.TFIDF(idf_path=None) 新建 TFIDF 物件，idf_path 為 IDF 語料庫路徑
+* articut.analyse.TFIDF(idf\_path=None) 新建 TFIDF 物件，idf_path 為 IDF 語料庫路徑
 
-關鍵詞抽取範例
+使用範例：
+<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L332-335>
 
-<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L295>
+---
+
+### 進階用法 05 - 基於 TextRank 算法的關鍵詞抽取
+
+* articut.analyse.textrank(sentence, topK=20, withWeight=False, allowPOS=())
+	* sentence 為要提取關鍵詞的文本
+	* topK 為提取幾個 TF-IDF 的關鍵詞，預設值為 20
+	* withWeight 為是否返回關鍵詞權重值，預設值為 False
+	* allowPOS 僅抽取指定詞性的詞，預設值為空，亦即全部抽取
+* articut.analyse.TextRank() 新建 TextRank 物件
+
+算法論文：[TextRank: Bringing Order into Texts](http://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf)
+
+### 基本思想：
+
+1. 將待抽取關鍵詞的文本斷詞
+2. 以固定的窗格大小 (預設值為 5，通過 span 屬性調整)，詞之間的共現關係，建構出不帶權圖
+3. 計算途中節點的 PageRank
+
+使用範例：
+<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L337-340>
