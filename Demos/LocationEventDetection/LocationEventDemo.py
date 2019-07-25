@@ -38,7 +38,7 @@ with open("./PengHu.txt", encoding="utf-8") as f:
     contentLIST = [l.replace("\n", "") for l in f.readlines()]
 
 resultLIST = []
-
+contentLIST = ["是否知道我從台北火車站到宜蘭縣蘇澳鎮海邊路11-1號要多久？", ]
 for c in contentLIST:
     print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
     resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
