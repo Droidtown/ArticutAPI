@@ -1,9 +1,9 @@
-var initMessage = 'Chatbot (雅口): 我能幫查什麼資料嗎？';
+var initMessage = 'Chatbot (雅口): 您好，我是機器人「雅口」，我可以幫您找到合適看診科別。您哪裡不舒服嗎？';
 
 $(document).ready(function(){
     $('#chatbotMessage').empty();
     receiveMessage(initMessage);
-    
+
     $(document).on('click', "#chatbotSenderBtn", function(e) {
         var inputText = $('#chatbotSenderText').val();
         if (inputText != '') {
@@ -40,7 +40,7 @@ function setSenderBtn(disabled) {
 }
 
 function sendMessage(message) {
-    var messageText = 
+    var messageText =
         '<div class="row d-flex justify-content-end">'
         + '<div class="col-10">'
         + '<div class="alert alert-primary float-right">'

@@ -6,7 +6,10 @@ import os
 import re
 import requests
 
-from Toolkit.analyse import KeywordExtraction
+try:
+    from Toolkit.analyse import AnalyseManager
+except: #供外部載入時使用。
+    from .Toolkit.analyse import AnalyseManager
 
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
@@ -35,13 +38,14 @@ class Articut:
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-        self.eventPat = re.compile("<ACTION_verb>[^<]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?")
+        self.eventPat = re.compile("<ACTION_verb>.?[有現到見道]</ACTION_verb><ENTITY_nouny>[^<]*?</ENTITY_nouny>$|(?<=[有現到見道]</ACTION_verb>)(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>$|(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>")
+        self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
         self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
 
         # Toolkit
-        self.analyse = KeywordExtraction()
+        self.analyse = AnalyseManager()
 
     def __str__(self):
         return "Articut API"
@@ -146,7 +150,8 @@ class Articut:
         eventLIST = []
         for e in parseResultDICT["result_pos"]:
             if len(e) > 1:
-                tmpEvent = [(e.start(), e.end(), e.group(0)) for e in list(self.eventPat.finditer(e))]
+                tmpE = re.sub("(?<=</ACTION_verb>)<((MODIFIER)|(ENTITY_nouny))>[^<]{1,4}</((MODIFIER)|(ENTITY_nouny))>(<FUNC_inner>的</FUNC_inner>)?(?=<ENTITY_nouny>)", "", e)
+                tmpEvent = [(e.start(), e.end(), e.group(0)) for e in list(self.eventPat.finditer(tmpE))]
                 for t in tmpEvent:
                     eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
         return eventLIST
@@ -232,6 +237,21 @@ class Articut:
         questionLIST = [q for q in questionLIST if q]
         return questionLIST
 
+    def getAddTWLIST(self, parseResultDICT):
+        '''
+        取出斷詞結果中含有 <KNOWLEDGE_addTW> 標籤的字串。
+        該字串為一台灣地址。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        addTWLIST = []
+        for add in parseResultDICT["result_pos"]:
+            addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.addTWPat.finditer(add))])
+        addTWLIST = [a for a in addTWLIST if a]
+        return addTWLIST
+
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
@@ -249,12 +269,20 @@ if __name__ == "__main__":
 
     #inputSTR = "你計劃過地球人類補完計劃"
     #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
-    inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
+    #inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
+    #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
+    #inputSTR = "2018 年 7 月 26 日" #getEventLIST() Test
+    inputSTR = "台北信義區出現哥吉拉。"
     articut = Articut()
+
+    print("inputSTR:{}\n".format(inputSTR))
 
     #取得斷詞結果
     result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
-    pprint(result)
+    print("斷詞結果：")
+    pprint(result["result_segmentation"])
+    print("\n標記結果：")
+    pprint(result["result_pos"])
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
     versions = articut.versions()
@@ -276,6 +304,11 @@ if __name__ == "__main__":
     print("\n##Noun:")
     pprint(nounStemLIST)
 
+    #列出所有的 event (事件)
+    eventLIST = articut.getEventLIST(result)
+    print("\n##Event:")
+    pprint(eventLIST)
+
     #列出所有的 location word. (地方名稱)
     locationStemLIST = articut.getLocationStemLIST(result)
     print("\n##Location:")
@@ -291,6 +324,17 @@ if __name__ == "__main__":
     print("\n##Question:")
     pprint(questionLIST)
 
+    #列出所有的台灣地址
+    addTWLIST = articut.getAddTWLIST(result)
+    print("\n##Address:")
+    pprint(addTWLIST)
+
     # 使用 TF-IDF 演算法
     tfidfResult = articut.analyse.extract_tags(result)
+    print("\n##TF-IDF:")
     pprint(tfidfResult)
+
+    # 使用 Textrank 演算法
+    textrankResult = articut.analyse.textrank(result)
+    print("\n##Textrank:")
+    pprint(textrankResult)
