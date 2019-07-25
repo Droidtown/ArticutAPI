@@ -38,7 +38,7 @@ class Articut:
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-        self.eventPat = re.compile("(?<=[有現到見道]</ACTION_verb>)(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>|<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>")
+        self.eventPat = re.compile("(?<=[有現到見道]</ACTION_verb>)(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>|(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)?<ACTION_verb>[^<有現到見道生]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>")
         self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
@@ -271,7 +271,8 @@ if __name__ == "__main__":
     #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
     #inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
     #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
-    inputSTR = "淡水有人看到帥氣的哥吉拉登陸" #getEventLIST() Test
+    #inputSTR = "2018 年 7 月 26 日" #getEventLIST() Test
+    inputSTR = "福興街有人裸奔"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
