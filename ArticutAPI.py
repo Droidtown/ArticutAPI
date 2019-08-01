@@ -17,24 +17,30 @@ class Articut:
         username = ""    # 你註冊時的 email。若留空，則會使用每日 1 萬字的公用帳號。
         apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每日 1 萬字的公用帳號。
         '''
+        try:
+            with open("./account.info") as f:
+                userDICT = json.loads(f.read())
+            self.username = userDICT["email"]
+            self.apikey = userDICT["apikey"]
+        except:
+            self.username = username
+            self.apikey = apikey
 
         self.url = "https://api.droidtown.co"
-        self.username = username
-        self.apikey = apikey
+
         self.version = version
         self.level = level
 
         self.userDefinedDictFILE = None
         self.openDataPlaceAccessBOOL=False
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
-
         self.verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
-
         self.verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
         self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
         self.modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
         self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
-        self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)|(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
+        self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
+        self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
@@ -84,6 +90,40 @@ class Articut:
             result["product"] = "{}/product/".format(self.url)
             result["document"] = "{}/document/".format(self.url)
         return result
+
+    def getPersonLIST(self, parseResultDICT, includePronounBOOL=True):
+        '''
+        取出斷詞結果中的人名 (Person)
+        若 includePronounBOOL 為 True，則連代名詞一併回傳；若為否，則只回傳人名。
+        回傳結果為一 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        person_pronounLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p)>1:
+                personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(self.personPat.finditer(p))]
+                if len(personLIST)>0:
+                    person_pronounLIST.append(personLIST)
+                else:
+                    person_pronounLIST.append([])
+
+            else:
+                person_pronounLIST.append([p])
+
+        if includePronounBOOL == True:
+            for p in parseResultDICT["result_pos"]:
+                if len(p)==1:
+                    pass
+                else:
+                    person_pronounLIST[parseResultDICT["result_pos"].index(p)].append([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
+        else:
+            pass
+        #person_pronounLIST.sort()
+        return person_pronounLIST
+
 
     def getContentWordLIST(self, parseResultDICT):
         '''
@@ -272,7 +312,9 @@ if __name__ == "__main__":
     #inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
     #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
-    inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
+    #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
+    inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
+
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
@@ -285,14 +327,23 @@ if __name__ == "__main__":
     pprint(result["result_pos"])
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
-    versions = articut.versions()
-    print("\n##Avaliable Versions:")
-    pprint(versions)
+    #versions = articut.versions()
+    #print("\n##Avaliable Versions:")
+    #pprint(versions)
 
     #列出所有的 content word.
     contentWordLIST = articut.getContentWordLIST(result)
     print("\n##ContentWord:")
     pprint(contentWordLIST)
+
+    #列出所有的人名 (不含代名詞).
+    personLIST = articut.getPerson(result, includePronounBOOL=False)
+    print("\n##Person (Without Pronoun):")
+    pprint(personLIST)
+    personLIST = articut.getPerson(result, includePronounBOOL=True)
+    print("\n##Person (With Pronoun):")
+    pprint(personLIST)
+
 
     #列出所有的 verb word. (動詞)
     verbStemLIST = articut.getVerbStemLIST(result)
