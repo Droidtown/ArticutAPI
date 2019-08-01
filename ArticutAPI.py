@@ -337,10 +337,10 @@ if __name__ == "__main__":
     pprint(contentWordLIST)
 
     #列出所有的人名 (不含代名詞).
-    personLIST = articut.getPerson(result, includePronounBOOL=False)
+    personLIST = articut.getPersonLIST(result, includePronounBOOL=False)
     print("\n##Person (Without Pronoun):")
     pprint(personLIST)
-    personLIST = articut.getPerson(result, includePronounBOOL=True)
+    personLIST = articut.getPersonLIST(result, includePronounBOOL=True)
     print("\n##Person (With Pronoun):")
     pprint(personLIST)
 
