@@ -18,7 +18,7 @@ class Articut:
         apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每日 1 萬字的公用帳號。
         '''
         try:
-            with open("./account.info") as f:
+            with open("./account.info", "r") as f:
                 userDICT = json.loads(f.read())
             self.username = userDICT["email"]
             self.apikey = userDICT["apikey"]
@@ -94,8 +94,8 @@ class Articut:
     def getPersonLIST(self, parseResultDICT, includePronounBOOL=True):
         '''
         取出斷詞結果中的人名 (Person)
-        若 includePronounBOOL 為 True，則連代名詞一併回傳；若為否，則只回傳人名。
-        回傳結果為一 list。
+        若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
+        回傳結果為一個 list。
         '''
         if "result_pos" in parseResultDICT:
             pass
@@ -109,7 +109,6 @@ class Articut:
                     person_pronounLIST.append(personLIST)
                 else:
                     person_pronounLIST.append([])
-
             else:
                 person_pronounLIST.append([p])
 
@@ -121,9 +120,7 @@ class Articut:
                     person_pronounLIST[parseResultDICT["result_pos"].index(p)].append([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
         else:
             pass
-        #person_pronounLIST.sort()
         return person_pronounLIST
-
 
     def getContentWordLIST(self, parseResultDICT):
         '''
@@ -327,9 +324,9 @@ if __name__ == "__main__":
     pprint(result["result_pos"])
 
     #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
-    #versions = articut.versions()
-    #print("\n##Avaliable Versions:")
-    #pprint(versions)
+    versions = articut.versions()
+    print("\n##Avaliable Versions:")
+    pprint(versions)
 
     #列出所有的 content word.
     contentWordLIST = articut.getContentWordLIST(result)
@@ -343,7 +340,6 @@ if __name__ == "__main__":
     personLIST = articut.getPersonLIST(result, includePronounBOOL=True)
     print("\n##Person (With Pronoun):")
     pprint(personLIST)
-
 
     #列出所有的 verb word. (動詞)
     verbStemLIST = articut.getVerbStemLIST(result)
@@ -380,12 +376,12 @@ if __name__ == "__main__":
     print("\n##Address:")
     pprint(addTWLIST)
 
-    # 使用 TF-IDF 演算法
+    #使用 TF-IDF 演算法
     tfidfResult = articut.analyse.extract_tags(result)
     print("\n##TF-IDF:")
     pprint(tfidfResult)
 
-    # 使用 Textrank 演算法
+    #使用 Textrank 演算法
     textrankResult = articut.analyse.textrank(result)
     print("\n##Textrank:")
     pprint(textrankResult)
