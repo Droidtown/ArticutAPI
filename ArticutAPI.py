@@ -300,6 +300,34 @@ class Articut:
             result["document"] = "{}/document/".format(self.url)
         return result
 
+    def _segIndexConverter(self, parseResultDICT, posIndexLIST):
+        '''
+        Convert posIndex to segIndex
+        Return list
+        '''
+
+        if type(posIndexLIST) is list and "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+
+        segIndexLIST = []
+        try:
+            for i, posLIST in enumerate(posIndexLIST):
+                if len(posLIST) > 1:
+                    tmpLIST = []
+                    for start, end, seg in posLIST:
+                        posEndSTR = parseResultDICT["result_pos"][i][:start]
+                        segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
+                        tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
+                    segIndexLIST.append(tmpLIST)
+                else:
+                    segIndexLIST.append(posLIST)
+        except Exception as e:
+            print("Invalid posIndexLIST format")
+            return None
+        return segIndexLIST
+
 
 if __name__ == "__main__":
     from pprint import pprint
