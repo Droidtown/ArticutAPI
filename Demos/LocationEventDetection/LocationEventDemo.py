@@ -79,7 +79,7 @@ for c in contentLIST:
     eventLIST.sort()
     if eventLIST!=None:
         if len(siteLIST)>0:
-            anchorIndex = min([l[0][0] for l in siteLIST])
+            anchorIndex = min([l[0][0] for l in siteLIST if l!=[]])
             for event in eventLIST:
                 if event[1]<anchorIndex:
                     pass

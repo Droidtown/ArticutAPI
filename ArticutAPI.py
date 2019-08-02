@@ -220,7 +220,7 @@ class Articut:
             if len(p) > 1:
                 tmpE = re.sub("(?<=</ACTION_verb>)<((MODIFIER)|(ENTITY_nouny))>[^<]{1,4}</((MODIFIER)|(ENTITY_nouny))>(<FUNC_inner>的</FUNC_inner>)?(?=<ENTITY_nouny>)", "", p)
                 tmpEvent = [(e.start(), e.end(), e.group(0)) for e in list(self.eventPat.finditer(tmpE))]
-                if len(tmpEvent) > 1:
+                if len(tmpEvent) > 0:
                     for t in tmpEvent:
                         eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
                 else:
@@ -367,8 +367,8 @@ if __name__ == "__main__":
     #inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
     #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
-    #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
-    inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
+    inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
+    #inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
 
     articut = Articut()
 
@@ -376,38 +376,38 @@ if __name__ == "__main__":
 
     #取得斷詞結果
     result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
-    print("斷詞結果：")
-    pprint(result["result_segmentation"])
-    print("\n標記結果：")
-    pprint(result["result_pos"])
+    #print("斷詞結果：")
+    #pprint(result["result_segmentation"])
+    #print("\n標記結果：")
+    #pprint(result["result_pos"])
 
-    #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
-    versions = articut.versions()
-    print("\n##Avaliable Versions:")
-    pprint(versions)
+    ##列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
+    #versions = articut.versions()
+    #print("\n##Avaliable Versions:")
+    #pprint(versions)
 
-    #列出所有的 content word.
-    contentWordLIST = articut.getContentWordLIST(result)
-    print("\n##ContentWord:")
-    pprint(contentWordLIST)
+    ##列出所有的 content word.
+    #contentWordLIST = articut.getContentWordLIST(result)
+    #print("\n##ContentWord:")
+    #pprint(contentWordLIST)
 
-    #列出所有的人名 (不含代名詞).
-    personLIST = articut.getPersonLIST(result, includePronounBOOL=False)
-    print("\n##Person (Without Pronoun):")
-    pprint(personLIST)
-    personLIST = articut.getPersonLIST(result, includePronounBOOL=True)
-    print("\n##Person (With Pronoun):")
-    pprint(personLIST)
+    ##列出所有的人名 (不含代名詞).
+    #personLIST = articut.getPersonLIST(result, includePronounBOOL=False)
+    #print("\n##Person (Without Pronoun):")
+    #pprint(personLIST)
+    #personLIST = articut.getPersonLIST(result, includePronounBOOL=True)
+    #print("\n##Person (With Pronoun):")
+    #pprint(personLIST)
 
-    #列出所有的 verb word. (動詞)
-    verbStemLIST = articut.getVerbStemLIST(result)
-    print("\n##Verb:")
-    pprint(verbStemLIST)
+    ##列出所有的 verb word. (動詞)
+    #verbStemLIST = articut.getVerbStemLIST(result)
+    #print("\n##Verb:")
+    #pprint(verbStemLIST)
 
-    #列出所有的 noun word. (名詞)
-    nounStemLIST = articut.getNounStemLIST(result)
-    print("\n##Noun:")
-    pprint(nounStemLIST)
+    ##列出所有的 noun word. (名詞)
+    #nounStemLIST = articut.getNounStemLIST(result)
+    #print("\n##Noun:")
+    #pprint(nounStemLIST)
 
     #列出所有的 event (事件)
     eventLIST = articut.getEventLIST(result)
