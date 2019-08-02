@@ -56,6 +56,34 @@ class Articut:
     def __str__(self):
         return "Articut API"
 
+    def _segIndexConverter(self, parseResultDICT, posIndexLIST):
+        '''
+        Convert posIndex to segIndex
+        Return list
+        '''
+
+        if type(posIndexLIST) is list and "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+
+        segIndexLIST = []
+        try:
+            for i, posLIST in enumerate(posIndexLIST):
+                if posLIST:
+                    tmpLIST = []
+                    for start, end, seg in posLIST:
+                        posEndSTR = parseResultDICT["result_pos"][i][:start]
+                        segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
+                        tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
+                    segIndexLIST.append(tmpLIST)
+                else:
+                    segIndexLIST.append(posLIST)
+        except Exception as e:
+            print("Invalid posIndexLIST format")
+            return None
+        return segIndexLIST
+
     def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False):
         if level=="":
             level = self.level
@@ -91,7 +119,7 @@ class Articut:
             result["document"] = "{}/document/".format(self.url)
         return result
 
-    def getPersonLIST(self, parseResultDICT, includePronounBOOL=True):
+    def getPersonLIST(self, parseResultDICT, includePronounBOOL=True, indexWithPOS=True):
         '''
         取出斷詞結果中的人名 (Person)
         若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
@@ -105,24 +133,20 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p)>1:
                 personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(self.personPat.finditer(p))]
-                if len(personLIST)>0:
-                    person_pronounLIST.append(personLIST)
-                else:
-                    person_pronounLIST.append([])
+                person_pronounLIST.append(personLIST)
             else:
-                person_pronounLIST.append([p])
-
+                person_pronounLIST.append([])
         if includePronounBOOL == True:
             for p in parseResultDICT["result_pos"]:
                 if len(p)==1:
                     pass
                 else:
                     person_pronounLIST[parseResultDICT["result_pos"].index(p)].extend([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
-        else:
-            pass
+        if not indexWithPOS:
+            person_pronounLIST = self._segIndexConverter(parseResultDICT, person_pronounLIST)
         return person_pronounLIST
 
-    def getContentWordLIST(self, parseResultDICT):
+    def getContentWordLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的實詞 (content word)。
         每個句子內的實詞為一個 list。
@@ -135,9 +159,13 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.contentPat.finditer(p))])
+            else:
+                contentWordLIST.append([])
+        if not indexWithPOS:
+            contentWordLIST = self._segIndexConverter(parseResultDICT, contentWordLIST)
         return contentWordLIST
 
-    def getVerbStemLIST(self, parseResultDICT):
+    def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
         每個句子內的動詞為一個 list。
@@ -152,13 +180,14 @@ class Articut:
             if len(p) > 1:
                 if "VerbP" in p:
                     verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPPat.finditer(p))])
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
-                else:
-                    verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
-        verbLIST = [v for v in verbLIST if v]
+                verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
+            else:
+                verbLIST.append([])
+        if not indexWithPOS:
+            verbLIST = self._segIndexConverter(parseResultDICT, verbLIST)
         return verbLIST
 
-    def getNounStemLIST(self, parseResultDICT):
+    def getNounStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
         每個句子內的名詞為一個 list。
@@ -171,10 +200,13 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 nounLIST.append([(n.start(), n.end(), n.group(0)) for n in list(self.nounPat.finditer(p))])
-        nounLIST = [n for n in nounLIST if n]
+            else:
+                nounLIST.append([])
+        if not indexWithPOS:
+            nounLIST = self._segIndexConverter(parseResultDICT, nounLIST)
         return nounLIST
 
-    def getEventLIST(self, parseResultDICT):
+    def getEventLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的事件 (event)。一個事件包含「一個動詞」以及受詞 (若有的話)。
         每個句子內事件列為一個 list。
@@ -183,17 +215,23 @@ class Articut:
             pass
         else:
             return None
-
         eventLIST = []
-        for e in parseResultDICT["result_pos"]:
-            if len(e) > 1:
-                tmpE = re.sub("(?<=</ACTION_verb>)<((MODIFIER)|(ENTITY_nouny))>[^<]{1,4}</((MODIFIER)|(ENTITY_nouny))>(<FUNC_inner>的</FUNC_inner>)?(?=<ENTITY_nouny>)", "", e)
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                tmpE = re.sub("(?<=</ACTION_verb>)<((MODIFIER)|(ENTITY_nouny))>[^<]{1,4}</((MODIFIER)|(ENTITY_nouny))>(<FUNC_inner>的</FUNC_inner>)?(?=<ENTITY_nouny>)", "", p)
                 tmpEvent = [(e.start(), e.end(), e.group(0)) for e in list(self.eventPat.finditer(tmpE))]
-                for t in tmpEvent:
-                    eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
+                if len(tmpEvent) > 1:
+                    for t in tmpEvent:
+                        eventLIST.append((t[0], t[1], [s.group(0) for s in list(self.stripPat.finditer(t[2])) if len(s.group(0))>0]))
+                else:
+                    eventLIST.append([])
+            else:
+                eventLIST.append([])
+        if not indexWithPOS:
+            eventLIST = self._segIndexConverter(parseResultDICT, eventLIST)
         return eventLIST
 
-    def getTimeLIST(self, parseResultDICT):
+    def getTimeLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的時間 (time)。
         每個句子內的「時間」詞列為一個 list。
@@ -203,13 +241,16 @@ class Articut:
         else:
             return None
         timeLIST = []
-        for t in parseResultDICT["result_pos"]:
-            if len(t) > 1:
-                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.timePat.finditer(t))])
-        timeLIST = [t for t in timeLIST if t]
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.timePat.finditer(p))])
+            else:
+                timeLIST.append([])
+        if not indexWithPOS:
+            timeLIST = self._segIndexConverter(parseResultDICT, timeLIST)
         return timeLIST
 
-    def getLocationStemLIST(self, parseResultDICT):
+    def getLocationStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
         每個句子內的地理位置列為一個 list。
@@ -222,10 +263,13 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.locationPat.finditer(p))])
-        locationLIST = [l for l in locationLIST if l]
+            else:
+                locationLIST.append([])
+        if not indexWithPOS:
+            locationLIST = self._segIndexConverter(parseResultDICT, locationLIST)
         return locationLIST
 
-    def getOpenDataPlaceLIST(self, parseResultDICT):
+    def getOpenDataPlaceLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的景點 (KNOWLEDGE_place)。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
         每個句子內的景點為一個 list.
@@ -244,10 +288,13 @@ class Articut:
         for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
                 placeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.placePat.finditer(p))])
-        placeLIST = [l for l in placeLIST if l]
+            else:
+                placeLIST.append([])
+        if not indexWithPOS:
+            placeLIST = self._segIndexConverter(parseResultDICT, placeLIST)
         return placeLIST
 
-    def getQuestionLIST(self, parseResultDICT):
+    def getQuestionLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中含有 <CLAUSE_Q> 標籤的句子。
         此處指的是
@@ -267,14 +314,21 @@ class Articut:
             return None
 
         questionLIST = []
-        for i, p in enumerate(parseResultDICT["result_pos"]):
+        for p in parseResultDICT["result_pos"]:
             if len(p) > 1:
-                for q in list(self.clausePat.finditer(p)):
-                    questionLIST.append([[q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])] for q in list(self.clausePat.finditer(p))])
-        questionLIST = [q for q in questionLIST if q]
+                tmpLIST = [q for q in list(self.clausePat.finditer(p))]
+                if tmpLIST:
+                    for q in tmpLIST:
+                        questionLIST.append([(q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])) for q in list(self.clausePat.finditer(p))])
+                else:
+                    questionLIST.append([])
+            else:
+                questionLIST.append([])
+        if not indexWithPOS:
+            questionLIST = self._segIndexConverter(parseResultDICT, questionLIST)
         return questionLIST
 
-    def getAddTWLIST(self, parseResultDICT):
+    def getAddTWLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中含有 <KNOWLEDGE_addTW> 標籤的字串。
         該字串為一台灣地址。
@@ -284,9 +338,13 @@ class Articut:
         else:
             return None
         addTWLIST = []
-        for add in parseResultDICT["result_pos"]:
-            addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.addTWPat.finditer(add))])
-        addTWLIST = [a for a in addTWLIST if a]
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.addTWPat.finditer(p))])
+            else:
+                addTWLIST.append([])
+        if not indexWithPOS:
+            addTWLIST = self._segIndexConverter(parseResultDICT, addTWLIST)
         return addTWLIST
 
     def versions(self):
@@ -299,34 +357,6 @@ class Articut:
             result["product"] = "{}/product/".format(self.url)
             result["document"] = "{}/document/".format(self.url)
         return result
-
-    def _segIndexConverter(self, parseResultDICT, posIndexLIST):
-        '''
-        Convert posIndex to segIndex
-        Return list
-        '''
-
-        if type(posIndexLIST) is list and "result_pos" in parseResultDICT:
-            pass
-        else:
-            return None
-
-        segIndexLIST = []
-        try:
-            for i, posLIST in enumerate(posIndexLIST):
-                if len(posLIST) > 1:
-                    tmpLIST = []
-                    for start, end, seg in posLIST:
-                        posEndSTR = parseResultDICT["result_pos"][i][:start]
-                        segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
-                        tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
-                    segIndexLIST.append(tmpLIST)
-                else:
-                    segIndexLIST.append(posLIST)
-        except Exception as e:
-            print("Invalid posIndexLIST format")
-            return None
-        return segIndexLIST
 
 
 if __name__ == "__main__":
@@ -383,6 +413,11 @@ if __name__ == "__main__":
     eventLIST = articut.getEventLIST(result)
     print("\n##Event:")
     pprint(eventLIST)
+
+    #列出所有的 time (時間)
+    timeLIST = articut.getTimeLIST(result)
+    print("\n##Time:")
+    pprint(timeLIST)
 
     #列出所有的 location word. (地方名稱)
     locationStemLIST = articut.getLocationStemLIST(result)
