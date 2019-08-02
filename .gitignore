@@ -1,4 +1,5 @@
 *.pyc
 *.json
 .*
+account.info
 __init__.py
