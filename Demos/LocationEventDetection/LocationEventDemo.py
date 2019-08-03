@@ -15,7 +15,7 @@ except:
     from ArticutAPI import Articut
 
 import json
-
+from pprint import pprint
 
 ############################ 定義及說明 ############################
 # LocationEvent 定義為「某時 - 某地 - 發生某事」。
@@ -29,68 +29,90 @@ import json
 ###################################################################
 
 
-#實體化 Articut()
-atc = Articut()
 
-#載入 Demo 用的文字
-contentLIST = []
-with open("./PengHu.txt", encoding="utf-8") as f:
-    contentLIST = [l.replace("\n", "") for l in f.readlines()]
+if __name__ == "__main__":
 
-resultLIST = []
+    try:
+        #使用自己的斷詞額度。
+        with open("../../account.info", "r") as f:
+            userDICT = json.loads(f.read())
+        username = userDICT["email"]
+        apikey = userDICT["apikey"]
+        atc = Articut(username=userDICT["email"], apikey=userDICT["apikey"])
+    except:
+        #使用免費的斷詞額度。
+        #實體化 Articut()
+        atc = Articut()
 
-for c in contentLIST:
-    print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
-    resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
+    #載入 Demo 用的文字
+    contentLIST = []
+    with open("./PengHu.txt", encoding="utf-8") as f:
+        contentLIST = [l.replace("\n", "") for l in f.readlines()]
 
-    eventDICT = {"time":[],
-                 "site":[],
-                 "event":[]}
+    #呼叫 parse(), 並把 "openDataPlaceAccessBOOL" 參數值設為 True 以便擷取最多的地點/地名資訊。
+    resultLIST = []
+    for c in contentLIST:
+        print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
+        resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
 
-    tmpLIST = []
-    timeLIST = atc.getTimeLIST(resultDICT)
-    if timeLIST!=None:
-        for tm in timeLIST:
-            eventDICT["time"].append([t[-1] for t in tm])
-    else:
-        pass
-    siteLIST = []
-    locationLIST = atc.getLocationStemLIST(resultDICT)
-    if locationLIST!=None:
-        siteLIST.extend(locationLIST)
-        for location in locationLIST:
-            eventDICT["site"].append([l[-1] for l in location])
-    else:
-        pass
-    addressLIST = atc.getAddTWLIST(resultDICT)
-    if addressLIST !=None:
-        siteLIST.extend(addressLIST)
-        for address in addressLIST:
-            eventDICT["site"].append([a[-1] for a in address])
+        eventDICT = {"time":[],
+                     "site":[],
+                     "event":[]}
 
-    placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
-    if placeLIST!=None:
-        siteLIST.extend(placeLIST)
-        for place in placeLIST:
-            eventDICT["site"].append([p[-1] for p in place])
-    else:
-        pass
-    eventLIST = atc.getEventLIST(resultDICT)
-    eventLIST.sort()
-    if eventLIST!=None:
-        if len(siteLIST)>0:
-            anchorIndex = min([l[0][0] for l in siteLIST if l!=[]])
-            for event in eventLIST:
-                if event[1]<anchorIndex:
+        #將結果傳給 getTimeLIST() 取出時間
+        tmpLIST = []
+        timeLIST = atc.getTimeLIST(resultDICT)
+        if timeLIST!=None:
+            for tm in timeLIST:
+                eventDICT["time"].append([t[-1] for t in tm])
+        else:
+            pass
+
+        #將結果傳給 getLocationStemLIST() 取出地名
+        siteLIST = []
+        locationLIST = atc.getLocationStemLIST(resultDICT)
+        if locationLIST!=None:
+            siteLIST.extend(locationLIST)
+            for location in locationLIST:
+                eventDICT["site"].append([l[-1] for l in location])
+        else:
+            pass
+
+        #將結果傳給 getAddTWLIST() 取出台灣地址
+        addressLIST = atc.getAddTWLIST(resultDICT)
+        if addressLIST !=None:
+            siteLIST.extend(addressLIST)
+            for address in range(0, len(addressLIST)):
+                if addressLIST[address] == []:
                     pass
                 else:
-                    eventDICT["event"].append("".join(event[-1]))
-    else:
-        pass
-    if eventDICT["site"]!=[] and eventDICT["event"]!=[]:
-        resultLIST.append(eventDICT)
+                    eventDICT["site"][address].extend([a[-1] for a in addressLIST[address]])
 
-print("DetectionResult:\n", resultLIST)
+        #將結果傳給 getOpenDataPlaceLIST() 取出開放資料平台中的景點
+        placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
+        if placeLIST!=None:
+            siteLIST.extend(placeLIST)
+            for place in range(0, len(placeLIST)):
+                eventDICT["site"][place].extend([p[-1] for p in placeLIST[place]])
+        else:
+            pass
 
-with open("./LocationEventDetectionResultLIST.json", "w", encoding="utf-8") as f:
-    json.dump(resultLIST, f, ensure_ascii=False)
+        eventLIST = atc.getEventLIST(resultDICT)
+        if eventLIST!=None:
+            if len(siteLIST)>0:
+                for event in range(0, len(eventLIST)):
+                    #eventDICT["event"].append([])
+                    eventDICT["event"].extend([e[-1] for e in eventLIST[event]])
+            else:
+                pass
+        else:
+            pass
+        if eventDICT["site"]!=[] and eventDICT["event"]!=[]:
+            resultLIST.append(eventDICT)
+
+    #在畫面上顯示結果，並將結果存入 LocationEventDetectionResultLIST.json 檔中。
+    print("DetectionResult:\n")
+    pprint(resultLIST)
+
+    with open("./LocationEventDetectionResultLIST.json", "w", encoding="utf-8") as f:
+        json.dump(resultLIST, f, ensure_ascii=False)

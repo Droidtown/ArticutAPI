@@ -14,25 +14,36 @@ except:
     from ArticutAPI import Articut
 
 
-# 載入 Demo 用的文字
-text = open("./InputString.txt", "r").read()
-sentLIST = text.split("\n")
+if __name__ == "__main__":
 
-# 實體化 Articut
-atc = Articut()
+    try:
+        #使用自己的斷詞額度。
+        with open("../../account.info", "r") as f:
+            userDICT = json.loads(f.read())
+        username = userDICT["email"]
+        apikey = userDICT["apikey"]
+        atc = Articut(username=userDICT["email"], apikey=userDICT["apikey"])
+    except:
+        #使用免費的斷詞額度。
+        #實體化 Articut()
+        atc = Articut()
 
-print("ArticutAPI Term Extraction Demo")
-for sentence in sentLIST:
-    if "" == sentence.strip():
-        continue
+    # 載入 Demo 用的文字
+    text = open("./InputString.txt", "r").read()
+    sentLIST = text.split("\n")
 
-    result = atc.parse(sentence)
-    if result["status"]:
-        print("{}\nInput: {}".format('#'*20 , sentence))
+    print("ArticutAPI Term Extraction Demo")
+    for sentence in sentLIST:
+        if "" == sentence.strip():
+            continue
 
-        # TextRank 抽取句子關鍵詞並排序
-        wordLIST = atc.analyse.textrank(result)
-        print("TextRank:", wordLIST)
-        # TFIDF 抽取句子關鍵詞
-        wordLIST = atc.analyse.extract_tags(result)
-        print("TFIDF:", wordLIST)
+        result = atc.parse(sentence)
+        if result["status"]:
+            print("{}\nInput: {}".format('#'*20 , sentence))
+
+            # TextRank 抽取句子關鍵詞並排序
+            wordLIST = atc.analyse.textrank(result)
+            print("TextRank:", wordLIST)
+            # TFIDF 抽取句子關鍵詞
+            wordLIST = atc.analyse.extract_tags(result)
+            print("TF-IDF:", wordLIST)
