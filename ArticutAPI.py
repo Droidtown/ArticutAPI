@@ -8,8 +8,10 @@ import requests
 
 try:
     from Toolkit.analyse import AnalyseManager
+    from Toolkit.localRE import TaiwanAddressAnalizer
 except: #供外部載入時使用。
     from .Toolkit.analyse import AnalyseManager
+    from .Toolkit.localRE import TaiwanAddressAnalizer
 
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
@@ -52,6 +54,7 @@ class Articut:
 
         # Toolkit
         self.analyse = AnalyseManager()
+        self.localRE = TaiwanAddressAnalizer(locale="TW")
 
     def __str__(self):
         return "Articut API"
@@ -365,6 +368,7 @@ if __name__ == "__main__":
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
     #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
     inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
+    inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷4弄1號2樓512室"
 
     articut = Articut()
 
@@ -444,3 +448,56 @@ if __name__ == "__main__":
     textrankResult = articut.analyse.textrank(result)
     print("\n##Textrank:")
     pprint(textrankResult)
+
+    #使用 localRE 工具取得地址分段細節
+    countyResult = articut.localRE.getAddressCounty(result)
+    print("\n##localRE: 縣")
+    pprint(countyResult)
+
+    cityResult = articut.localRE.getAddressCity(result)
+    print("\n##localRE: 市")
+    pprint(cityResult)
+
+    districtResult = articut.localRE.getAddressDistrict(result)
+    print("\n##localRE: 區")
+    pprint(districtResult)
+
+    townshipResult = articut.localRE.getAddressTownship(result)
+    print("\n##localRE: 鄉里")
+    pprint(townshipResult)
+
+    townResult = articut.localRE.getAddressTown(result)
+    print("\n##localRE: 鎮")
+    pprint(townResult)
+
+    villageResult = articut.localRE.getAddressVillage(result)
+    print("\n##localRE: 村")
+    pprint(villageResult)
+
+    neighborhoodResult = articut.localRE.getAddressNeighborhood(result)
+    print("\n##localRE: 鄰")
+    pprint(neighborhoodResult)
+
+    roadResult = articut.localRE.getAddressRoad(result)
+    print("\n##localRE: 路")
+    pprint(roadResult)
+
+    sectionResult = articut.localRE.getAddressSection(result)
+    print("\n##localRE: 段")
+    pprint(sectionResult)
+
+    alleyResult = articut.localRE.getAddressAlley(result)
+    print("\n##localRE: 巷、弄")
+    pprint(alleyResult)
+
+    numberResult = articut.localRE.getAddressNumber(result)
+    print("\n##localRE: 號")
+    pprint(numberResult)
+
+    floorResult = articut.localRE.getAddressFloor(result)
+    print("\n##localRE: 樓")
+    pprint(floorResult)
+
+    roomResult = articut.localRE.getAddressRoom(result)
+    print("\n##localRE: 室")
+    pprint(roomResult)
