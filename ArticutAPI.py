@@ -367,8 +367,8 @@ if __name__ == "__main__":
     #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
     #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
-    inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
-    inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷4弄1號2樓512室"
+    #inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
+    inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷1號2樓" #localRE 工具包 Demo
 
     articut = Articut()
 
