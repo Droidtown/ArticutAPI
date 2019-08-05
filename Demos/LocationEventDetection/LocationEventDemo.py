@@ -60,7 +60,6 @@ if __name__ == "__main__":
                      "event":[]}
 
         #將結果傳給 getTimeLIST() 取出時間
-        tmpLIST = []
         timeLIST = atc.getTimeLIST(resultDICT)
         if timeLIST!=None:
             for tm in timeLIST:
