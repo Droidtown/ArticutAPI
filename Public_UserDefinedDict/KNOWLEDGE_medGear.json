@@ -1,0 +1,17 @@
+{
+    "耳溫槍":[],
+    "自控式止痛儀":["pca", "PCA", "Pca", "止痛儀", "止痛器"],
+    "換藥車":["藥車"],
+    "氧氣筒":[],
+    "心臟電擊器":["起搏器", "電擊器"],
+    "血糖機":["血糖儀"],
+    "輪椅":[],
+    "洗澡椅":[],
+    "烤燈":[],
+    "點滴幫浦":["iv pump", "IV PUMP", "Iv Pump", "IV pump", "Iv pump"],
+    "輪血加溫器":[],
+    "氧氣設備":["給氧設備"],
+    "蒸氣吸入器":["steam inhalation", "Steam inhalation", "Steam Inhalation", "STEAM INHALATION"],
+    "急救車":[],
+    "血壓監視器":["BP Monitor", "BP MONITOR", "BP monitor"]
+}
