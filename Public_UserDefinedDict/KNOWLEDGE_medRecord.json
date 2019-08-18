@@ -69,5 +69,10 @@
     "血壓":["BP", "Blood pressure", "blodd pressure"],
     "體重":["BW", "Body weight", "body weight"],
     "身高":["BH", "Body height", "body height"],
-    "停止":["DC", "Discontinue", "discontinue"]
+    "停止":["DC", "Discontinue", "discontinue"],
+    "痛":["Pain", "pain"],
+    "正常":["Normal", "normal"],
+    "盤尼西林皮膚測試":["PCT", "Penicillin skin test", "penicillin skin test"],
+    "噴霧治療":["Steam inhalation", "steam inhalation"],
+    "診斷":["Impression", "impression"]
 }
