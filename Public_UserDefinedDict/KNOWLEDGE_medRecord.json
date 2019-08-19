@@ -14,6 +14,7 @@
     "會診":["Consult", "consult"],
     "痰":["Sputum", "sputum"],
     "尿":["尿液", "Urine", "urine"],
+    "尿布":["包大人", "尿褲", "紙尿褲", "紙尿布"],
     "糞便":["Stool", "stool"],
     "同意書":["Permit", "permit"],
     "病歷":["Chart", "chart"],
