@@ -252,6 +252,7 @@ pprint(result)
 ---
 
 ### 進階用法 06 - 使用 GraphQL 查詢斷詞結果
+[![Watch the video](Screenshots/Articut-GraphQL.png)](https://youtu.be/0Ubx08WJ7rU)
 
 ### 使用 GraphiQL 工具
 
@@ -272,10 +273,10 @@ $ python ArticutGraphQL.py articutResult.json
 ```
 
 ### 使用範例 01
-![GraphiQL Example 01](Screenshots/GraphiQL.png)
+![GraphiQL Example 01](Screenshots/GraphiQL_Example01.png)
 
 ### 使用範例 02
-![GraphiQL Example 02](Screenshots/GraphiQL2.png)
+![GraphiQL Example 02](Screenshots/GraphiQL_Example02.png)
 
 ### 使用 Articut-GraphQL
 
@@ -318,7 +319,7 @@ pprint(graphQLResult)
 ```
 
 ### 回傳結果
-![Articut-GraphQL Example 01](Screenshots/Articut-GraphQL.png)
+![Articut-GraphQL Example 01](Screenshots/Articut-GraphQL_Example01.png)
 
 ### 使用範例 02
 ```
@@ -350,5 +351,5 @@ pprint(graphQLResult)
 ```
 	
 ### 回傳結果
-![Articut-GraphQL 回傳結果2](Screenshots/Articut-GraphQL2.png)
+![Articut-GraphQL 回傳結果2](Screenshots/Articut-GraphQL_Example02.png)
 
