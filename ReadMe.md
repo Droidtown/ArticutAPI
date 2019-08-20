@@ -265,15 +265,17 @@ $ pip install jinja2
 $ pip install uvicorn
 ```
 
-執行 ArticutGraphQL.py 帶入 Articut 斷詞結果檔案路徑。
+執行 ArticutGraphQL.py 帶入 Articut 斷詞結果檔案路徑，並開啟瀏覽器輸入網址 http://0.0.0.0:8000/，開始使用 GraphiQL 工具。
 
 ```
 $ python ArticutGraphQL.py articutResult.json
 ```
 
-開啟瀏覽器輸入網址 http://0.0.0.0:8000/，開始使用 GraphiQL 工具。
+### 使用範例 01
+![GraphiQL Example 01](Screenshots/GraphiQL.png)
 
-![GraphiQL](Screenshots/GraphiQL.png)
+### 使用範例 02
+![GraphiQL Example 02](Screenshots/GraphiQL2.png)
 
 ### 使用 Articut-GraphQL
 
@@ -282,7 +284,7 @@ $ python ArticutGraphQL.py articutResult.json
 ```
 $ pip install graphene
 ```
-### 使用範例
+### 使用範例 01
 ```
 inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷1號2樓"
 result = articut.parse(inputSTR)
@@ -314,8 +316,39 @@ graphQLResult = articut.graphQL.query(
 	}""")
 pprint(graphQLResult)
 ```
+
+### 回傳結果
+![Articut-GraphQL Example 01](Screenshots/Articut-GraphQL.png)
+
+### 使用範例 02
+```
+inputSTR = inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。"
+result = articut.parse(inputSTR)
+with open("articutResult.json", "w", encoding="utf-8") as resultFile:
+    json.dump(result, resultFile, ensure_ascii=False)
+	
+graphQLResult = articut.graphQL.query(
+    filePath="articutResult.json",
+    query="""
+	{
+	  meta {
+	    lang
+	    description
+	  }
+	  doc {
+	    text
+	    ents {
+	      persons {
+	        text
+	        pos_
+	        tag_
+	      }
+	    }
+	  }
+	}""")
+pprint(graphQLResult)
+```
 	
 ### 回傳結果
-![Articut-GraphQL 回傳結果](Screenshots/Articut-GraphQL.png)
-
+![Articut-GraphQL 回傳結果2](Screenshots/Articut-GraphQL2.png)
 

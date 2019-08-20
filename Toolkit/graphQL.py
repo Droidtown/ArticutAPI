@@ -17,6 +17,46 @@ resultFilePath = ''
 """
 Articut GraphQL Schema
 """
+class Persons(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    text = graphene.String()
+    pos_ = graphene.String()
+    tag_ = graphene.String()
+
+class Nouns(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    text = graphene.String()
+    pos_ = graphene.String()
+    tag_ = graphene.String()
+
+class Numbers(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    text = graphene.String()
+    pos_ = graphene.String()
+    tag_ = graphene.String()
+
+class Sites(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    text = graphene.String()
+    pos_ = graphene.String()
+    tag_ = graphene.String()
+
+class Userdefined(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    text = graphene.String()
+    pos_ = graphene.String()
+    tag_ = graphene.String()
+
 class Meta(graphene.ObjectType):
     class Meta:
         default_resolver = dict_resolver
@@ -38,12 +78,23 @@ class Tokens(graphene.ObjectType):
     isClause = graphene.Boolean()
     isKnowledge = graphene.Boolean()
 
+class Ents(graphene.ObjectType):
+    class Meta:
+        default_resolver = dict_resolver
+    
+    persons = graphene.List(Persons)
+    nouns = graphene.List(Nouns)
+    numbers = graphene.List(Numbers)
+    sites = graphene.List(Sites)
+    #userdefined = graphene.List(Userdefined)
+
 class Doc(graphene.ObjectType):
     class Meta:
         default_resolver = dict_resolver
     
     text = graphene.String()
     tokens = graphene.List(Tokens)
+    ents = graphene.Field(Ents)
 
 class Nlp(graphene.ObjectType):
     meta = graphene.Field(Meta)
@@ -61,7 +112,7 @@ class Query(graphene.ObjectType):
             return Nlp(
                 meta = {
                     "lang": model,
-                    "description": 'Articut GraphQL Model Unsupported.'
+                    "description": 'Articut-GraphQL Model Unsupported.'
                 }
             )
         
@@ -69,6 +120,7 @@ class Query(graphene.ObjectType):
             try:
                 with open(filepath, 'r', encoding='utf-8') as resultFile:
                     result = json.loads(resultFile.read())
+                textTagLIST = posList2TextTag(result["result_pos"])
                 
                 return Nlp(
                     meta = {
@@ -77,15 +129,16 @@ class Query(graphene.ObjectType):
                     },
                     doc = {
                         "text": result["result_segmentation"].replace('/', ''),
-                        "tokens": getTokens(result["result_pos"])
+                        "tokens": getTokens(textTagLIST),
+                        "ents": getEnts(textTagLIST)
                     }
                 )
             except Exception as e:
-                print(e)
+                print('[Articut-GraphQL ERROR] {}'.format(e))
         return Nlp(
             meta = {
                 "lang": model,
-                "description": 'Articut GraphQL Error.'
+                "description": 'Articut-GraphQL Error.'
             }
         )
 
@@ -113,6 +166,28 @@ class GraphQL():
           isClause
           isKnowledge
         }
+        ents {
+          persons {
+            text
+            pos_
+            tag_
+          }
+          nouns {
+            text
+            pos_
+            tag_
+          }
+          numbers {
+            text
+            pos_
+            tag_
+          }
+          site {
+            text
+            pos_
+            tag_
+          }
+        }
       }
     }"""):
         query = """{\n  nlp(filepath: "{{filePath}}", model: "TW") {{query}}\n}""".replace('{{filePath}}', filePath).replace('{{query}}', query)
@@ -120,28 +195,7 @@ class GraphQL():
         return json.loads(json.dumps({"data": result.data}))
 
 """
-取得 Articut 詞組和 POS
-"""
-def getTokens(resultPosLIST):
-    resultLIST = []
-    textTagLIST = posList2TextTag(resultPosLIST)
-    for textTag in textTagLIST:
-        resultDICT = {
-            "text": textTag["text"],
-            "tag_": textTag["tag"],
-            "pos_": pos2UniversalPOS(textTag["tag"]),
-            "isStop": posIsStop(textTag["tag"]),
-            "isEntity": posIsEntity(textTag["tag"]),
-            "isVerb": posIsVerb(textTag["tag"]),
-            "isTime": posIsTime(textTag["tag"]),
-            "isClause": posIsClause(textTag["tag"]),
-            "isKnowledge": posIsKnowledge(textTag["tag"])
-        }
-        resultLIST.append(resultDICT)
-    return resultLIST
-
-"""
-將 result_pos 拆開成 [{"text", "tag"}, {"text", "tag"} ...]
+將 result_pos 拆開成 [{"text", "tag_", "pos_"} ...]
 """
 def posList2TextTag(posLIST):
     textTagLIST = []
@@ -155,10 +209,15 @@ def posList2TextTag(posLIST):
                 textLIST = [tp.group(0).split("</") for tp in posPat.finditer(t)]
                 textTagLIST.append({
                     "text": textLIST[0][0],
-                    "tag": textLIST[0][1][:-1]
+                    "tag_": textLIST[0][1][:-1],
+                    "pos_": pos2UniversalPOS(textLIST[0][1][:-1])
                 })
         else:
-            textTagLIST.append({"text": pos, "tag": 'PUNCTUATION'})
+            textTagLIST.append({
+                "text": pos,
+                "tag_": 'PUNCTUATION',
+                "pos_": 'PUNCT'
+            })
     textTagLIST.reverse()
     return textTagLIST
 
@@ -166,8 +225,6 @@ def posList2TextTag(posLIST):
 Articut POS 轉換 Universal Part-of-speech Tags
 """
 def pos2UniversalPOS(pos):
-    if pos in ['PUNCTUATION']:
-        return 'PUNCT'
     if pos in ['FUNC_inner']:
         return 'ADP'
     if pos in ['FUNC_determiner']:
@@ -186,7 +243,7 @@ def pos2UniversalPOS(pos):
         return 'QUANTITY'
     if pos in ['MODIFIER', 'MODIFIER_color', 'FUNC_modifierHead']:
         return 'ADJ'
-    if pos in ['LOCATION', 'RANGE_locality', 'KNOWLEDGE_place', 'KNOWLEDGE_addTW']:
+    if pos in ['LOCATION', 'RANGE_locality', 'KNOWLEDGE_place', 'KNOWLEDGE_addTW', 'KNOWLEDGE_route']:
         return 'LOC'
     if pos in ['VerbP', 'ACTION_verb', 'ACTION_lightVerb', 'ACTION_quantifiedVerb']:
         return 'VERB'
@@ -198,7 +255,37 @@ def pos2UniversalPOS(pos):
     return 'OTHER' # ['UserDefined', 'CLAUSE_AnotAQ', 'CLAUSE_YesNoQ', 'CLAUSE_WhoQ', 'CLAUSE_WhatQ', 'CLAUSE_WhereQ', 'CLAUSE_WhenQ', 'CLAUSE_HowQ', 'CLAUSE_WhyQ', 'CLAUSE_Particle', 'KNOWLEDGE_url']
 
 """
-Articut POS Type
+Articut-GraphQL Content
+"""
+def getTokens(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        resultDICT = {
+            "text": textTag["text"],
+            "tag_": textTag["tag_"],
+            "pos_": textTag["pos_"],
+            "isStop": posIsStop(textTag["tag_"]),
+            "isEntity": posIsEntity(textTag["tag_"]),
+            "isVerb": posIsVerb(textTag["tag_"]),
+            "isTime": posIsTime(textTag["tag_"]),
+            "isClause": posIsClause(textTag["tag_"]),
+            "isKnowledge": posIsKnowledge(textTag["tag_"])
+        }
+        resultLIST.append(resultDICT)
+    return resultLIST
+
+def getEnts(textTagLIST):
+    resultDICT = {
+        "persons": getPersons(textTagLIST),
+        "nouns": getNouns(textTagLIST),
+        "numbers": getNumbers(textTagLIST),
+        "sites": getSites(textTagLIST)
+        #"userdefined": getUserdefined(textTagLIST)
+    }
+    return resultDICT
+
+"""
+Articut-GraphQL Function
 """
 def posIsStop(pos):
     if pos in ['ACTION_lightVerb', 'FUNC_determiner', 'FUNC_modifierHead', 'FUNC_negation', 'FUNC_conjunction', 'RANGE_locality', 'RANGE_period']:
@@ -226,9 +313,46 @@ def posIsClause(pos):
     return False
 
 def posIsKnowledge(pos):
-    if pos in ['KNOWLEDGE_addTW', 'KNOWLEDGE_url', 'KNOWLEDGE_place', 'LOCATION', 'UserDefined']:
+    if pos in ['KNOWLEDGE_addTW', 'KNOWLEDGE_url', 'KNOWLEDGE_place', 'KNOWLEDGE_route', 'LOCATION', 'UserDefined']:
         return True
     return False
+
+def getPersons(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        if textTag["tag_"] in ['ENTITY_person', 'ENTITY_pronoun']:
+            resultLIST.append(textTag)
+    return resultLIST
+
+def getNouns(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        if textTag["tag_"] in ['ENTITY_noun', 'ENTITY_nounHead', 'ENTITY_nouny', 'ENTITY_oov', 'ENTITY_NP']:
+            resultLIST.append(textTag)
+    return resultLIST
+
+def getNumbers(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        if textTag["tag_"] in ['ENTITY_classifier', 'ENTITY_measurement']:
+            resultLIST.append(textTag)
+    return resultLIST
+
+def getSites(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        if textTag["tag_"] in ['KNOWLEDGE_addTW', 'KNOWLEDGE_place', 'LOCATION', 'KNOWLEDGE_route']:
+            resultLIST.append(textTag)
+    return resultLIST
+
+# Uncompleted
+def getUserdefined(textTagLIST):
+    resultLIST = []
+    for textTag in textTagLIST:
+        if textTag["tag_"] in ['']:
+            resultLIST.append(textTag)
+    return resultLIST
+
 
 
 """

@@ -41,7 +41,13 @@
       var parameters = {
         "query": '{\n  nlp(filepath: "{{resultFilePath}}", model: "TW") {\n' +
                  '    meta {\n      lang\n      description\n    }\n' +
-                 '    doc {\n      text\n      tokens {\n        text\n        pos_\n        tag_\n        isStop\n        isEntity\n        isVerb\n        isTime\n        isClause\n        isKnowledge\n      }\n' +
+                 '    doc {\n      text\n' +
+                 '      tokens {\n        text\n        pos_\n        tag_\n        isStop\n        isEntity\n        isVerb\n        isTime\n        isClause\n        isKnowledge\n      }\n' +
+                 '      ents {\n' +
+                 '        persons {\n          text\n          pos_\n          tag_\n        }\n' +
+                 '        nouns {\n          text\n          pos_\n          tag_\n        }\n' +
+                 '        numbers {\n          text\n          pos_\n          tag_\n        }\n' +
+                 '        sites {\n          text\n          pos_\n          tag_\n        }\n      }\n' +
                  '    }\n  }\n}'
       };
       search.substr(1).split('&').forEach(function (entry) {
