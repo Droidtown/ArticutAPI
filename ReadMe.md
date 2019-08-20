@@ -266,7 +266,7 @@ $ pip install jinja2
 $ pip install uvicorn
 ```
 
-執行 ArticutGraphQL.py 帶入 Articut 斷詞結果檔案路徑，並開啟瀏覽器輸入網址 http://0.0.0.0:8000/，開始使用 GraphiQL 工具。
+執行 ArticutGraphQL.py 帶入 Articut 斷詞結果檔案路徑，並開啟瀏覽器輸入網址 http://0.0.0.0:8000/
 
 ```
 $ python ArticutGraphQL.py articutResult.json
