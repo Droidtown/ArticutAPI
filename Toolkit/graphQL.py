@@ -249,7 +249,7 @@ def pos2UniversalPOS(pos):
         return 'VERB'
     if pos in ['TIME_day', 'TIME_week', 'TIME_month', 'TIME_season', 'TIME_year', 'TIME_decade', 'TIME_holiday']:
         return 'DATE'
-    if pos in ['IDIOM', 'ENTITY_noun', 'ENTITY_nouny', 'ENTITY_oov', 'ENTITY_NP', 'ENTITY_nounHead', 'ENTITY_classifier', 'ENTITY_possessive']:
+    if pos in ['IDIOM', 'ENTITY_noun', 'ENTITY_nouny', 'ENTITY_oov', 'ENTITY_NP', 'ENTITY_nounHead', 'ENTITY_num', 'ENTITY_classifier', 'ENTITY_possessive']:
         return 'NOUN'
 
     return 'OTHER' # ['UserDefined', 'CLAUSE_AnotAQ', 'CLAUSE_YesNoQ', 'CLAUSE_WhoQ', 'CLAUSE_WhatQ', 'CLAUSE_WhereQ', 'CLAUSE_WhenQ', 'CLAUSE_HowQ', 'CLAUSE_WhyQ', 'CLAUSE_Particle', 'KNOWLEDGE_url']
@@ -293,7 +293,7 @@ def posIsStop(pos):
     return False
 
 def posIsEntity(pos):
-    if pos in ['ENTITY_classifier', 'ENTITY_measurement', 'ENTITY_person', 'ENTITY_pronoun', 'ENTITY_possessive', 'ENTITY_noun', 'ENTITY_nounHead', 'ENTITY_nouny', 'ENTITY_oov', 'ENTITY_NP']:
+    if pos in ['ENTITY_num', 'ENTITY_classifier', 'ENTITY_measurement', 'ENTITY_person', 'ENTITY_pronoun', 'ENTITY_possessive', 'ENTITY_noun', 'ENTITY_nounHead', 'ENTITY_nouny', 'ENTITY_oov', 'ENTITY_NP']:
         return True
     return False
 
@@ -334,7 +334,7 @@ def getNouns(textTagLIST):
 def getNumbers(textTagLIST):
     resultLIST = []
     for textTag in textTagLIST:
-        if textTag["tag_"] in ['ENTITY_classifier', 'ENTITY_measurement']:
+        if textTag["tag_"] in ['ENTITY_num', 'ENTITY_classifier', 'ENTITY_measurement']:
             resultLIST.append(textTag)
     return resultLIST
 
