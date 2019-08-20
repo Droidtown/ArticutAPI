@@ -536,7 +536,7 @@ if __name__ == "__main__":
     print("\n##localRE: 室")
     pprint(roomResult)
 
-    #使用 GraphQL 查詢斷詞結果
+    #使用 Articut-GraphQL 查詢斷詞結果
     try:
         graphQLResult = articut.graphQL.query(
             filePath=resultFilePath,
