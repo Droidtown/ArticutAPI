@@ -248,3 +248,74 @@ pprint(result)
 
 使用範例：
 <https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L337-340>
+
+---
+
+### 進階用法 06 - 使用 GraphQL 查詢斷詞結果
+
+### 使用 GraphiQL 工具
+
+**環境需求**
+
+```
+Python 3.6.1
+$ pip install graphene
+$ pip install starlette
+$ pip install jinja2
+$ pip install uvicorn
+```
+
+執行 ArticutGraphQL.py 帶入 Articut 斷詞結果檔案路徑。
+
+```
+$ python ArticutGraphQL.py articutResult.json
+```
+
+開啟瀏覽器輸入網址 http://0.0.0.0:8000/，開始使用 GraphiQL 工具。
+
+![GraphiQL](Screenshots/GraphiQL.png)
+
+### 使用 Articut-GraphQL
+
+安裝 graphene 模組
+
+```
+$ pip install graphene
+```
+### 使用範例
+```
+inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷1號2樓"
+result = articut.parse(inputSTR)
+with open("articutResult.json", "w", encoding="utf-8") as resultFile:
+    json.dump(result, resultFile, ensure_ascii=False)
+	
+graphQLResult = articut.graphQL.query(
+    filePath="articutResult.json",
+    query="""
+	{
+	  meta {
+	    lang
+	    description
+	  }
+	  doc {
+	    text
+	    tokens {
+	      text
+	      pos_
+	      tag_
+	      isStop
+	      isEntity
+	      isVerb
+	      isTime
+	      isClause
+	      isKnowledge
+	    }
+	  }
+	}""")
+pprint(graphQLResult)
+```
+	
+### 回傳結果
+![Articut-GraphQL 回傳結果](Screenshots/Articut-GraphQL.png)
+
+

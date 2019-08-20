@@ -13,6 +13,13 @@ except: #供外部載入時使用。
     from .Toolkit.analyse import AnalyseManager
     from .Toolkit.localRE import TaiwanAddressAnalizer
 
+try:
+    from Toolkit.graphQL import GraphQL
+except:
+    print("No module named 'graphene'")
+    print("Articut-graphQL requires 'graphene' module.")
+    print("Please use pip/conda install graphene-python to install the module and reload ArticutAPI.")
+
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
         '''
@@ -55,6 +62,10 @@ class Articut:
         # Toolkit
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
+        try:
+            self.graphQL = GraphQL()
+        except:
+            pass
 
     def __str__(self):
         return "Articut API"
@@ -374,9 +385,32 @@ if __name__ == "__main__":
 
     print("inputSTR:{}\n".format(inputSTR))
 
+    #檢查儲存的結果是否已存在
+    resultFilePath = "articutResult.json"
+    resultExistBOOL = False
+    try:
+        with open(resultFilePath, "r", encoding="utf-8") as resultFile:
+            result = json.loads(resultFile.read())
+            # inputSTR 去除空白及斜線
+            # result_segmentation 去除斜線
+            if inputSTR.replace(' ', '').replace("/", "") == result["result_segmentation"].replace("/", ""):
+                resultExistBOOL = True
+    except:
+        pass
+
     #取得斷詞結果
-    result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
-    print("斷詞結果：")
+    if not resultExistBOOL:
+        result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
+
+        #儲存斷詞結果
+        try:
+            with open(resultFilePath, "w", encoding="utf-8") as resultFile:
+                json.dump(result, resultFile, ensure_ascii=False)
+                print("斷詞結果儲存成功")
+        except Exception as e:
+            print("斷詞結果儲存失敗：{}".format(e))
+
+    print("\n斷詞結果：")
     pprint(result["result_segmentation"])
     print("\n標記結果：")
     pprint(result["result_pos"])
@@ -501,3 +535,35 @@ if __name__ == "__main__":
     roomResult = articut.localRE.getAddressRoom(result)
     print("\n##localRE: 室")
     pprint(roomResult)
+
+    #使用 GraphQL 查詢斷詞結果
+    try:
+        graphQLResult = articut.graphQL.query(
+            filePath=resultFilePath,
+            query="""
+        {
+          meta {
+            lang
+            description
+          }
+          doc {
+            text
+            tokens {
+              text
+              pos_
+              tag_
+              isStop
+              isEntity
+              isVerb
+              isTime
+              isClause
+              isKnowledge
+            }
+          }
+        }""")
+        print("\n##Articut-GraphQL:")
+        pprint(graphQLResult)
+    except:
+        print("No module named 'graphene'")
+        print("Articut-graphQL requires 'graphene' module.")
+        print("Please use pip/conda install graphene-python to install the module and reload ArticutAPI.")
