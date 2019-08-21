@@ -1,50 +1,47 @@
-[English ReadMe](README_EN.md)
+[中文版 ReadMe](README_TW.md)
 ------------------------------
 
-# Articut-GraphQL (類 spaCy 中文)
+# Articut-GraphQL (Psudo-spaCy NLP Tool for Chinese)
 
-Articut-GraphQL 是現今完成度最高，可操作中文文本的 類 spaCy 工具。不需要訓練模型，只要把經過 Articut 中文斷詞處理後的結果載入 Articut-GraphQL 即可開始使用。
+Articut-GraphQL the most practical sPacy NLP tool for Chinese language. It is not driven by Machine Learning but Chinese Language Syntactic Rules. Simply load the .json file which contains the text processed with Articut CWS, then you are good to go.
 
-## 線上操作
+## Use it Online
 
-即將登場
+To be released soon...(very soon, I promise.)
 
-### 特性
-以 **`曾正元在新竹的交通大學讀書`** 這個句子為例，純粹 spaCy 做訓練，以及只用 Articut-GraphQL 的 `Doc` 各種屬性如下:
+### Features
+Taking the sentence **`曾正元在新竹的交通大學讀書`** (Zeng, Jen-yuan studies in the Chiao Tung University in Hsinchu.) for example, the difference of `doc` between using spaCy and Articut-GraphQL are shown below:
 
-![attributes_of_doc](../../Screenshots/attributes_of_doc.gif)
+![attributes_of_doc](../../Screenshots/attributes_of_doc_EN.gif)
 
 ### NER
 
-Articut-GraphQL 可辨識 [人名]、[人稱代名詞]、[地名]、[台灣道路名稱]、 [台灣地址]、[URL]…等「命名實體」(Named Entity)
+Articut-GraphQL can recognize [Person]、[Pronoun]、[Location]、[Route names in Taiwan]、 [Address in Taiwan]、[URL]...etc named entities.
 
 ![ner_of_doc](../../Screenshots/ner_of_doc.png)
 
-## 開始使用
+## Start Using Articut-GraphQL
+### System requirement
 
+Python 3.6.1+
 
-
-### 系统要求
-
-Python 3.5+
-
-### 安装
+### Download
 `git clone git@github.com:Droidtown/ArticutAPI.git`
 
-### 指定文本
-以 "articutResult.json" 為例。其內容應為經過 Articut 斷詞處理後的結果，另存成 .json 格式。
+### Specify a text file
+Taking file **"articutResult.json"** for example, the content of the file is the processed results of some Chinese text by Articut and saved as .json format.
 
 **`filepath: "articutResult.json"`**
 
-### 指定句法規則
-目前僅支援「繁體中文」，故只能填寫大寫的 "TW"
+### Specify Syntactic Rules:
+Currently, we only support "Traditional Chinese", so it has to be "TW" now.
 
 **`model:"TW"`**
 
-### 開始操作
+### Begin to operate GraphQL:
 
 
 
-## 授權
+## License
 
-MIT License - 詳參 [LICENSE.md](https://github.com/Droidtown/ArticutAPI/blob/master/LICENSE)
+MIT License - Details: [LICENSE.md](https://github.com/Droidtown/ArticutAPI/blob/master/LICENSE)
