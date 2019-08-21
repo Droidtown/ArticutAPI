@@ -182,7 +182,7 @@ class GraphQL():
             pos_
             tag_
           }
-          site {
+          sites {
             text
             pos_
             tag_
