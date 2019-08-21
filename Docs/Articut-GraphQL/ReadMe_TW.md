@@ -1,4 +1,4 @@
-[English ReadMe](README_EN.md)
+[English ReadMe](ReadMe_EN.md)
 ------------------------------
 
 # Articut-GraphQL (類 spaCy 中文)
