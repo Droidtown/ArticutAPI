@@ -1,4 +1,4 @@
-[中文版 ReadMe](README_TW.md)
+Switch to: [中文版 ReadMe]([README_TW.md](./ReadMe_TW.md))
 ------------------------------
 
 # Articut-GraphQL (Psudo-spaCy NLP Tool for Chinese)
