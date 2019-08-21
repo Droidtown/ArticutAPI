@@ -10,7 +10,7 @@ Articut-GraphQL 是現今完成度最高，可操作中文文本的 類 spaCy �
 即將登場
 
 ### 特性
-以 `曾正元在新竹的交通大學讀書` 這個句子為例，純粹 spaCy 做訓練，以及只用 Articut-GraphQL 的 `Doc` 各種屬性如下:
+以 **`曾正元在新竹的交通大學讀書`** 這個句子為例，純粹 spaCy 做訓練，以及只用 Articut-GraphQL 的 `Doc` 各種屬性如下:
 
 ![attributes_of_doc](https://github.com/Droidtown/ArticutAPI/tree/master/Screenshots/attributes_of_doc.gif)
 
