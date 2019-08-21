@@ -12,13 +12,13 @@ Articut-GraphQL 是現今完成度最高，可操作中文文本的 類 spaCy �
 ### 特性
 以 **`曾正元在新竹的交通大學讀書`** 這個句子為例，純粹 spaCy 做訓練，以及只用 Articut-GraphQL 的 `Doc` 各種屬性如下:
 
-![attributes_of_doc](https://github.com/Droidtown/ArticutAPI/tree/master/Screenshots/attributes_of_doc.gif)
+![attributes_of_doc](Screenshots/attributes_of_doc.gif)
 
 ### NER
 
 Articut-GraphQL 可辨識 [人名]、[人稱代名詞]、[地名]、[台灣道路名稱]、 [台灣地址]、[URL]…等「命名實體」(Named Entity)
 
-![ner_of_doc](https://github.com/Droidtown/ArticutAPI/tree/master/Screenshots/ner_of_doc.png)
+![ner_of_doc](Screenshots/ner_of_doc.png)
 
 ## 開始使用
 
