@@ -369,6 +369,15 @@ class Articut:
         return result
 
 
+class Tokenizer:
+    def __init__(self, articutResult):
+        self.text = []
+        self.tag_ = []
+        self.idx = []
+        self.pos_ = []
+
+
+
 if __name__ == "__main__":
     from pprint import pprint
 
