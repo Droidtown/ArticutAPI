@@ -23,8 +23,8 @@ except:
 class Articut:
     def __init__(self, username="", apikey="", version="latest", level="lv2"):
         '''
-        username = ""    # 你註冊時的 email。若留空，則會使用每日 1 萬字的公用帳號。
-        apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每日 1 萬字的公用帳號。
+        username = ""    # 你註冊時的 email。若留空，則會使用每小時更新 2000 字的公用帳號。
+        apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每小時更新 2000 字的公用帳號。
         '''
         try:
             with open("./account.info", "r") as f:
@@ -43,6 +43,8 @@ class Articut:
         self.userDefinedDictFILE = None
         self.openDataPlaceAccessBOOL=False
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
+
+        # Regex Pattern
         self.verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
         self.verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
         self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
@@ -55,6 +57,9 @@ class Articut:
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
         self.eventPat = re.compile("<ACTION_lightVerb>[^<]</ACTION_lightVerb>((?<!</LOCATION>)<ENTITY_nouny>[^<]</ENTITY_nouny>)?((<ACTION_verb>[^<]*?</ACTION_verb>)|(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>$))|<ACTION_verb>.?[有現到見道]</ACTION_verb>(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)$|(?<=[有現到見道]</ACTION_verb>)((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>$|((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(?!<ENTITY_pronoun>)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>|<ACTION_verb>[^<]*?</ACTION_verb>($|(?=<ACTION_verb>))")
         self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
+        self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
+        self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
+        self.currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
         self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
@@ -105,7 +110,7 @@ class Articut:
         url = "{}/Articut/API/".format(self.url)
         payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
                    "username": self.username,                     #String Type：使用者帳號 email
-                   "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每日公用一萬字的額度。
+                   "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                    "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                    "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
                    "opendata_place":self.openDataPlaceAccessBOOL} #Bool Type：為 True 或 False，表示是否允許 Articut 存取 OpenData 中的地點名稱。
@@ -281,7 +286,7 @@ class Articut:
 
     def getOpenDataPlaceLIST(self, parseResultDICT, indexWithPOS=True):
         '''
-        取出斷詞結果中的景點 (KNOWLEDGE_place)。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
+        取出斷詞結果中的景點 (KNOWLEDGE_place) 標籤的字串。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
         每個句子內的景點為一個 list.
         '''
         if "result_pos" in parseResultDICT:
@@ -306,7 +311,7 @@ class Articut:
 
     def getQuestionLIST(self, parseResultDICT, indexWithPOS=True):
         '''
-        取出斷詞結果中含有 <CLAUSE_Q> 標籤的句子。
+        取出斷詞結果中含有 (CLAUSE_Q) 標籤的句子。
         此處指的是
             <CLAUSE_AnotAQ>: A-not-A 問句
             <CLAUSE_YesNoQ>: 是非問句
@@ -340,7 +345,7 @@ class Articut:
 
     def getAddTWLIST(self, parseResultDICT, indexWithPOS=True):
         '''
-        取出斷詞結果中含有 <KNOWLEDGE_addTW> 標籤的字串。
+        取出斷詞結果中含有 (KNOWLEDGE_addTW) 標籤的字串。
         該字串為一台灣地址。
         '''
         if "result_pos" in parseResultDICT:
@@ -356,6 +361,43 @@ class Articut:
         if not indexWithPOS:
             addTWLIST = self._segIndexConverter(parseResultDICT, addTWLIST)
         return addTWLIST
+
+    def getCurrencyLIST(self, parseResultDICT, indexWithPOS=True, greedyBOOL=False):
+        '''
+        取出斷詞結果中的貨幣金額 (KNOWLEDGE_currency) 標籤的字串。
+        每個句子內的「貨幣金額」，將列為一個 list。
+        若 greedy = True，則以下格式會加到回傳 list
+            貨幣名稱 + 數字 (包含「'」與「,」符號)
+            新台幣 100
+            美金9.99
+            歐元 1,999'99
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        currencyLIST = []
+        for i, p in enumerate(parseResultDICT["result_pos"]):
+            if len(p) > 1:
+                currencyLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.currencyPat.finditer(p))])
+                if greedyBOOL:
+                    greedyLIST = []
+                    try:
+                        if parseResultDICT["result_pos"][i-1][-14:] == "</ENTITY_noun>" and parseResultDICT["result_pos"][i-1][-15] in "元金幣圜圓比布索鎊盾銖令朗郎":
+                            greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyGapPat.finditer(p))]
+                    except:
+                        pass
+                    if greedyLIST:
+                        greedyLIST.extend([(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))])
+                    else:
+                        greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))]
+                    if greedyLIST:
+                        currencyLIST[-1].extend(greedyLIST)
+            else:
+                currencyLIST.append([])
+        if not indexWithPOS:
+            currencyLIST = self._segIndexConverter(parseResultDICT, currencyLIST)
+        return currencyLIST
 
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
@@ -377,14 +419,10 @@ class Tokenizer:
         self.pos_ = []
 
 
-
 if __name__ == "__main__":
     from pprint import pprint
 
-    #inputSTR = "你計劃過地球人類補完計劃"
-    #inputSTR = "阿美族民俗中心, 以東海岸人數最眾的原住民族群阿美族為主題"
-    #inputSTR = "你是否知道傍晚可以到觀音亭去看夕陽喔!"
-    #inputSTR = "南方澳漁港人氣海鮮餐廳，導航請設定宜蘭縣蘇澳鎮海邊路 111號"
+    #inputSTR = "你計劃過地球人類補完計劃" #parse() Demo
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
     #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
     #inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
@@ -545,6 +583,11 @@ if __name__ == "__main__":
     roomResult = articut.localRE.getAddressRoom(result)
     print("\n##localRE: 室")
     pprint(roomResult)
+
+    #列出所有的貨幣金額
+    currencyResult = articut.getCurrencyLIST(result)
+    print("\n##currencyLIST:")
+    pprint(currencyResult)
 
     #使用 Articut-GraphQL 查詢斷詞結果
     try:
