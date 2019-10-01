@@ -60,6 +60,7 @@ class Articut:
         self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
         self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
         self.currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
+        self.wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
         self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
@@ -103,17 +104,19 @@ class Articut:
             return None
         return segIndexLIST
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False):
         if level=="":
             level = self.level
         self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
+        self.wikiDataBOOL=wikiDataBOOL
         url = "{}/Articut/API/".format(self.url)
         payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
                    "username": self.username,                     #String Type：使用者帳號 email
                    "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                    "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                    "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
-                   "opendata_place":self.openDataPlaceAccessBOOL} #Bool Type：為 True 或 False，表示是否允許 Articut 存取 OpenData 中的地點名稱。
+                   "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                   "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
 
         if userDefinedDictFILE:
             try:
@@ -399,6 +402,25 @@ class Articut:
             currencyLIST = self._segIndexConverter(parseResultDICT, currencyLIST)
         return currencyLIST
 
+    def getWikiDataLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的 WikiData 標記文字。此處指的是 KNOWLEDGE_wikiData 標記的條目名稱。
+        每個句子內的條目名稱為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        wikiDataLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                wikiDataLIST.append([(n.start(), n.end(), n.group(0)) for n in list(self.wikiDataPat.finditer(p))])
+            else:
+                wikiDataLIST.append([])
+        if not indexWithPOS:
+            wikiDataLIST = self._segIndexConverter(parseResultDICT, wikiDataLIST)
+        return wikiDataLIST
+
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
@@ -448,7 +470,7 @@ if __name__ == "__main__":
 
     #取得斷詞結果
     if not resultExistBOOL:
-        result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True)
+        result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True, wikiDataBOOL=True)
 
         #儲存斷詞結果
         try:
@@ -510,6 +532,11 @@ if __name__ == "__main__":
     placeLIST = articut.getOpenDataPlaceLIST(result)
     print("\n##Place:")
     pprint(placeLIST)
+
+    #允許 Articut 調用 WikiData 字典，列出所有 WikiData 條目名稱的字串。
+    wikiDataLIST = articut.getWikiDataLIST(result)
+    print("\n##WikiData:")
+    pprint(wikiDataLIST)
 
     #列出所有的 CLAUSE 問句
     questionLIST = articut.getQuestionLIST(result)
