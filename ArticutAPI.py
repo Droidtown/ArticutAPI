@@ -99,7 +99,7 @@ class Articut:
                     segIndexLIST.append(tmpLIST)
                 else:
                     segIndexLIST.append(posLIST)
-        except Exception as e:
+        except Exception:
             print("Invalid posIndexLIST format")
             return None
         return segIndexLIST
