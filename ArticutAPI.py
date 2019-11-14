@@ -432,6 +432,40 @@ class Articut:
             result["document"] = "{}/document/".format(self.url)
         return result
 
+class LawsToolkit:
+    def __init__(self, articutResult):
+        self.articutResult = articutResult
+        self.articlePat = re.compile("<KNOWLEDGE_lawTW>[^<]+?</KNOWLEDGE_lawTW>")
+        self.crimePat = re.compile("(?<=<ACTION_verb>犯</ACTION_verb>).*?罪(?=<)")
+        self.criminalResponsibilityPat = re.compile("(?<=<ACTION_verb>處</ACTION_verb>).*?刑(?=<)(<[^>]*?>)?(<TIME_year>[^<]+?</TIME_year>)?(<TIME_month>[^<]+?</TIME_month>)?")
+
+
+    def tagPurger(self, posSTR):
+        textSTR = re.sub("<[^<]*?>", "", posSTR)
+        return textSTR
+
+    def getLawArticle(self):
+        '''
+        取得法條編號
+        '''
+        articleLIST = [self.tagPurger(a.group(0)) for a in re.finditer(self.articlePat, "".join(self.articutResult["result_pos"]))]
+        return articleLIST
+
+    def getCrime(self):
+        '''
+        取得罪名
+        '''
+        crimePosLIST = [c.group(0) for c in re.finditer(self.crimePat, "".join(self.articutResult["result_pos"]))]
+        crimeTextLIST = [self.tagPurger(c) for c in crimePosLIST]
+        return crimeTextLIST
+
+    def getCriminalResponsibility(self):
+        '''
+        取得刑責
+        '''
+        crPosLIST = [c.group(0) for c in re.finditer(self.criminalResponsibilityPat, "".join(self.articutResult["result_pos"]))]
+        crTextLIST = [self.tagPurger(c) for c in crPosLIST]
+        return crTextLIST
 
 class Tokenizer:
     def __init__(self, articutResult):
