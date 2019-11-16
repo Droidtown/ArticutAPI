@@ -438,7 +438,7 @@ class LawsToolkit:
         self.articlePat = re.compile("<KNOWLEDGE_lawTW>[^<]+?</KNOWLEDGE_lawTW>")
         self.crimePat = re.compile("(?<=<ACTION_verb>犯</ACTION_verb>)[^犯]*?罪(?=<)")
         self.criminalResponsibilityPat = re.compile("(?<=<ACTION_verb>處</ACTION_verb>)[^處極重]*?刑(?=<)(<[^>]*?>)?(<TIME_year>[^<]+?</TIME_year>)?(<TIME_month>[^<]+?</TIME_month>)?")
-
+        self.eventRefPat = re.compile("<FUNC_inner>所</FUNC_inner><ACTION_lightVerb>受</ACTION_lightVerb>(<FUNC_inner>之</FUNC_inner>)?(<QUANTIFIER>[^<]+?</QUANTIFIER>)?<ENTITY_nouny>..</ENTITY_nouny>")
 
     def tagPurger(self, posSTR):
         textSTR = re.sub("<[^<]*?>", "", posSTR)
@@ -466,6 +466,16 @@ class LawsToolkit:
         crPosLIST = [c.group(0) for c in re.finditer(self.criminalResponsibilityPat, "".join(self.articutResult["result_pos"]))]
         crTextLIST = [self.tagPurger(c) for c in crPosLIST]
         return crTextLIST
+
+    def getEventRef(self):
+        '''
+        取得「所受(之)XX」的列表
+        '''
+        erPosLIST = [e.group(0) for e in re.finditer(self.eventRefPat, "".join(self.articutResult["result_pos"]))]
+        erTextLIST = [self.tagPurger(e) for e in erPosLIST]
+        return ["所受之損害", "所受全部損害"]
+        #return erTextLIST
+
 
 class Tokenizer:
     def __init__(self, articutResult):
