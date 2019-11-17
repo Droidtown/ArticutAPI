@@ -473,8 +473,7 @@ class LawsToolkit:
         '''
         erPosLIST = [e.group(0) for e in re.finditer(self.eventRefPat, "".join(self.articutResult["result_pos"]))]
         erTextLIST = [self.tagPurger(e) for e in erPosLIST]
-        return ["所受之損害", "所受全部損害"]
-        #return erTextLIST
+        return erTextLIST
 
 
 class Tokenizer:
