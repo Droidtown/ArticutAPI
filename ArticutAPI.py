@@ -476,6 +476,46 @@ class LawsToolkit:
         return erTextLIST
 
 
+class UserDefinedDictToolkit:
+    def __init__(self):
+        self.msg_AticutDictERROR = "\n".join(["請輸入 Articut.parse() 處理完的 dictionary 做為參數！", "Please specify dictionary returned by Articut.parse() as argument!"])
+        self.msg_UserDefinedDictionaryDIRERROR = "\n".join(["", ""])
+
+    def tagByDictName(self, ArticutDICT, UserDefinedDictionaryDIR):
+        try:
+            if isinstance(ArticutDICT, dict):
+                if "result_pos" in ArticutDICT:
+                    pass
+                else:
+                    return self.msg_AticutDictERROR
+            else:
+                return self.msg_AticutDictERROR
+        except:
+            return self.msg_AticutDictERROR
+
+        dictLIST = [d for d in os.listdir(UserDefinedDictionaryDIR) if d.endswith(".json")]
+        for D in dictLIST:
+            try:
+                dictName = D.split("/")[-1].split(".json")[0]
+                with open(D) as f:
+                    dDICT = json.load(f.read())
+                    dLIST = []
+                    for d in dDICT:
+                        dLIST.append(d)
+                        dLIST.extend(dDICT[d])
+            except:
+                return self.msg_UserDefinedDictionaryDIRERROR
+
+            resultLIST = []
+            for s in ArticutDICT["result_pos"]:
+                for d in dLIST:
+                    if "<UserDefined>{}</UserDefined>".format(d) in s:
+                        resultLIST.append(s.replace("<UserDefined>{}</UserDefined>".format(d), "UD_{}".format(dictName)))
+                    else:
+                        resultLIST.append(s)
+            ArticutDICT["result_pos"] = resultLIST
+        return ArticutDICT
+
 class Tokenizer:
     def __init__(self, articutResult):
         self.text = []
