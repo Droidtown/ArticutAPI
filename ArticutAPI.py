@@ -436,7 +436,7 @@ class LawsToolkit:
     def __init__(self, articutResult):
         self.articutResult = articutResult
         self.articlePat = re.compile("<KNOWLEDGE_lawTW>[^<]+?</KNOWLEDGE_lawTW>")
-        self.crimePat = re.compile("(?<=<ACTION_verb>犯</ACTION_verb>)[^犯]*?罪(?=<)")
+        self.crimePat = re.compile("(?<=<ACTION_verb>犯</ACTION_verb>)[^犯罪]*?(>(?=<KNOWLEDGE_lawTW>第)|罪(?=<))")
         self.criminalResponsibilityPat = re.compile("(?<=<ACTION_verb>處</ACTION_verb>)[^處極重]*?刑(?=<)(<[^>]*?>)?(<TIME_year>[^<]+?</TIME_year>)?(<TIME_month>[^<]+?</TIME_month>)?")
         self.eventRefPat = re.compile("<FUNC_inner>所</FUNC_inner><ACTION_lightVerb>受</ACTION_lightVerb>(<FUNC_inner>之</FUNC_inner>)?(<QUANTIFIER>[^<]+?</QUANTIFIER>)?<ENTITY_nouny>..</ENTITY_nouny>")
 
