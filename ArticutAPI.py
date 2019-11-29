@@ -448,14 +448,14 @@ class LawsToolkit:
         '''
         取得法條編號
         '''
-        articleLIST = [self.tagPurger(a.group(0)) for a in re.finditer(self.articlePat, "".join(self.articutResult["result_pos"]))]
+        articleLIST = list(set([self.tagPurger(a.group(0)) for a in re.finditer(self.articlePat, "".join(self.articutResult["result_pos"]))]))
         return articleLIST
 
     def getCrime(self):
         '''
         取得罪名
         '''
-        crimePosLIST = [c.group(0) for c in re.finditer(self.crimePat, "".join(self.articutResult["result_pos"]))]
+        crimePosLIST = set([c.group(0) for c in re.finditer(self.crimePat, "".join(self.articutResult["result_pos"]))])
         crimeTextLIST = [self.tagPurger(c) for c in crimePosLIST]
         return crimeTextLIST
 
@@ -463,7 +463,7 @@ class LawsToolkit:
         '''
         取得刑責
         '''
-        crPosLIST = [c.group(0) for c in re.finditer(self.criminalResponsibilityPat, "".join(self.articutResult["result_pos"]))]
+        crPosLIST = set([c.group(0) for c in re.finditer(self.criminalResponsibilityPat, "".join(self.articutResult["result_pos"]))])
         crTextLIST = [self.tagPurger(c) for c in crPosLIST]
         return crTextLIST
 
@@ -471,7 +471,7 @@ class LawsToolkit:
         '''
         取得「所受(之)XX」的列表
         '''
-        erPosLIST = [e.group(0) for e in re.finditer(self.eventRefPat, "".join(self.articutResult["result_pos"]))]
+        erPosLIST = set([e.group(0) for e in re.finditer(self.eventRefPat, "".join(self.articutResult["result_pos"]))])
         erTextLIST = [self.tagPurger(e) for e in erPosLIST]
         return erTextLIST
 
