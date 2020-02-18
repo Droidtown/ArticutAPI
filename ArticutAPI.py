@@ -104,19 +104,34 @@ class Articut:
             return None
         return segIndexLIST
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False):
-        if level=="":
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin=None):
+        if level not in ("lv1", "lv2", "lv3"):
             level = self.level
+
         self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
         self.wikiDataBOOL=wikiDataBOOL
         url = "{}/Articut/API/".format(self.url)
-        payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
-                   "username": self.username,                     #String Type：使用者帳號 email
-                   "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
-                   "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
-                   "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
-                   "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
-                   "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
+        if level in ("lv1", "lv2"):
+            payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
+                       "username": self.username,                     #String Type：使用者帳號 email
+                       "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
+                       "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
+                       "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                       "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                       "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
+        else:
+            payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
+                       "username": self.username,                     #String Type：使用者帳號 email
+                       "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
+                       "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
+                       "level": level,                                #String Type：指定為 lv3 語意斷詞。
+                       "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                       "wikidata": self.wikiDataBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
+                       "index_with_pos":False,
+                       "time_ref":"",
+                       "pinyin":pinyin
+            }
+
 
         if userDefinedDictFILE:
             try:
@@ -227,27 +242,6 @@ class Articut:
         if not indexWithPOS:
             nounLIST = self._segIndexConverter(parseResultDICT, nounLIST)
         return nounLIST
-
-    def getEventLIST(self, parseResultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的事件 (event)。一個事件包含「一個動詞」以及受詞 (若有的話)。
-        每個句子內事件列為一個 list。
-        '''
-        if "result_pos" in parseResultDICT:
-            pass
-        else:
-            return None
-        eventLIST = []
-        for p in parseResultDICT["result_pos"]:
-            if len(p) > 1:
-                tmpE = re.sub("(?<=</ACTION_verb>)<((MODIFIER)|(ENTITY_nouny))>[^<]{1,4}</((MODIFIER)|(ENTITY_nouny))>(<FUNC_inner>的</FUNC_inner>)?(?=<ENTITY_nouny>)", "", p)
-                tmpEvent = [(e.start(), e.end(), re.sub("<{1}/?.*?>{1}", "", e.group(0))) for e in list(self.eventPat.finditer(tmpE))]
-                eventLIST.append(tmpEvent)
-            else:
-                eventLIST.append([])
-        if not indexWithPOS:
-            eventLIST = self._segIndexConverter(parseResultDICT, eventLIST)
-        return eventLIST
 
     def getTimeLIST(self, parseResultDICT, indexWithPOS=True):
         '''
@@ -529,11 +523,11 @@ if __name__ == "__main__":
 
     #inputSTR = "你計劃過地球人類補完計劃" #parse() Demo
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
-    #inputSTR = "台北信義區出現哥吉拉！"#getEventLIST() Demo
     #inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
     #inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷1號2樓" #localRE 工具包 Demo
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
     inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
+    inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
@@ -595,11 +589,6 @@ if __name__ == "__main__":
     nounStemLIST = articut.getNounStemLIST(result)
     print("\n##Noun:")
     pprint(nounStemLIST)
-
-    #列出所有的 event (事件)
-    eventLIST = articut.getEventLIST(result)
-    print("\n##Event:")
-    pprint(eventLIST)
 
     #列出所有的 time (時間)
     timeLIST = articut.getTimeLIST(result)
@@ -752,3 +741,14 @@ if __name__ == "__main__":
         print("No module named 'graphene'")
         print("Articut-graphQL requires 'graphene' module.")
         print("Please use pip/conda install graphene-python to install the module and reload ArticutAPI.")
+
+
+    inputSTR = "前天你說便宜的油還在海上，怎麼兩天後就到港口了？"
+    lv3result = articut.parse(inputSTR, level="lv3",
+                              userDefinedDictFILE=None,
+                              openDataPlaceAccessBOOL=False,
+                              wikiDataBOOL=False,
+                              indexWithPOS=False,
+                              timeRef=None,
+                              pinyin="BOPOMOFO")
+    pprint(lv3result)
