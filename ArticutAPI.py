@@ -104,7 +104,7 @@ class Articut:
             return None
         return segIndexLIST
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin=None):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         if level not in ("lv1", "lv2", "lv3"):
             level = self.level
 
