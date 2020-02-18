@@ -38,11 +38,13 @@ if __name__ == "__main__":
             userDICT = json.loads(f.read())
         username = userDICT["email"]
         apikey = userDICT["apikey"]
-        atc = Articut(username=userDICT["email"], apikey=userDICT["apikey"])
+        atclv2 = Articut(username=userDICT["email"], apikey=userDICT["apikey"])
+        atclv3 = Articut(username=userDICT["email"], apikey=userDICT["apikey"], level="lv3")
     except:
         #使用免費的斷詞額度。
         #實體化 Articut()
-        atc = Articut()
+        atclv2 = Articut()
+        atclv3 = Articut(level="lv3")
 
     #載入 Demo 用的文字
     contentLIST = []
@@ -53,14 +55,14 @@ if __name__ == "__main__":
     resultLIST = []
     for c in contentLIST:
         print("Processing:{}/{} >> {}".format(contentLIST.index(c)+1, len(contentLIST), c))
-        resultDICT = atc.parse(c, openDataPlaceAccessBOOL=True)
+        resultDICT = atclv2.parse(c, openDataPlaceAccessBOOL=True)
 
         eventDICT = {"time":[],
                      "site":[],
                      "event":[]}
 
         #將結果傳給 getTimeLIST() 取出時間
-        timeLIST = atc.getTimeLIST(resultDICT)
+        timeLIST = atclv2.getTimeLIST(resultDICT)
         if timeLIST!=None:
             for tm in timeLIST:
                 eventDICT["time"].append([t[-1] for t in tm])
@@ -69,7 +71,7 @@ if __name__ == "__main__":
 
         #將結果傳給 getLocationStemLIST() 取出地名
         siteLIST = []
-        locationLIST = atc.getLocationStemLIST(resultDICT)
+        locationLIST = atclv2.getLocationStemLIST(resultDICT)
         if locationLIST!=None:
             siteLIST.extend(locationLIST)
             for location in locationLIST:
@@ -78,7 +80,7 @@ if __name__ == "__main__":
             pass
 
         #將結果傳給 getAddTWLIST() 取出台灣地址
-        addressLIST = atc.getAddTWLIST(resultDICT)
+        addressLIST = atclv2.getAddTWLIST(resultDICT)
         if addressLIST !=None:
             siteLIST.extend(addressLIST)
             for address in range(0, len(addressLIST)):
@@ -88,7 +90,7 @@ if __name__ == "__main__":
                     eventDICT["site"][address].extend([a[-1] for a in addressLIST[address]])
 
         #將結果傳給 getOpenDataPlaceLIST() 取出開放資料平台中的景點
-        placeLIST = atc.getOpenDataPlaceLIST(resultDICT)
+        placeLIST = atclv2.getOpenDataPlaceLIST(resultDICT)
         if placeLIST!=None:
             siteLIST.extend(placeLIST)
             for place in range(0, len(placeLIST)):
@@ -96,7 +98,7 @@ if __name__ == "__main__":
         else:
             pass
 
-        eventLIST = atc.getEventLIST(resultDICT)
+        eventLIST = ["->".join(e) for e in atclv3.parse(c)["event"]]
         if eventLIST!=None:
             if len(siteLIST)>0:
                 for event in range(0, len(eventLIST)):
