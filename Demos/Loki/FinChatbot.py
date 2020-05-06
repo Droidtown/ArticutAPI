@@ -51,11 +51,11 @@ class LokiResult():
 
         try:
             result = requests.post("https://api.droidtown.co/Loki/API/", json={
-                "username": "peter.w@droidtown.co",
-                "api_key": "luf*-fyy6ogbXZFASkGRMkmsuypcY=Y",
+                "username": "your_account@your_domain",
+                "api_key": "your_articut_api_key",
                 "input_str": input_str,
                 "version": "latest",
-                "loki_key": "GcNwqO=+pP#xGQaWY3+BznLC17*agff"
+                "loki_key": "your_loki_project_key"
             })
 
             if result.status_code == requests.codes.ok:
@@ -157,8 +157,8 @@ def getSrc2TgtCurrencyExRate(sourceCurrencySTR, targetCurrencySTR):
 def amountSTRconvert(amountSTR):
     '''把 amountSTR 的金額數字字串轉為數值類型並回傳'''
     response = requests.post("https://api.droidtown.co/Articut/API/",
-                              json={"username": "peter.w@droidtown.co",
-                                    "api_key": "luf*-fyy6ogbXZFASkGRMkmsuypcY=Y",
+                              json={"username": "your_email@your_domain",
+                                    "api_key": "your_articut_api_key",
                                     "input_str": amountSTR,
                                     "version": "latest",
                                     "level": "lv3",
