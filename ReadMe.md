@@ -225,7 +225,7 @@ pprint(result)
 * articut.analyse.TFIDF(idf\_path=None) 新建 TFIDF 物件，idf_path 為 IDF 語料庫路徑
 
 使用範例：
-<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L332-335>
+<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L624>
 
 ---
 
@@ -247,7 +247,7 @@ pprint(result)
 3. 計算途中節點的 PageRank
 
 使用範例：
-<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L337-340>
+<https://github.com/Droidtown/ArticutAPI/blob/master/ArticutAPI.py#L629>
 
 ---
 
