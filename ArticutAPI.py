@@ -49,10 +49,12 @@ class Articut:
         self.verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
         self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
         self.modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
+        self.modifierPPat = re.compile("(?<=<DegreeP>)[^<]*?(?=</DegreeP>)|(?<=<ModifierP>)[^<]*?(?=</ModifierP>)")
         self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
         self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
         self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
         self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)")
+        self.userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
         self.eventPat = re.compile("<ACTION_lightVerb>[^<]</ACTION_lightVerb>((?<!</LOCATION>)<ENTITY_nouny>[^<]</ENTITY_nouny>)?((<ACTION_verb>[^<]*?</ACTION_verb>)|(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>$))|<ACTION_verb>.?[有現到見道]</ACTION_verb>(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)$|(?<=[有現到見道]</ACTION_verb>)((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>$|((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(?!<ENTITY_pronoun>)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>|<ACTION_verb>[^<]*?</ACTION_verb>($|(?=<ACTION_verb>))")
@@ -63,7 +65,7 @@ class Articut:
         self.wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
         self.stripPat = re.compile("(?<=>).*?(?=<)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
-        self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.verbPPat.pattern]))
+        self.contentPat = re.compile("|".join([self.verbPPat.pattern, self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.modifierPPat.pattern, self.userDefinedPat.pattern]))
 
         # Toolkit
         self.analyse = AnalyseManager()
