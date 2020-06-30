@@ -249,7 +249,7 @@ def difference(subject, entity, unit):
                 subject = entity
                 entity = entityLIST[0]
     
-    elif subject == "":
+    if subject == "":
         if questionDICT["Calculation"] and questionDICT["Definition"]:
             if entity in questionDICT["Definition"]:
                 subject = list(questionDICT["Definition"][entity].keys())[0]
