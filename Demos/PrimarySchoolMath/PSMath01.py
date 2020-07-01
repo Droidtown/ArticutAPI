@@ -129,6 +129,7 @@ nubmerPat = re.compile("[\d０１２３４５６７８９〇一二三四五六�
 
 questionDICT = {"Definition": {},
                 "Calculation": {},
+                "Entity": {},
                 "Memory": {},
                 "Process": [],
                 "Question": []}
@@ -151,14 +152,16 @@ def doSomethingAbout(args, intent):
 
 def transitive(subject, entity, amount, unit):
     if entity == "":
-        if questionDICT["Definition"]:
-            entity = list(questionDICT["Definition"].keys())[0]
-            if subject in ["", "他", "她"] and subject not in questionDICT["Definition"][entity]:
-                subject = list(questionDICT["Definition"][entity].keys())[0]
-        elif questionDICT["Calculation"]:
-            entity = list(questionDICT["Calculation"].keys())[0]
-            if subject in ["", "他", "她"] and subject not in questionDICT["Calculation"][entity]:
-                subject = list(questionDICT["Calculation"][entity].keys())[0]
+        if unit in questionDICT["Entity"]:
+            if len(questionDICT["Entity"][unit]) == 1:
+                entity = questionDICT["Entity"][unit][0]
+                if subject in ["", "他", "她"]:
+                    if questionDICT["Definition"]:
+                        if subject not in questionDICT["Definition"][entity]:
+                            subject = list(questionDICT["Definition"][entity].keys())[0]
+                    elif questionDICT["Calculation"]:
+                        if subject not in questionDICT["Calculation"][entity]:
+                            subject = list(questionDICT["Calculation"][entity].keys())[0]
     else:
         if subject in ["", "他", "她"]:
             if entity in questionDICT["Definition"]:
@@ -166,14 +169,19 @@ def transitive(subject, entity, amount, unit):
             elif entity in questionDICT["Calculation"]:
                 subject = list(questionDICT["Calculation"][entity].keys())[0]
 
-    #if entity:
     if entity in questionDICT["Calculation"]:
         if subject in questionDICT["Calculation"][entity]:
             questionDICT["Calculation"][entity][subject].append({unit: amount})
         else:
             questionDICT["Calculation"][entity][subject] = [{unit: amount}]
     else:
+        if unit in questionDICT["Entity"]:
+            if entity not in questionDICT["Entity"][unit]:
+                questionDICT["Entity"][unit].append(entity)
+        else:
+            questionDICT["Entity"][unit] = [entity]
         questionDICT["Calculation"][entity] = {subject: [{unit: amount}]}
+
     return subject, entity
 
 def intransitive(entity):
@@ -226,6 +234,12 @@ def intransitive(entity):
     return primaryEnt, (entAmount - primaryAmount), primaryUnit
 
 def existential(subject, entity, amount, unit):
+    if unit in questionDICT["Entity"]:
+        if entity not in questionDICT["Entity"][unit]:
+            questionDICT["Entity"][unit].append(entity)
+    else:
+        questionDICT["Entity"][unit] = [entity]
+
     if entity in questionDICT["Definition"]:
         if subject in questionDICT["Definition"][entity]:
             questionDICT["Definition"][entity][subject][unit] = amount
@@ -239,10 +253,9 @@ def difference(subject, entity, unit):
     global questionDICT
 
     if entity == "":
-        if questionDICT["Definition"]:
-            entity = list(questionDICT["Definition"].keys())[0]
-        elif questionDICT["Calculation"]:
-            entity = list(questionDICT["Calculation"].keys())[0]
+        if unit in questionDICT["Entity"]:
+            if len(questionDICT["Entity"][unit]) == 1:
+                entity = questionDICT["Entity"][unit][0]
     else:
         entityLIST = list(set(list(questionDICT["Definition"].keys())+list(questionDICT["Calculation"].keys())+list(questionDICT["Memory"].keys())))
         if entity not in entityLIST:
@@ -329,10 +342,9 @@ def inTotal(subject, entity, unit):
     global questionDICT
 
     if entity == "":
-        if questionDICT["Definition"]:
-            entity = list(questionDICT["Definition"].keys())[0]
-        elif questionDICT["Calculation"]:
-            entity = list(questionDICT["Calculation"].keys())[0]
+        if unit in questionDICT["Entity"]:
+            if len(questionDICT["Entity"][unit]) == 1:
+                entity = questionDICT["Entity"][unit][0]
     else:
         entityLIST = list(set(list(questionDICT["Definition"].keys())+list(questionDICT["Calculation"].keys())+list(questionDICT["Memory"].keys())))
         if entity not in entityLIST:
@@ -416,7 +428,7 @@ def inTotal(subject, entity, unit):
     return subject, entity, abs(entityAmount)
 
 if __name__ == "__main__":
-    inputSTR = "農場有牛5隻，羊3隻，牲畜共有幾隻？"
+    inputSTR = "書架上有6本故事書，老師又放了3本，書架上現在共有幾本故事書？小明借走3本，書架上現在還有幾本故事書？"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
@@ -469,6 +481,13 @@ if __name__ == "__main__":
                     subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
                     subject, entity, entityAmount = inTotal(subject, "人", "人")
                     questionDICT["Process"].append([s, "{}_人={}人".format(subject, entityAmount)])
+
+                # [撲滿][裡]共有幾元
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[共有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[共有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>元</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[撲滿][裡]共有幾元")
+                    subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
+                    subject, entity, entityAmount = inTotal(subject, "", "元")
+                    questionDICT["Process"].append([s, "{}={}元".format(subject, entityAmount)])
 
                 # [皇后]有幾[顆][寶石]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
