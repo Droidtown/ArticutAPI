@@ -250,8 +250,6 @@ def existential(subject, entity, amount, unit):
     return None
 
 def difference(subject, entity, unit):
-    global questionDICT
-
     if entity == "":
         if unit in questionDICT["Entity"]:
             if len(questionDICT["Entity"][unit]) == 1:
@@ -316,8 +314,8 @@ def difference(subject, entity, unit):
             for ent in questionDICT["Memory"]:
                 for subj in questionDICT["Memory"][ent].values():
                     for v in subj:
-                        if unit in v:
-                            entityAmount += v[unit]
+                        if unit == v:
+                            entityAmount += subj[unit]
         else:
             if entity in questionDICT["Definition"]:
                 if subject in questionDICT["Definition"][entity]:
@@ -332,15 +330,13 @@ def difference(subject, entity, unit):
                 else:
                     for subj in questionDICT["Memory"][entity].values():
                         for v in subj:
-                            if unit in v:
-                                entityAmount += v[unit]
+                            if unit == v:
+                                entityAmount += subj[unit]
 
     questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
     return subject, entity, abs(entityAmount)
 
 def inTotal(subject, entity, unit):
-    global questionDICT
-
     if entity == "":
         if unit in questionDICT["Entity"]:
             if len(questionDICT["Entity"][unit]) == 1:
@@ -405,8 +401,8 @@ def inTotal(subject, entity, unit):
             for ent in questionDICT["Memory"]:
                 for subj in questionDICT["Memory"][ent].values():
                     for v in subj:
-                        if unit in v:
-                            entityAmount += v[unit]
+                        if unit == v:
+                            entityAmount += subj[unit]
         else:
             if entity in questionDICT["Definition"]:
                 if subject in questionDICT["Definition"][entity]:
@@ -421,8 +417,8 @@ def inTotal(subject, entity, unit):
                 else:
                     for subj in questionDICT["Memory"][entity].values():
                         for v in subj:
-                            if unit in v:
-                                entityAmount += v[unit]
+                            if unit == v:
+                                entityAmount += subj[unit]
 
     questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
     return subject, entity, abs(entityAmount)
