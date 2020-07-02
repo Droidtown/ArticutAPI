@@ -438,7 +438,7 @@ def inTotal(subject, entity, unit):
     return subject, entity, abs(entityAmount)
 
 if __name__ == "__main__":
-    inputSTR = "玩投籃遊戲，小福得42分，棒虎得9分，棒虎比小福少得幾分？"
+    inputSTR = "桌上有6個黃花片和4個紅花片，共有幾個花片？"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
@@ -1035,12 +1035,11 @@ if __name__ == "__main__":
                     subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
                     unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
                     existential(subject, lokiRst.getArgs(i)[3], amount, unit)
-                    questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[3], amount, unit)])
 
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[4])
                     unit = lokiRst.getArgs(i)[4].replace(numberSTR, "")
                     existential(subject, lokiRst.getArgs(i)[5], amount, unit)
-                    questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[5], amount, unit)])
+                    questionDICT["Process"].append([s, "{0}_{1}={2}; {0}_{3}={4}".format(subject, lokiRst.getArgs(i)[3], lokiRst.getArgs(i)[2], lokiRst.getArgs(i)[5], lokiRst.getArgs(i)[4])])
 
                 # [小軒][今年][7]歲
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><TIME_year>[^<]*?</TIME_year><ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>歲</ENTITY_UserDefined>":
