@@ -27,13 +27,24 @@
         }
 """
 
+import json
+import os
 import re
 import requests
+
 from pprint import pprint
+
+infoPath = "{}/account.json".format(os.path.dirname(os.path.abspath(__file__)))
 
 USERNAME = ""
 API_KEY = ""
 LOKI_KEY = ""
+
+if os.path.isfile(infoPath):
+    infoDICT = json.load(open(infoPath, "r"))
+    USERNAME = infoDICT["username"]
+    API_KEY = infoDICT["api_key"]
+    LOKI_KEY = infoDICT["loki_key"]
 
 class LokiResult():
     status = False
