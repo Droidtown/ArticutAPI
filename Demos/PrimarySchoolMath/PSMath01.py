@@ -31,9 +31,9 @@ import re
 import requests
 from pprint import pprint
 
-USERNAME = "eclair.c@droidtown.co"
-API_KEY = "g7@5Bh914AfG%oBQUzI5wNa1%BjxZaX"
-LOKI_KEY = "he_O^N2eam#*o@HaQK#G&bN74g^#xhL"
+USERNAME = ""
+API_KEY = ""
+LOKI_KEY = ""
 
 class LokiResult():
     status = False
