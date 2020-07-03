@@ -34,18 +34,21 @@ import requests
 
 from pprint import pprint
 
-infoPath = "{}/account.json".format(os.path.dirname(os.path.abspath(__file__)))
+try:
+    infoPath = "{}/account.json".format(os.path.dirname(os.path.abspath(__file__)))
+    if os.path.isfile(infoPath):
+        infoDICT = json.load(open(infoPath, "r"))
+        USERNAME = infoDICT["username"]
+        API_KEY = infoDICT["api_key"]
+        LOKI_KEY = infoDICT["loki_key"]
+except:
+    # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
+    USERNAME = ""
+    API_KEY = ""
+    LOKI_KEY = ""
 
-USERNAME = ""
-API_KEY = ""
-LOKI_KEY = ""
 
-if os.path.isfile(infoPath):
-    infoDICT = json.load(open(infoPath, "r"))
-    USERNAME = infoDICT["username"]
-    API_KEY = infoDICT["api_key"]
-    LOKI_KEY = infoDICT["loki_key"]
-
+# HINT: 基本上 LokiResult() 與你無關，這是用來和 Loki API 伺服器溝通用的 class.
 class LokiResult():
     status = False
     message = ""
@@ -146,7 +149,8 @@ questionDICT = {"Definition": {},
                 "Question": []}
 
 def amountSTRconvert(amountSTR):
-    '''把 amountSTR 的數字字串轉為數值類型並回傳'''
+    '''把 amountSTR 的數字字串，透過 Articut 的 lv3 轉為數值類型並回傳。
+    如此一來，就能把「兩個」變成數字 2 以便後續計算使用。'''
     numberSTR = nubmerPat.match(amountSTR).group()
     response = requests.post("https://api.droidtown.co/Articut/API/",
                               json={"username": USERNAME,
@@ -158,10 +162,13 @@ def amountSTRconvert(amountSTR):
     return numberSTR, response["number"][numberSTR]
 
 def doSomethingAbout(args, intent):
-    '''將符合句型的參數列表印出'''
+    '''將符合句型的參數列表印出。這是 debug 或是開發用的。'''
     print(args, "===>", intent)
 
 def comparative(subject1, entity1, subject2, entity2, unit):
+    '''
+    計算「X 比 Y 多幾個」或是「X 比 Y 少幾個」的比較句。
+    '''
     questionDICT["Question"].append([unit, entity1, subject1, entity2, subject2])
     entityAmount = 0
     subj1, ent1, ent1Amount = inTotal(subject1, entity1, unit)
@@ -176,6 +183,9 @@ def comparative(subject1, entity1, subject2, entity2, unit):
     return entityAmount
 
 def transitive(subject, entity, amount, unit):
+    '''
+    處理及物動詞， 也就是「有受詞」的那些動作。
+    '''
     if entity == "":
         if unit in questionDICT["Entity"]:
             if len(questionDICT["Entity"][unit]) == 1:
@@ -210,6 +220,9 @@ def transitive(subject, entity, amount, unit):
     return subject, entity
 
 def intransitive(entity):
+    '''
+    處理不及物動詞， 也就是「沒有受詞」的那些動作。
+    '''
     #pprint(questionDICT)
     if entity not in questionDICT["Definition"] and entity not in questionDICT["Calculation"]:
         primaryEnt = None
@@ -259,6 +272,10 @@ def intransitive(entity):
     return primaryEnt, (entAmount - primaryAmount), primaryUnit
 
 def existential(subject, entity, amount, unit):
+    '''
+    處理存現動詞， 也就是意思上表示「存在著」的那些動詞。
+    例如「桌上有兩顆蘋果」裡的 "有"
+    '''
     if unit in questionDICT["Entity"]:
         if entity not in questionDICT["Entity"][unit]:
             questionDICT["Entity"][unit].append(entity)
@@ -275,6 +292,9 @@ def existential(subject, entity, amount, unit):
     return None
 
 def difference(subject, entity, unit):
+    '''
+    處理減法的計算。
+    '''
     if entity == "":
         if unit in questionDICT["Entity"]:
             if len(questionDICT["Entity"][unit]) == 1:
@@ -362,6 +382,9 @@ def difference(subject, entity, unit):
     return subject, entity, abs(entityAmount)
 
 def inTotal(subject, entity, unit):
+    '''
+    處理加法的計算。
+    '''
     if entity == "":
         if unit in questionDICT["Entity"]:
             if len(questionDICT["Entity"][unit]) == 1:
@@ -449,6 +472,7 @@ def inTotal(subject, entity, unit):
     return subject, entity, abs(entityAmount)
 
 if __name__ == "__main__":
+    # HINT: 測試段落。
     inputSTR = "桌上有6個黃花片和4個紅花片，共有幾個花片？"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
@@ -456,6 +480,11 @@ if __name__ == "__main__":
 
     for s in inputLIST:
         lokiRst = LokiResult(s)
+        # HINT: 以下這些 lokiRst.getPattern(i) 都是在 Loki 的網頁中自動幫你生成的。
+        # 所以後面那些看起來很複雜的正規表示式 (regular expression) 你不需要讀懂沒關係。
+        # 每個 lokiRst.getPattern(i) 的上方還會出現一行「註解起來」的中文句子。那是用來
+        # 表示那段正規表示式是在描述哪一種句型。比如說『剩下幾[個]』這段，就在表示其後的正規
+        # 表示式是用來抓「剩下幾個」中的「個」。
 
         for i in range(0, lokiRst.getLen()):
             # <Question>
