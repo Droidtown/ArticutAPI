@@ -473,7 +473,7 @@ def inTotal(subject, entity, unit):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    inputSTR = "桌上有6個黃花片和4個紅花片，共有幾個花片？"
+    inputSTR = "公車上原有21人，到站後有8人下車，公車上現在還有幾人？"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
@@ -498,7 +498,7 @@ if __name__ == "__main__":
                 # 總共有幾人
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout("", "總共有幾人")
-                    subject, entity, entityAmount = inTotal("", "人", "人")
+                    subject, entity, entityAmount = inTotal("", "", "人")
                     questionDICT["Process"].append([s, "{}人".format(entityAmount)])
 
                 # [男生]有幾人
@@ -529,7 +529,7 @@ if __name__ == "__main__":
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[共有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[共有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[球場][上]共有幾人")
                     subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
-                    subject, entity, entityAmount = inTotal(subject, "人", "人")
+                    subject, entity, entityAmount = inTotal(subject, "", "人")
                     questionDICT["Process"].append([s, "{}_人={}人".format(subject, entityAmount)])
 
                 # [撲滿][裡]共有幾元
@@ -936,7 +936,7 @@ if __name__ == "__main__":
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[女生][16]人")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
-                    existential(lokiRst.getArgs(i)[0], "", amount, "人")
+                    existential("", lokiRst.getArgs(i)[0], amount, "人")
                     questionDICT["Process"].append([s, "{}={}人".format(lokiRst.getArgs(i)[0], amount)])
 
                 # [男生]有[35]人
@@ -1010,11 +1010,11 @@ if __name__ == "__main__":
                     questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[4], amount, unit)])
 
                 # [球場][上]原有[33]人
-                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE><MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[球場][上]原有[33]人")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
                     subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
-                    existential(subject, "人", amount, "人")
+                    existential(subject, "", amount, "人")
                     questionDICT["Process"].append([s, "{}_人={}人".format(subject, amount)])
 
                 # [兔屋外]有[10隻][兔子]
@@ -1046,9 +1046,9 @@ if __name__ == "__main__":
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[游泳池][裡]有[男生][6]人")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
-                    entity = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
-                    existential(lokiRst.getArgs(i)[2], entity, amount, "人")
-                    questionDICT["Process"].append([s, "{}_{}={}人".format(entity, lokiRst.getArgs(i)[2], amount)])
+                    subject = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
+                    existential(subject, lokiRst.getArgs(i)[2], amount, "人")
+                    questionDICT["Process"].append([s, "{}_{}={}人".format(subject, lokiRst.getArgs(i)[2], amount)])
 
                 # [弟弟]有[3塊][蕾神][巧克力]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
@@ -1252,8 +1252,8 @@ if __name__ == "__main__":
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[來][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[來][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "又來了[10]人")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
-                    subject, entity = transitive("", "人", amount, "人")
-                    questionDICT["Process"].append([s, "人+{}人".format(amount)])
+                    subject, entity = transitive("", "", amount, "人")
+                    questionDICT["Process"].append([s, "+{}人".format(amount)])
 
                 # 又給[弟弟][10元]
                 if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[給][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[給][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
@@ -1268,8 +1268,8 @@ if __name__ == "__main__":
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[下台][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[下台][^<不]*?</VerbP>))":
                     doSomethingAbout(lokiRst.getArgs(i), "有[四]人下台")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
-                    subject, entity = transitive("", "人", -amount, "人")
-                    questionDICT["Process"].append([s, "人{}人".format(amount)])
+                    subject, entity = transitive("", "", -amount, "人")
+                    questionDICT["Process"].append([s, "{}人".format(-amount)])
 
                 # [3隻][貓]上車[後]
                 if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[上車][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上車][^<不]*?</VerbP>))<RANGE>[^<]*?</RANGE>":
@@ -1735,7 +1735,7 @@ if __name__ == "__main__":
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
                     unit = lokiRst.getArgs(i)[3].replace(numberSTR, "")
                     existential(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[4], amount, unit)
-                    questionDICT["Process"].append([s, "{0}_{1}={2}; {0}_{3}={4}".format(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[2], lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[4], lokiRst.getArgs(i)[3])])
+                    questionDICT["Process"].append([s, "{0}_{1}+{2}; {0}_{3}+{4}".format(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[2], lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[4], lokiRst.getArgs(i)[3])])
 
                 # [花園][裡]開了[11朵][白花]和[8朵][紅花]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[開][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[開][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
@@ -1744,12 +1744,11 @@ if __name__ == "__main__":
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
                     unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
                     existential(subject, lokiRst.getArgs(i)[3], amount, unit)
-                    questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[3], amount, unit)])
 
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[4])
                     unit = lokiRst.getArgs(i)[4].replace(numberSTR, "")
                     existential(subject, lokiRst.getArgs(i)[5], amount, unit)
-                    questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[5], amount, unit)])
+                    questionDICT["Process"].append([s, "{0}_{1}+{2}; {0}_{3}+{4}".format(subject, lokiRst.getArgs(i)[3], lokiRst.getArgs(i)[2], lokiRst.getArgs(i)[5], lokiRst.getArgs(i)[4])])
 
 
                 # [哥哥]自己也花掉[20元]
