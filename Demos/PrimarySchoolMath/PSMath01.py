@@ -42,9 +42,9 @@ try:
     LOKI_KEY = infoDICT["loki_key"]
 except:
     # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
-    USERNAME = "peter.w@droidtown.co"
-    API_KEY = "Npk$a3fLvA2IZoNNvfs=Hy&Ho^KJY+*"
-    LOKI_KEY = "^=z9gCBl4ZVGx=wqSGspaXi&gqg6Ma+"
+    USERNAME = ""
+    API_KEY = ""
+    LOKI_KEY = ""
 
 
 # HINT: 基本上 LokiResult() 與你無關，這是用來和 Loki API 伺服器溝通用的 class.
@@ -1793,7 +1793,7 @@ if __name__ == "__main__":
                     doSomethingAbout(lokiRst.getArgs(i), "又游來[2條][魟魚]")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
-                    subject, entity = transitive("", "", amount, unit)
+                    subject, entity = transitive("", lokiRst.getArgs(i)[1], amount, unit)
                     questionDICT["Process"].append([s, "{}+{}{}".format(entity, amount, unit)])
 
                 # 又買[9隻]放進來
