@@ -42,9 +42,9 @@ try:
     LOKI_KEY = infoDICT["loki_key"]
 except:
     # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
-    USERNAME = ""
-    API_KEY = ""
-    LOKI_KEY = ""
+    USERNAME = "peter.w@droidtown.co"
+    API_KEY = "Npk$a3fLvA2IZoNNvfs=Hy&Ho^KJY+*"
+    LOKI_KEY = "^=z9gCBl4ZVGx=wqSGspaXi&gqg6Ma+"
 
 
 # HINT: 基本上 LokiResult() 與你無關，這是用來和 Loki API 伺服器溝通用的 class.
@@ -292,7 +292,7 @@ def bitransitive(subject1, subject2, entity1, entity2, amount, unit):
             subject2 = entity2
             entity1 = tmpEnt1
             entity2 = tmpEnt2
-    
+
     if subject2 != "":
         if subject1 in entityLIST or subject2 in entityLIST:
             tmpSubj1 = entity1
@@ -301,20 +301,20 @@ def bitransitive(subject1, subject2, entity1, entity2, amount, unit):
             entity2 = subject2
             subject1 = tmpSubj1
             subject2 = tmpSubj2
-    
+
     # 把已存在的 entity1 / subject1 放入 entity2 / subject2
     if entity1 in entityLIST and entity2 != "":
         tmpEnt = entity1
         entity1 = entity2
         entity2 = tmpEnt
         amount = -amount
-    
+
     if subject1 in subjectLIST and subject2 != "":
         tmpSubj = subject1
         subject1 = subject2
         subject2 = tmpSubj
         amount = -amount
-    
+
     # entity1 / subject1 空白時試著補上存在的 entity / subject
     if entity1 == "":
         if unit in questionDICT["Entity"]:
@@ -390,7 +390,10 @@ def bitransitive(subject1, subject2, entity1, entity2, amount, unit):
 def existential(subject, entity, amount, unit):
     '''
     處理存現動詞， 也就是意思上表示「存在著」的那些動詞。
-    例如「桌上有兩顆蘋果」裡的 "有"
+    例如「桌上有兩顆蘋果」裡的 "有"。以「桌子」做為「物體存在的地點」。
+
+    同時兼容動詞的「擁有」或「持有」的動詞。
+    例如「妹妹有三個杯子蛋糕」裡的 "有"。以「妹妹」做為「物體存在的地點」。
     '''
     if entity == "":
         entityLIST = list(questionDICT["Definition"].keys())
@@ -2314,7 +2317,7 @@ if __name__ == "__main__":
                     unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
                     bitransitive(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], "", "", amount, unit)
                     questionDICT["Process"].append([s, "{}={}+{}{}".format(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], amount, unit)])
-                
+
                 # [黃花]比[紅花]少[9朵]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[比][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[比][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[少][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[少][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "[黃花]比[紅花]少[9朵]")
