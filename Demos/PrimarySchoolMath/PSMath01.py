@@ -633,6 +633,7 @@ if __name__ == "__main__":
     # HINT: 測試段落。
     inputSTR = "妹妹有五個蛋糕，吃掉了兩個，買了四個蛋糕，又從爸爸那邊拿到四個，請問現在妹妹有幾個蛋糕"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
+    inputSTR = "妮妮中餐吃了12顆水餃，秀秀比她少吃了3顆，秀秀吃了幾顆水餃？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
 
@@ -1407,6 +1408,9 @@ if __name__ == "__main__":
 
             # <Calculation_Addition>
             if lokiRst.getIntent(i) == "Calculation_Addition":
+                if "比" in s:
+                    continue
+
                 # 做了[3個]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[做][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[做][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "做了[3個]")
