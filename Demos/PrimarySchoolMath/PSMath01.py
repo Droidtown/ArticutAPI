@@ -473,7 +473,7 @@ def inTotal(subject, entity, unit):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    inputSTR = "妹妹有五個蛋糕，吃掉了兩個，又從爸爸那邊拿到四個，請問現在妹妹有幾個蛋糕"
+    inputSTR = "妹妹有五個蛋糕，吃掉了兩個，買了四個蛋糕，又從爸爸那邊拿到四個，請問現在妹妹有幾個蛋糕"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
@@ -1150,7 +1150,7 @@ if __name__ == "__main__":
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
                     subject, entity = transitive("", "", amount, unit)
-                    questionDICT["Process"].append([s, "{}{}{}".format(entity, amount, unit)])
+                    questionDICT["Process"].append([s, "{}+{}{}".format(entity, amount, unit)])
 
                 # 又拿到[4個]
                 if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[拿到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[拿到][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
@@ -1158,7 +1158,7 @@ if __name__ == "__main__":
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
                     subject, entity = transitive("", "", amount, unit)
-                    questionDICT["Process"].append([s, "{}{}{}".format(entity, amount, unit)])
+                    questionDICT["Process"].append([s, "{}+{}{}".format(entity, amount, unit)])
 
                 # 謝了[4朵]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[謝][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[謝][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
@@ -1263,6 +1263,14 @@ if __name__ == "__main__":
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
                     subject, entity = transitive("", "", amount, unit)
                     questionDICT["Process"].append([s, "{}+{}{}".format(entity, amount, unit)])
+
+                # 買了[四個][蛋糕]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[買][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "買了[四個][蛋糕]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    subject, entity = transitive("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}+{}{}".format(lokiRst.getArgs(i)[1], amount, unit)])
 
                 # 又來了[10]人
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[來][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[來][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
