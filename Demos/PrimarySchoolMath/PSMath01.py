@@ -473,7 +473,7 @@ def inTotal(subject, entity, unit):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    inputSTR = "公車上原有21人，到站後有8人下車，公車上現在還有幾人？"
+    inputSTR = "妹妹有五個蛋糕，吃掉了兩個，又從爸爸那邊拿到四個，請問現在妹妹有幾個蛋糕"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
@@ -1136,13 +1136,29 @@ if __name__ == "__main__":
                     subject, entity = transitive("", "", -amount, unit)
                     questionDICT["Process"].append([s, "{}{}{}".format(entity, -amount, unit)])
 
-                # 拿走[5個]
-                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[拿走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[拿走][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
-                    doSomethingAbout(lokiRst.getArgs(i), "拿走[5個]")
+                # 移走[5個]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[移走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[移走][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "移走[5個]")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
                     subject, entity = transitive("", "", -amount, unit)
                     questionDICT["Process"].append([s, "{}{}{}".format(entity, -amount, unit)])
+
+                # 拿到[4個]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[拿到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[拿到][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "拿到[4個]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    subject, entity = transitive("", "", amount, unit)
+                    questionDICT["Process"].append([s, "{}{}{}".format(entity, amount, unit)])
+
+                # 又拿到[4個]
+                if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[拿到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[拿到][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "又拿到[4個]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    subject, entity = transitive("", "", amount, unit)
+                    questionDICT["Process"].append([s, "{}{}{}".format(entity, amount, unit)])
 
                 # 謝了[4朵]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[謝][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[謝][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
@@ -1215,9 +1231,9 @@ if __name__ == "__main__":
                     subject, entity = transitive("", "", amount, unit)
                     questionDICT["Process"].append([s, "{}+{}{}".format(entity, amount, unit)])
 
-                # 又拿走[3個]
-                if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[拿走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[拿走][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
-                    doSomethingAbout(lokiRst.getArgs(i), "又拿走[3個]")
+                # 又移走[3個]
+                if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[移走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[移走][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "又移走[3個]")
                     numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
                     unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
                     subject, entity = transitive("", "", -amount, unit)
