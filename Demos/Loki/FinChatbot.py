@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-
-
-
 """
     Loki Template For Python3
 
@@ -33,7 +30,21 @@
         }
 """
 
+import json
+import os
 import requests
+
+try:
+    infoPath = "{}/account.json".format(os.path.dirname(os.path.abspath(__file__)))
+    infoDICT = json.load(open(infoPath, "r"))
+    USERNAME = infoDICT["username"]
+    API_KEY = infoDICT["api_key"]
+    LOKI_KEY = infoDICT["loki_key"]
+except:
+    # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
+    USERNAME = ""
+    API_KEY = ""
+    LOKI_KEY = ""
 
 class LokiResult():
     status = False
@@ -51,11 +62,11 @@ class LokiResult():
 
         try:
             result = requests.post("https://api.droidtown.co/Loki/API/", json={
-                "username": "your_account@your_domain",
-                "api_key": "your_articut_api_key",
+                "username": USERNAME,
+                "api_key": API_KEY,
                 "input_str": input_str,
                 "version": "latest",
-                "loki_key": "your_loki_project_key"
+                "loki_key": LOKI_KEY
             })
 
             if result.status_code == requests.codes.ok:
@@ -122,9 +133,9 @@ class LokiResult():
 
         return rst
 
-def doSomethingAbout(args):
-    '''將符合句型的參數列表印出'''
-    print(args)
+def doSomethingAbout(args, intent):
+    '''將符合句型的參數列表印出。這是 debug 或是開發用的。'''
+    print(args, "===>", intent)
 
 #建立貨幣名稱代碼轉換字典
 currencyCodeDICT = {"美金":"USD", "美元":"USD", "日幣":"JPY", "日圓":"JPY", "日元":"JPY",
@@ -137,7 +148,6 @@ def getCurrencyExRate():
     '''取得最新匯率，並儲存到 currencyExRateDICT'''
     global currencyExRateDICT
     currencyExRateDICT = requests.get("https://tw.rter.info/capi.php").json()
-
 
 def getSrc2TgtCurrencyExRate(sourceCurrencySTR, targetCurrencySTR):
     '''依 currencyExRateDICT 的內容，將 sourceCurrencySTR 和 targetCurrencySTR 兩種貨幣之間的匯率取出並回傳'''
@@ -157,8 +167,8 @@ def getSrc2TgtCurrencyExRate(sourceCurrencySTR, targetCurrencySTR):
 def amountSTRconvert(amountSTR):
     '''把 amountSTR 的金額數字字串轉為數值類型並回傳'''
     response = requests.post("https://api.droidtown.co/Articut/API/",
-                              json={"username": "your_email@your_domain",
-                                    "api_key": "your_articut_api_key",
+                              json={"username": USERNAME,
+                                    "api_key": API_KEY,
                                     "input_str": amountSTR,
                                     "version": "latest",
                                     "level": "lv3",
@@ -168,115 +178,116 @@ def amountSTRconvert(amountSTR):
 if __name__== "__main__":
     input_str = "我實在很想換真正的100元美金"
     lokiRst = LokiResult(input_str)
+    amountSTR = "0"
 
     for i in range(0, lokiRst.getLen()):
         # <換匯>
-        if lokiRst.getIntent(i) == "換匯":
-            # 我想要[100元][美金]
-            if lokiRst.getPattern(i) == "(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)?((<ACTION_verb>[^<不]*?[想要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想要][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
-                sourceCurrencySTR = lokiRst.getArgs(i)[1]
-                targetCurrencySTR = None
-                amountSTR = lokiRst.getArgs(i)[0]
-            # 我想要[美金][100元]
-            if lokiRst.getPattern(i) == "(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)?((<ACTION_verb>[^<不]*?[想要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
-                doSomethingAbout(lokiRst.getArgs(i))
-                sourceCurrencySTR = lokiRst.getArgs(i)[0]
+        if lokiRst.getIntent(i) == "Exchange":
+            # [我]想要[100元][美金]
+            if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[想要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想要][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                doSomethingAbout(lokiRst.getArgs(i), "[我]想要[100元][美金]")
+                sourceCurrencySTR = lokiRst.getArgs(i)[2]
                 targetCurrencySTR = None
                 amountSTR = lokiRst.getArgs(i)[1]
-            # 我想買[100元][美金]
-            if lokiRst.getPattern(i) == "(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)?((<ACTION_verb>[^<不]*?[想買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想買][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+            # [我]想要[美金][100元]
+            if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[想要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                doSomethingAbout(lokiRst.getArgs(i), "[我]想要[美金][100元]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = None
-                amountSTR = lokiRst.getArgs(i)[0]
-            # 我想買[美金][100元]
-            if lokiRst.getPattern(i) == "(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)?((<ACTION_verb>[^<不]*?[想買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想買][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
-                doSomethingAbout(lokiRst.getArgs(i))
-                sourceCurrencySTR = lokiRst.getArgs(i)[0]
+                amountSTR = lokiRst.getArgs(i)[2]
+            # [我]想買[100元][美金]
+            if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[想買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想買][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                doSomethingAbout(lokiRst.getArgs(i), "[我]想買[100元][美金]")
+                sourceCurrencySTR = lokiRst.getArgs(i)[2]
                 targetCurrencySTR = None
                 amountSTR = lokiRst.getArgs(i)[1]
+            # [我]想買[美金][100元]
+            if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[想買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[想買][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                doSomethingAbout(lokiRst.getArgs(i), "[我]想買[美金][100元]")
+                sourceCurrencySTR = lokiRst.getArgs(i)[1]
+                targetCurrencySTR = None
+                amountSTR = lokiRst.getArgs(i)[2]
             # [100美金]要[台幣]多少
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100美金]要[台幣]多少")
                 sourceCurrencySTR = [code for code in currencyCodeDICT.keys() if code in lokiRst.getArgs(i)[1]][0]
                 targetCurrencySTR = lokiRst.getArgs(i)[1]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [100美金]要多少[台幣]
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100美金]要多少[台幣]")
                 sourceCurrencySTR = [code for code in currencyCodeDICT.keys() if code in lokiRst.getArgs(i)[1]][0]
                 targetCurrencySTR = lokiRst.getArgs(i)[1]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [美金][100]要[台幣]多少
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_num>[^<]*?</ENTITY_num>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100]要[台幣]多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [美金][100]要多少[台幣]
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_num>[^<]*?</ENTITY_num>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100]要多少[台幣]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [100元][美金]要[台幣]多少
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100元][美金]要[台幣]多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [100元][美金]要多少[台幣]
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100元][美金]要多少[台幣]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [美金][100元]要[台幣]多少
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100元]要[台幣]多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [美金][100元]要多少[台幣]
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100元]要多少[台幣]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [今天][美金]兌換[台幣]是多少
             if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[今天][美金]兌換[台幣]是多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = "1元"
             # [100元][美金]可以兌換[台幣]多少
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100元][美金]可以兌換[台幣]多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [100元][美金]可以兌換多少[台幣]
             if lokiRst.getPattern(i) == "<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[100元][美金]可以兌換多少[台幣]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[1]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[0]
             # [美金][100元]可以兌換[台幣]多少
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100元]可以兌換[台幣]多少")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [美金][100元]可以兌換多少[台幣]
             if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[美金][100元]可以兌換多少[台幣]")
                 sourceCurrencySTR = lokiRst.getArgs(i)[0]
                 targetCurrencySTR = lokiRst.getArgs(i)[2]
                 amountSTR = lokiRst.getArgs(i)[1]
             # [上星期三][美金]兌換[台幣]是多少
             if lokiRst.getPattern(i) == "<TIME_week>[^<]*?</TIME_week><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[兌換][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[兌換][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ>":
-                doSomethingAbout(lokiRst.getArgs(i))
+                doSomethingAbout(lokiRst.getArgs(i), "[上星期三][美金]兌換[台幣]是多少")
         # </換匯>
         getCurrencyExRate()
         #answer = 兌換數字 * 貨幣轉換匯率
