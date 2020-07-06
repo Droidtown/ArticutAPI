@@ -36,11 +36,10 @@ from pprint import pprint
 
 try:
     infoPath = "{}/account.json".format(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.isfile(infoPath):
-        infoDICT = json.load(open(infoPath, "r"))
-        USERNAME = infoDICT["username"]
-        API_KEY = infoDICT["api_key"]
-        LOKI_KEY = infoDICT["loki_key"]
+    infoDICT = json.load(open(infoPath, "r"))
+    USERNAME = infoDICT["username"]
+    API_KEY = infoDICT["api_key"]
+    LOKI_KEY = infoDICT["loki_key"]
 except:
     # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
     USERNAME = ""
@@ -271,11 +270,133 @@ def intransitive(entity):
     questionDICT["Calculation"][entity] = {primarySubject: [{primaryUnit: resultAmount}]}
     return primaryEnt, (entAmount - primaryAmount), primaryUnit
 
+def bitransitive(subject1, subject2, entity1, entity2, amount, unit):
+    '''
+    處理 A 比 B 多或少的題型
+    subject1 比 subject2 多 amount unit
+    entity1 比 entity2 多 amount unit
+    '''
+    entityLIST = list(set(list(questionDICT["Definition"].keys())+list(questionDICT["Calculation"])+list(questionDICT["Memory"])))
+    subjectLIST = []
+    for k in ["Memory", "Definition", "Calculation"]:
+        for ent in entityLIST:
+            if ent in questionDICT[k]:
+                subjectLIST.extend(list(questionDICT[k][ent].keys()))
+    subjectLIST = list(set(subjectLIST))
+
+    if entity2 != "":
+        if entity1 in subjectLIST or entity2 in subjectLIST or entity2 in ["他", "她"]:
+            tmpEnt1 = subject1
+            tmpEnt2 = subject2
+            subject1 = entity1
+            subject2 = entity2
+            entity1 = tmpEnt1
+            entity2 = tmpEnt2
+    
+    if subject2 != "":
+        if subject1 in entityLIST or subject2 in entityLIST:
+            tmpSubj1 = entity1
+            tmpSubj2 = entity2
+            entity1 = subject1
+            entity2 = subject2
+            subject1 = tmpSubj1
+            subject2 = tmpSubj2
+    
+    # 把已存在的 entity1 / subject1 放入 entity2 / subject2
+    if entity1 in entityLIST and entity2 != "":
+        tmpEnt = entity1
+        entity1 = entity2
+        entity2 = tmpEnt
+        amount = -amount
+    
+    if subject1 in subjectLIST and subject2 != "":
+        tmpSubj = subject1
+        subject1 = subject2
+        subject2 = tmpSubj
+        amount = -amount
+    
+    # entity1 / subject1 空白時試著補上存在的 entity / subject
+    if entity1 == "":
+        if unit in questionDICT["Entity"]:
+            if len(questionDICT["Entity"][unit]) == 1:
+                entity1 = questionDICT["Entity"][unit][0]
+
+    if subject1 == "":
+        for k in ["Definition", "Memory", "Calculation"]:
+            if entity1 != "" and entity2 != "":
+                tmpEnt = entity2
+            else:
+                tmpEnt = entity1
+            if tmpEnt in questionDICT[k]:
+                subject1 = list(questionDICT[k][tmpEnt].keys())[0]
+                subject2 = subject1
+                break
+
+    # 決定 ref 是 entity 或 subject
+    if entity1 != "" and entity2 != "":
+        entity = entity2
+        subject = subject1
+        refOBJ = entity2
+    else:
+        entity = entity1
+        subject = subject2
+        refOBJ = subject2
+
+    if subject in ["", "他", "她"]:
+        for k in ["Definition", "Memory", "Calculation"]:
+            if entity in questionDICT[k]:
+                subjectLIST = list(questionDICT[k][entity].keys())
+                if len(subjectLIST) == 1 and subjectLIST[0] != "":
+                    subject = subjectLIST[0]
+                    refOBJ = subject
+                    break
+
+    # 取得 ref 的 amount
+    refAmount = 0
+    for k in ["Memory", "Definition", "Calculation"]:
+        if entity in questionDICT[k]:
+            if subject in questionDICT[k][entity]:
+                if k == "Calculation":
+                    refAmount = questionDICT[k][entity][subject][-1][unit]
+                else:
+                    refAmount = questionDICT[k][entity][subject][unit]
+                break
+
+    # 算式存入 Calculation
+    if entity1 in questionDICT["Calculation"]:
+        if subject1 in questionDICT["Calculation"][entity1]:
+            questionDICT["Calculation"][entity1][subject1].append({unit: amount, "ref": refOBJ})
+        else:
+            questionDICT["Calculation"][entity1][subject1] = [{unit: amount, "ref": refOBJ}]
+    else:
+        questionDICT["Calculation"][entity1] = {subject1: [{unit: amount, "ref": refOBJ}]}
+
+    # 結果存入 Memory
+    if entity1 in questionDICT["Memory"]:
+        questionDICT["Memory"][entity1][subject1] = {unit: refAmount + amount}
+    else:
+        questionDICT["Memory"][entity1] = {subject1: {unit: refAmount + amount}}
+
+    if unit in questionDICT["Entity"]:
+        questionDICT["Entity"][unit].append(entity1)
+    else:
+        questionDICT["Entity"] = {unit: [entity1]}
+
+    if refOBJ == subject:
+        return subject1, refOBJ
+    else:
+        return entity1, refOBJ
+
 def existential(subject, entity, amount, unit):
     '''
     處理存現動詞， 也就是意思上表示「存在著」的那些動詞。
     例如「桌上有兩顆蘋果」裡的 "有"
     '''
+    if entity == "":
+        entityLIST = list(questionDICT["Definition"].keys())
+        if len(entityLIST) > 0:
+            entity = entityLIST[0]
+
     if unit in questionDICT["Entity"]:
         if entity not in questionDICT["Entity"][unit]:
             questionDICT["Entity"][unit].append(entity)
@@ -351,7 +472,7 @@ def difference(subject, entity, unit):
                             if unit in v:
                                 entityAmount += v[unit]
     else:
-        if entity not in questionDICT["Definition"] and entity not in questionDICT["Memory"]:
+        if entity not in questionDICT["Definition"] and entity not in questionDICT["Memory"] and entity not in questionDICT["Calculation"]:
             for ent in questionDICT["Definition"]:
                 for subj in questionDICT["Definition"][ent].values():
                     if unit in subj:
@@ -361,6 +482,11 @@ def difference(subject, entity, unit):
                     for v in subj:
                         if unit == v:
                             entityAmount += subj[unit]
+            for ent in questionDICT["Calculation"]:
+                for subj in questionDICT["Calculation"][ent].values():
+                    for v in subj:
+                        if unit in v and "ref" not in v:
+                            entityAmount += v[unit]
         else:
             if entity in questionDICT["Definition"]:
                 if subject in questionDICT["Definition"][entity]:
@@ -368,7 +494,6 @@ def difference(subject, entity, unit):
                 else:
                     for subj in questionDICT["Definition"][entity].values():
                         entityAmount += subj[unit]
-
             if entity in questionDICT["Memory"]:
                 if subject in questionDICT["Memory"][entity]:
                     entityAmount = questionDICT["Memory"][entity][subject][unit]
@@ -377,8 +502,21 @@ def difference(subject, entity, unit):
                         for v in subj:
                             if unit == v:
                                 entityAmount += subj[unit]
+            if entity in questionDICT["Calculation"]:
+                if subject in questionDICT["Calculation"][entity]:
+                    for subj in questionDICT["Calculation"][entity][subject]:
+                        if "ref" not in subj:
+                            entityAmount += subj[unit]
+                else:
+                    for subj in questionDICT["Calculation"][entity].values():
+                        for v in subj:
+                            if unit in v and "ref" not in v:
+                                entityAmount += v[unit]
 
-    questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
+    if entity == "":
+        questionDICT["Answer"] = {subject: [unit, abs(entityAmount)]}
+    else:
+        questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
     return subject, entity, abs(entityAmount)
 
 def inTotal(subject, entity, unit):
@@ -441,7 +579,7 @@ def inTotal(subject, entity, unit):
                             if unit in v:
                                 entityAmount += v[unit]
     else:
-        if entity not in questionDICT["Definition"] and entity not in questionDICT["Memory"]:
+        if entity not in questionDICT["Definition"] and entity not in questionDICT["Memory"] and entity not in questionDICT["Calculation"]:
             for ent in questionDICT["Definition"]:
                 for subj in questionDICT["Definition"][ent].values():
                     if unit in subj:
@@ -451,6 +589,11 @@ def inTotal(subject, entity, unit):
                     for v in subj:
                         if unit == v:
                             entityAmount += subj[unit]
+            for ent in questionDICT["Calculation"]:
+                for subj in questionDICT["Calculation"][ent].values():
+                    for v in subj:
+                        if unit in v and "ref" not in v:
+                            entityAmount += v[unit]
         else:
             if entity in questionDICT["Definition"]:
                 if subject in questionDICT["Definition"][entity]:
@@ -458,7 +601,6 @@ def inTotal(subject, entity, unit):
                 else:
                     for subj in questionDICT["Definition"][entity].values():
                         entityAmount += subj[unit]
-
             if entity in questionDICT["Memory"]:
                 if subject in questionDICT["Memory"][entity]:
                     entityAmount = questionDICT["Memory"][entity][subject][unit]
@@ -467,8 +609,21 @@ def inTotal(subject, entity, unit):
                         for v in subj:
                             if unit == v:
                                 entityAmount += subj[unit]
+            if entity in questionDICT["Calculation"]:
+                if subject in questionDICT["Calculation"][entity]:
+                    for subj in questionDICT["Calculation"][entity][subject]:
+                        if "ref" not in subj:
+                            entityAmount += subj[unit]
+                else:
+                    for subj in questionDICT["Calculation"][entity].values():
+                        for v in subj:
+                            if unit in v and "ref" not in v:
+                                entityAmount += v[unit]
 
-    questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
+    if entity == "":
+        questionDICT["Answer"] = {subject: [unit, abs(entityAmount)]}
+    else:
+        questionDICT["Answer"] = {entity: [unit, abs(entityAmount)]}
     return subject, entity, abs(entityAmount)
 
 if __name__ == "__main__":
