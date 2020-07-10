@@ -1503,81 +1503,203 @@ if __name__ == "__main__":
                 # [批發站]原有[140筐][水果]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[批發站]原有[140筐][水果]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[2], amount, unit)
+                    questionDICT["Process"].append([s, "{}_{}={}{}".format(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[2], amount, unit)])
+
                 # [15個][小朋友]捉迷藏
                 if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[捉迷藏][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉迷藏][^<不]*?</VerbP>))":
                     doSomethingAbout(lokiRst.getArgs(i), "[15個][小朋友]捉迷藏")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[1], amount, unit)])
+
                 # [13個][小朋友]在玩捉迷藏的遊戲
                 if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[玩][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[玩][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[捉迷藏][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉迷藏][^<不]*?</VerbP>))<ENTITY_UserDefined>遊戲</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[13個][小朋友]在玩捉迷藏的遊戲")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[1], amount, unit)])
+
                 # [5年][1]班有[46]人
                 if lokiRst.getPattern(i) == "<TIME_year>[^<]*?</TIME_year><ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>班</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[5年][1]班有[46]人")
+                    subject = lokiRst.getArgs(i)[1]+"班"
+                    entity = lokiRst.getArgs(i)[0]+"年"
+                    existential(subject, entity, int(lokiRst.getArgs(i)[2]), "人")
+                    questionDICT["Process"].append([s, "{}_{}={}人".format(entity, subject, lokiRst.getArgs(i)[1])])
+
                 # [舞蹈隊]需要[80]人
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[舞蹈隊]需要[80]人")
+                    subject = lokiRst.getArgs(i)[0]
+                    existential(subject, "", int(lokiRst.getArgs(i)[1]), "人")
+                    questionDICT["Process"].append([s, "{}={}人".format(subject, lokiRst.getArgs(i)[1])])
+
                 # 原計畫[8月]生產[手帕][780打]
                 if lokiRst.getPattern(i) == "<MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[計畫][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[計畫][^<不]*?</VerbP>))<TIME_month>[^<]*?</TIME_month>((<ACTION_verb>[^<不]*?[生產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[生產][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "原計畫[8月]生產[手帕][780打]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    entity = lokiRst.getArgs(i)[1]
+                    existential("", entity, amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(entity, amount, unit)])
+
                 # 還剩[485打]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "還剩[485打]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    existential("", "", amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format("", amount, unit)])
+
                 # 還剩餘[15.80元]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩餘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩餘][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
                     doSomethingAbout(lokiRst.getArgs(i), "還剩餘[15.80元]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    existential("", "", amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format("", amount, unit)])
+
                 # [獵豹]最快時速是每[小時][113公里]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><DegreeP>最快</DegreeP><ENTITY_UserDefined>時速</ENTITY_UserDefined><AUX>[^<]*?</AUX><QUANTIFIER>每</QUANTIFIER><TIME_justtime>[^<]*?</TIME_justtime><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[獵豹]最快時速是每[小時][113公里]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[2], "", amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[2], amount, unit)])
+
                 # [小明][寒假]看[一本][126頁]的[科普書]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><TIME_season>[^<]*?</TIME_season>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[小明][寒假]看[一本][126頁]的[科普書]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
+                    unit = lokiRst.getArgs(i)[3].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[4], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[4], amount, unit)])
+
                 # [小明]看[一本][35頁]的[書]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[小明]看[一本][35頁]的[書]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[3], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[3], amount, unit)])
+
                 # [鋼材]長[18.4公尺]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><MODIFIER>長</MODIFIER><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[鋼材]長[18.4公尺]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # [公園][裡]新種[359棵][樹]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE><ENTITY_UserDefined>新種</ENTITY_UserDefined><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[公園][裡]新種[359棵][樹]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[3], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[3], amount, unit)])
+
                 # 有[一批][貨物][14.6噸]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "有[一批][貨物][14.6噸]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[1], amount, unit)])
+
                 # [電視機]原價是[5800元]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>原價</ENTITY_UserDefined><AUX>[^<]*?</AUX><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
                     doSomethingAbout(lokiRst.getArgs(i), "[電視機]原價是[5800元]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # [倉儲][裡]有[水泥][88噸]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[倉儲][裡]有[水泥][88噸]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
+                    unit = lokiRst.getArgs(i)[3].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[2], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[2], amount, unit)])
+
                 # 有[水泥][88噸]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "有[水泥][88噸]")
-                # 小強有[12.5元]
-                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
-                    doSomethingAbout(lokiRst.getArgs(i), "小強有[12.5元]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # [一根][繩子][4公尺]
                 if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[一根][繩子][4公尺]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[1], amount, unit)])
+
                 # 若某[次][數學]考試標準[成績]定為[85分]
                 if lokiRst.getPattern(i) == "<ACTION_eventQuantifier>[^<]*?</ACTION_eventQuantifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[考試][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[考試][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[定為][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[定為][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
                     doSomethingAbout(lokiRst.getArgs(i), "若某[次][數學]考試標準[成績]定為[85分]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
+                    unit = lokiRst.getArgs(i)[3].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1]+lokiRst.getArgs(i)[2], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[2], amount, unit)])
+
                 # [成績]定為[85分]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[定為][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[定為][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
                     doSomethingAbout(lokiRst.getArgs(i), "[成績]定為[85分]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # [一本][19.5元]
                 if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
                     doSomethingAbout(lokiRst.getArgs(i), "[一本][19.5元]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", "", amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format("", amount, unit)])
+
                 # [珠穆朗瑪峰]的[海拔][高度]為[海平面]以上[8844m]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[珠穆朗瑪峰]的[海拔][高度]為[海平面]以上[8844m]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[4])
+                    unit = lokiRst.getArgs(i)[4].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[2], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[2], amount, unit)])
+
                 # [高度]為[8844m]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[高度]為[8844m]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # [吐魯番盆地]的[高度]為[海平面]以下[155公尺]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[吐魯番盆地]的[高度]為[海平面]以下[155公尺]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[3])
+                    unit = lokiRst.getArgs(i)[3].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[3], amount, unit)])
+
                 # [速度]是每[小時][13.5公里]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><QUANTIFIER>每</QUANTIFIER><TIME_justtime>[^<]*?</TIME_justtime><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[速度]是每[小時][13.5公里]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential("", lokiRst.getArgs(i)[0], amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}/小時".format(lokiRst.getArgs(i)[0], amount, unit)])
+
                 # 其中[1200雙]是[塑料][涼鞋]
                 if lokiRst.getPattern(i) == "<FUNC_inner>其中</FUNC_inner><ENTITY_classifier>[^<]*?</ENTITY_classifier><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "其中[1200雙]是[塑料][涼鞋]")
