@@ -1058,39 +1058,76 @@ if __name__ == "__main__":
                 # 還有多少人沒捉住
                 if lokiRst.getPattern(i) == "<FUNC_conjunction>[^<]*?</FUNC_conjunction><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>人</ENTITY_UserDefined><FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[捉住][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉住][^<不]*?</VerbP>))":
                     doSomethingAbout(lokiRst.getArgs(i), "還有多少人沒捉住")
+                    subject, entity, entityAmount = difference("","", "人")
+                    questionDICT["Process"].append([s, "{}人".format(entityAmount)])
+
                 # 上車的[人][中]有多少[人]站著
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[上車][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上車][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[站著][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[站著][^<不]*?</VerbP>))":
                     doSomethingAbout(lokiRst.getArgs(i), "上車的[人][中]有多少[人]站著")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0], "", lokiRst.getArgs(i)[2])
+                    questionDICT["Process"].append([s, "{}人".format(entityAmount)])
+
+
                 # 沒有捉到的[小朋友]有多少[個]
                 if lokiRst.getPattern(i) == "<FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[捉到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉到][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "沒有捉到的[小朋友]有多少[個]")
+                    subject, entity, entityAmount = difference("", lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[1])])
+
                 # [收入]多少萬元
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><KNOWLEDGE_currency>萬元</KNOWLEDGE_currency>":
                     doSomethingAbout(lokiRst.getArgs(i), "[收入]多少萬元")
+                    subject, entity, entityAmount = inTotal("", lokiRst.getArgs(i)[0], "萬元")
+                    questionDICT["Process"].append([s, "{}萬元".format(entityAmount)])
+
                 # [水果]多少[公斤]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[水果]多少[公斤]")
+                    subject, entity, entityAmount = inTotal("", lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[1])])
+
                 # [商店]還有[水果]多少[公斤]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[商店]還有[水果]多少[公斤]")
+                    subject, entity, entityAmount = difference(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[2])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[2])])
+
+
                 # 還需要多少[人]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "還需要多少[人]")
+                    subject, entity, entityAmount = difference("", "", lokiRst.getArgs(i)[0])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[0])])
+
                 # [植物園][裡]有多少[人]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[植物園][裡]有多少[人]")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1], "", lokiRst.getArgs(i)[2])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[2])])
+
                 # 比原計畫增產多少[打]
                 if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[比][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[比][^<不]*?</VerbP>))<MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[計畫][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[計畫][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[增產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[增產][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
                     doSomethingAbout(lokiRst.getArgs(i), "比原計畫增產多少[打]")
+                    subject, entity, entityAmount = inTotal("", "", lokiRst.getArgs(i)[0])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[0])])
+
                 # [商店]有[蘋果]多少[公斤]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
                     doSomethingAbout(lokiRst.getArgs(i), "[商店]有[蘋果]多少[公斤]")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], lokiRst.getArgs(i)[2])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[2])])
+
                 # [媽媽]帶了多少[錢]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[帶][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[媽媽]帶了多少[錢]")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0], "元")
+                    questionDICT["Process"].append([s, "{}元".format(entityAmount)])
+
                 # [楊阿姨]已經打了多少[個][字]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ACTION_lightVerb>[^<]*?</ACTION_lightVerb><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[楊阿姨]已經打了多少[個][字]")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[2], lokiRst.getArgs(i)[1])
+                    questionDICT["Process"].append([s, "{}{}".format(entityAmount, lokiRst.getArgs(i)[1]+lokiRst.getArgs(i)[2])])
             # </Question>
 
             # <Definition>
