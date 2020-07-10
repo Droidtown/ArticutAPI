@@ -633,7 +633,7 @@ if __name__ == "__main__":
     # HINT: 測試段落。
     inputSTR = "妹妹有五個蛋糕，吃掉了兩個，買了四個蛋糕，又從爸爸那邊拿到四個，請問現在妹妹有幾個蛋糕"
     #inputSTR = "小宏有20元，小宏有5顆蘋果，小華有10顆蘋果，一顆蘋果2元，小宏買給小華4顆蘋果，小華吃了一顆，小華剩下幾顆蘋果？"
-    inputSTR = "妮妮中餐吃了12顆水餃，秀秀比她少吃了3顆，秀秀吃了幾顆水餃？"
+    inputSTR = "兩隻兔子比賽吃蘿蔔，一隻吃了7個，另一隻吃了5個，兩隻小兔一共吃了多少個蘿蔔？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
 
@@ -1054,6 +1054,43 @@ if __name__ == "__main__":
                 # [洋娃娃]和[猴子]各[一個]一共需要多少元
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><QUANTIFIER>各</QUANTIFIER><ENTITY_classifier>[^<]*?</ENTITY_classifier>((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>元</ENTITY_UserDefined>":
                     doSomethingAbout(lokiRst.getArgs(i), "[洋娃娃]和[猴子]各[一個]一共需要多少元")
+
+                # 還有多少人沒捉住
+                if lokiRst.getPattern(i) == "<FUNC_conjunction>[^<]*?</FUNC_conjunction><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>人</ENTITY_UserDefined><FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[捉住][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉住][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "還有多少人沒捉住")
+                # 上車的[人][中]有多少[人]站著
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[上車][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上車][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[站著][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[站著][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "上車的[人][中]有多少[人]站著")
+                # 沒有捉到的[小朋友]有多少[個]
+                if lokiRst.getPattern(i) == "<FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[捉到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉到][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "沒有捉到的[小朋友]有多少[個]")
+                # [收入]多少萬元
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><KNOWLEDGE_currency>萬元</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[收入]多少萬元")
+                # [水果]多少[公斤]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[水果]多少[公斤]")
+                # [商店]還有[水果]多少[公斤]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[商店]還有[水果]多少[公斤]")
+                # 還需要多少[人]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "還需要多少[人]")
+                # [植物園][裡]有多少[人]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[植物園][裡]有多少[人]")
+                # 比原計畫增產多少[打]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[比][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[比][^<不]*?</VerbP>))<MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[計畫][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[計畫][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[增產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[增產][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "比原計畫增產多少[打]")
+                # [商店]有[蘋果]多少[公斤]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[商店]有[蘋果]多少[公斤]")
+                # [媽媽]帶了多少[錢]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[帶][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[媽媽]帶了多少[錢]")
+                # [楊阿姨]已經打了多少[個][字]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ACTION_lightVerb>[^<]*?</ACTION_lightVerb><CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[楊阿姨]已經打了多少[個][字]")
             # </Question>
 
             # <Definition>
@@ -1209,6 +1246,13 @@ if __name__ == "__main__":
                     unit = lokiRst.getArgs(i)[1].replace(numberSTR, "")
                     existential("", lokiRst.getArgs(i)[0], -amount, unit)
                     questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], -amount, unit)])
+
+                # 其中[女生]有[7]人
+                if lokiRst.getPattern(i) == "<FUNC_inner>其中</FUNC_inner><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "其中[女生]有[7]人")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
+                    existential("", lokiRst.getArgs(i)[0], -amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(lokiRst.getArgs(i)[0], -amount, "人")])
 
                 # [小娟]有[7張][貼紙]
                 if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
@@ -1404,6 +1448,107 @@ if __name__ == "__main__":
 
                     questionDICT["Process"].append([s, "{0}_{1}={2}; {0}_{3}={4}".format(subject, lokiRst.getArgs(i)[3]+lokiRst.getArgs(i)[4], lokiRst.getArgs(i)[2], entity, lokiRst.getArgs(i)[5])])
 
+                # 某班共有[46]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[共有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[共有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "某班共有[46]人")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    existential("", "", amount, "人")
+                    questionDICT["Process"].append([s, "{}人".format(amount)])
+
+                # [水果店]有[水果][670公斤]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[水果店]有[水果][670公斤]")
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[2])
+                    unit = lokiRst.getArgs(i)[2].replace(numberSTR, "")
+                    existential(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], amount, unit)
+                    questionDICT["Process"].append([s, "{}_{}={}{}".format(lokiRst.getArgs(i)[0], lokiRst.getArgs(i)[1], amount, unit)])
+
+                # [批發站]原有[140筐][水果]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[批發站]原有[140筐][水果]")
+                # [15個][小朋友]捉迷藏
+                if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[捉迷藏][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉迷藏][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "[15個][小朋友]捉迷藏")
+                # [13個][小朋友]在玩捉迷藏的遊戲
+                if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[玩][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[玩][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[捉迷藏][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉迷藏][^<不]*?</VerbP>))<ENTITY_UserDefined>遊戲</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[13個][小朋友]在玩捉迷藏的遊戲")
+                # [5年][1]班有[46]人
+                if lokiRst.getPattern(i) == "<TIME_year>[^<]*?</TIME_year><ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>班</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[5年][1]班有[46]人")
+                # [舞蹈隊]需要[80]人
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[舞蹈隊]需要[80]人")
+                # 原計畫[8月]生產[手帕][780打]
+                if lokiRst.getPattern(i) == "<MODIFIER>原</MODIFIER>((<ACTION_verb>[^<不]*?[計畫][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[計畫][^<不]*?</VerbP>))<TIME_month>[^<]*?</TIME_month>((<ACTION_verb>[^<不]*?[生產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[生產][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "原計畫[8月]生產[手帕][780打]")
+                # 還剩[485打]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "還剩[485打]")
+                # 還剩餘[15.80元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩餘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩餘][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "還剩餘[15.80元]")
+                # [獵豹]最快時速是每[小時][113公里]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><DegreeP>最快</DegreeP><ENTITY_UserDefined>時速</ENTITY_UserDefined><AUX>[^<]*?</AUX><QUANTIFIER>每</QUANTIFIER><TIME_justtime>[^<]*?</TIME_justtime><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[獵豹]最快時速是每[小時][113公里]")
+                # [小明][寒假]看[一本][126頁]的[科普書]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><TIME_season>[^<]*?</TIME_season>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小明][寒假]看[一本][126頁]的[科普書]")
+                # [小明]看[一本][35頁]的[書]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小明]看[一本][35頁]的[書]")
+                # [鋼材]長[18.4公尺]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><MODIFIER>長</MODIFIER><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[鋼材]長[18.4公尺]")
+                # [公園][裡]新種[359棵][樹]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE><ENTITY_UserDefined>新種</ENTITY_UserDefined><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[公園][裡]新種[359棵][樹]")
+                # 有[一批][貨物][14.6噸]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "有[一批][貨物][14.6噸]")
+                # [電視機]原價是[5800元]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>原價</ENTITY_UserDefined><AUX>[^<]*?</AUX><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[電視機]原價是[5800元]")
+                # [倉儲][裡]有[水泥][88噸]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[倉儲][裡]有[水泥][88噸]")
+                # 有[水泥][88噸]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "有[水泥][88噸]")
+                # 小強有[12.5元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "小強有[12.5元]")
+                # [一根][繩子][4公尺]
+                if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[一根][繩子][4公尺]")
+                # 若某[次][數學]考試標準[成績]定為[85分]
+                if lokiRst.getPattern(i) == "<ACTION_eventQuantifier>[^<]*?</ACTION_eventQuantifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[考試][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[考試][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[定為][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[定為][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "若某[次][數學]考試標準[成績]定為[85分]")
+                # [成績]定為[85分]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[定為][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[定為][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[成績]定為[85分]")
+                # [一本][19.5元]
+                if lokiRst.getPattern(i) == "<ENTITY_classifier>[^<]*?</ENTITY_classifier><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[一本][19.5元]")
+                # [珠穆朗瑪峰]的[海拔][高度]為[海平面]以上[8844m]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[珠穆朗瑪峰]的[海拔][高度]為[海平面]以上[8844m]")
+                # [高度]為[8844m]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[高度]為[8844m]")
+                # [吐魯番盆地]的[高度]為[海平面]以下[155公尺]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[吐魯番盆地]的[高度]為[海平面]以下[155公尺]")
+                # [速度]是每[小時][13.5公里]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><AUX>[^<]*?</AUX><QUANTIFIER>每</QUANTIFIER><TIME_justtime>[^<]*?</TIME_justtime><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[速度]是每[小時][13.5公里]")
+                # 其中[1200雙]是[塑料][涼鞋]
+                if lokiRst.getPattern(i) == "<FUNC_inner>其中</FUNC_inner><ENTITY_classifier>[^<]*?</ENTITY_classifier><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "其中[1200雙]是[塑料][涼鞋]")
+                    entity = lokiRst.getArgs(i)[1]+lokiRst.getArgs(i)[2]
+                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[0])
+                    unit = lokiRst.getArgs(i)[0].replace(numberSTR, "")
+                    existential("", entity, -amount, unit)
+                    questionDICT["Process"].append([s, "{}={}{}".format(entity, -amount, unit)])
             # </Definition>
 
             # <Calculation_Addition>
@@ -1776,13 +1921,6 @@ if __name__ == "__main__":
                     subject, entity = transitive("", "", -amount, unit)
                     transitive(lokiRst.getArgs(i)[0], entity, amount, unit)
                     questionDICT["Process"].append([s, "{}{}{}".format(entity, -amount, unit)])
-
-                # 其中[女生]有[7]人
-                if lokiRst.getPattern(i) == "<FUNC_inner>其中</FUNC_inner><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
-                    doSomethingAbout(lokiRst.getArgs(i), "其中[女生]有[7]人")
-                    numberSTR, amount = amountSTRconvert(lokiRst.getArgs(i)[1])
-                    transitive("", lokiRst.getArgs(i)[0], -amount, "人")
-                    questionDICT["Process"].append([s, "{}{}人".format(lokiRst.getArgs(i)[0], -amount)])
 
                 # 再放入[8個][排球]
                 if lokiRst.getPattern(i) == "<MODIFIER>再</MODIFIER>((<ACTION_verb>[^<不]*?[放入][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[放入][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
@@ -2233,6 +2371,159 @@ if __name__ == "__main__":
                     existential(subject, lokiRst.getArgs(i)[5], amount, unit)
                     questionDICT["Process"].append([s, "{}_{}={}{}".format(subject, lokiRst.getArgs(i)[5], amount, unit)])
 
+                # 已經捉住了[4]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[捉住][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉住][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "已經捉住了[4]人")
+                # 上來了[9]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[上來][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上來][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "上來了[9]人")
+                # 參加[美術][小組]的有[12]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[參加][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[參加][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "參加[美術][小組]的有[12]人")
+                # 有[5]人[兩個][小組]都參加
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[參加][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[參加][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "有[5]人[兩個][小組]都參加")
+                # 已經捉到了其中的[3個][人]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[捉到][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[捉到][^<不]*?</VerbP>))<FUNC_inner>其中</FUNC_inner><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "已經捉到了其中的[3個][人]")
+                # 其餘的全部是[蘋果][樹]
+                if lokiRst.getPattern(i) == "<MODIFIER>其餘</MODIFIER><AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "其餘的全部是[蘋果][樹]")
+                # 剩餘的是[蘋果][樹]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩餘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩餘][^<不]*?</VerbP>))<AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "剩餘的是[蘋果][樹]")
+                # 訂《[少年報]》的有[40]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[訂][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[訂][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "訂《[少年報]》的有[40]人")
+                # 訂《[小主][人報]》的有[25]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[訂][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[訂][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "訂《[小主][人報]》的有[25]人")
+                # 已經生產了[653塊]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[生產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[生產][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "已經生產了[653塊]")
+                # [中午]走了[107]人
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[走][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[中午]走了[107]人")
+                # [上午]賣出[132公斤]
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[賣出][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[賣出][^<不]*?</VerbP>))<ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[上午]賣出[132公斤]")
+                # [下午]購進[145公斤]
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[購進][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[購進][^<不]*?</VerbP>))<ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[下午]購進[145公斤]")
+                # [小明]第[一天]讀了[47頁]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_determiner>[^<]*?</FUNC_determiner><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[讀][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[讀][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小明]第[一天]讀了[47頁]")
+                # 第[二天]讀了[53頁]
+                if lokiRst.getPattern(i) == "<FUNC_determiner>[^<]*?</FUNC_determiner><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[讀][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[讀][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "第[二天]讀了[53頁]")
+                # [樂樂]買[書]用去[8.55元]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[買][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[樂樂]買[書]用去[8.55元]")
+                # 買[鋼筆]用去[3.2元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[買][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "買[鋼筆]用去[3.2元]")
+                # 付給[售貨員][15元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[付給][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[付給][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "付給[售貨員][15元]")
+                # 已經量了[身高]的有[396]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[量][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[量][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "已經量了[身高]的有[396]人")
+                # 下車[12]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[下車][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[下車][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "下車[12]人")
+                # 上車[19]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[上車][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上車][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "上車[19]人")
+                # 第[二天]看的與第[一天]同樣多
+                if lokiRst.getPattern(i) == "<FUNC_determiner>[^<]*?</FUNC_determiner><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<FUNC_conjunction>[^<]*?</FUNC_conjunction><FUNC_determiner>[^<]*?</FUNC_determiner><TIME_day>[^<]*?</TIME_day><MODIFIER>多</MODIFIER>":
+                    doSomethingAbout(lokiRst.getArgs(i), "第[二天]看的與第[一天]同樣多")
+                # 第[一天]看了[24頁]
+                if lokiRst.getPattern(i) == "<FUNC_determiner>[^<]*?</FUNC_determiner><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "第[一天]看了[24頁]")
+                # 已經參觀過[博物館]的有[398]人
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[參觀過][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[參觀過][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "已經參觀過[博物館]的有[398]人")
+                # [108]人上船
+                if lokiRst.getPattern(i) == "<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[上船][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[上船][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "[108]人上船")
+                # [中午]有[215]人離去
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[離去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[離去][^<不]*?</VerbP>))":
+                    doSomethingAbout(lokiRst.getArgs(i), "[中午]有[215]人離去")
+                # 剩餘的是[柳樹]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[剩餘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩餘][^<不]*?</VerbP>))<AUX>[^<]*?</AUX><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "剩餘的是[柳樹]")
+                # 借出[40本]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[借出][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[借出][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "借出[40本]")
+                # 又還回[285本]
+                if lokiRst.getPattern(i) == "<FUNC_inner>又</FUNC_inner>((<ACTION_verb>[^<不]*?[回][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[回][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "又還回[285本]")
+                # 參加了[3個][興趣][小組]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[參加][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[參加][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "參加了[3個][興趣][小組]")
+                # 洗米需要[1分鐘]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[洗米][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[洗米][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "洗米需要[1分鐘]")
+                # 煮飯需要[15分鐘]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[煮飯][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[煮飯][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "煮飯需要[15分鐘]")
+                # 炒菜需要[10分鐘]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[炒菜][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[炒菜][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[需要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[需要][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "炒菜需要[10分鐘]")
+                # [小明]已經看了[100頁]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[看][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[看][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小明]已經看了[100頁]")
+                # 買了[水壺][後]還剩[57元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[買][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><RANGE>[^<]*?</RANGE>((<ACTION_verb>[^<不]*?[剩][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[剩][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "買了[水壺][後]還剩[57元]")
+                # 買了[48.2元]的[零食]和[18.43元]的[文具]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[買][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[買][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "買了[48.2元]的[零食]和[18.43元]的[文具]")
+                # 找回了[13.37元]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[找回][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[找回][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "找回了[13.37元]")
+                # [小兔]摘了[136個][果子]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[摘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[摘][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小兔]摘了[136個][果子]")
+                # 先運走[45.2噸]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[運走][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[運走][^<不]*?</VerbP>))<ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "先運走[45.2噸]")
+                # [媽媽]帶[100元]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[帶][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[媽媽]帶[100元]")
+                # [小豬]摘的[個數]和[小兔]同樣多
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[摘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[摘][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><FUNC_conjunction>[^<]*?</FUNC_conjunction><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><MODIFIER>多</MODIFIER>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小豬]摘的[個數]和[小兔]同樣多")
+                # 用去[1.6公尺]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "用去[1.6公尺]")
+                # [阿姨]打[一份][1000個][字]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ACTION_lightVerb>[^<]*?</ACTION_lightVerb><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[阿姨]打[一份][1000個][字]")
+                # [小明]做[數學][作業]用去[0.15小時]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[做][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[做][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小明]做[數學][作業]用去[0.15小時]")
+                # 用去[0.15小時]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "用去[0.15小時]")
+                # 做[數學][作業]用去[0.15小時]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[做][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[做][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[用][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[用][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[去][^<不]*?</VerbP>))<TIME_justtime>[^<]*?</TIME_justtime>":
+                    doSomethingAbout(lokiRst.getArgs(i), "做[數學][作業]用去[0.15小時]")
+                # [上午]收[雞蛋][85公斤]
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[收][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[收][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[上午]收[雞蛋][85公斤]")
+                # 賣出[42公斤]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[賣出][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[賣出][^<不]*?</VerbP>))<ENTITY_measurement>[^<]*?</ENTITY_measurement>":
+                    doSomethingAbout(lokiRst.getArgs(i), "賣出[42公斤]")
+                # [他]付出[50元]
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>((<ACTION_verb>[^<不]*?[付出][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[付出][^<不]*?</VerbP>))<KNOWLEDGE_currency>[^<]*?</KNOWLEDGE_currency>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[他]付出[50元]")
+                # 生產[4500雙][涼鞋]
+                if lokiRst.getPattern(i) == "((<ACTION_verb>[^<不]*?[生產][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[生產][^<不]*?</VerbP>))<ENTITY_classifier>[^<]*?</ENTITY_classifier><ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "生產[4500雙][涼鞋]")
+                # [中午]離去[186]人
+                if lokiRst.getPattern(i) == "<TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[離去][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[離去][^<不]*?</VerbP>))<ENTITY_num>[^<]*?</ENTITY_num><ENTITY_UserDefined>人</ENTITY_UserDefined>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[中午]離去[186]人")
             # </Calculation_Addition>
 
             # <Calculation_Comparison>
