@@ -634,7 +634,7 @@ def inTotal(subject, entity, unit):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    inputSTR = "桌上有三顆蘋果，小明吃掉一顆，還剩下幾顆蘋果"
+    inputSTR = "小美有33張貼紙，媽媽又給她5張，小美現在有幾張？"
     inputLIST = list(filter(None, punctuationPat.sub("\n", inputSTR).split("\n")))
     print(inputLIST)
 
@@ -732,6 +732,12 @@ if __name__ == "__main__":
                     doSomethingAbout(lokiRst.getArgs(i), "[黑][珠子]有幾[顆]")
                     entity = lokiRst.getArgs(i)[0]+lokiRst.getArgs(i)[1]
                     subject, entity, entityAmount = inTotal("", entity, lokiRst.getArgs(i)[2])
+                    questionDICT["Process"].append([s, "{}={}{}".format(entity, entityAmount, lokiRst.getArgs(i)[2])])
+
+                # [小美][現在]有幾[張]？
+                if lokiRst.getPattern(i) == "<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined><TIME_justtime>[^<]*?</TIME_justtime>((<ACTION_verb>[^<不]*?[有][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[有][^<不]*?</VerbP>))<CLAUSE_HowQ>[^<]*?</CLAUSE_HowQ><ENTITY_classifier>[^<]*?</ENTITY_classifier>":
+                    doSomethingAbout(lokiRst.getArgs(i), "[小美][現在]有幾[張]？")
+                    subject, entity, entityAmount = inTotal(lokiRst.getArgs(i)[0], "", lokiRst.getArgs(i)[2])
                     questionDICT["Process"].append([s, "{}={}{}".format(entity, entityAmount, lokiRst.getArgs(i)[2])])
 
                 # [他們]總共有幾元
