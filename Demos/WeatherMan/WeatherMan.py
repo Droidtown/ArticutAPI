@@ -136,7 +136,7 @@ class LokiResult():
 
 def runLoki(input_str):
     resultDICT = {}
-    lokiRst = LokiResult(input_str)
+    lokiRst = LokiResult(input_str.replace("台", "臺"))
     for i in range(0, lokiRst.getLen()):
         # Weather
         if lokiRst.getIntent(i) == "Weather":
@@ -145,7 +145,8 @@ def runLoki(input_str):
     return resultDICT
 
 if __name__ == "__main__":
-    #input_str = "後天早上台北適合慢跑嗎".replace("台", "臺")
-    input_str = "今天台中會下雨嗎".replace("台", "臺")
+    #input_str = "後天早上台北適合慢跑嗎"
+    input_str = "明天台北可以不用帶傘嗎"
+    print("Input:", input_str)
     resultDICT = runLoki(input_str)
-    print(resultDICT)
+    print("Output:", resultDICT["answer"])

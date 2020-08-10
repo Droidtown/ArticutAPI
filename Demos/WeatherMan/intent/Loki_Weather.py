@@ -73,7 +73,7 @@ def convertDatetime2ForecastFMT(datetimeSTR):
             resultDatetime = forecastStartTime + datetime.timedelta(hours=-12)
         elif inputDatetime >= forecastEndTime:
             resultDatetime = forecastEndTime
-        print("InputTime ===>", inputDatetime, "\nResultTime ===>", resultDatetime)
+        #print("InputTime ===>", inputDatetime, "\nResultTime ===>", resultDatetime)
         return resultDatetime.strftime(datetimeFMT)
     except:
         return ""
@@ -83,10 +83,75 @@ DEBUG_Weather = True
 # 將符合句型的參數列表印出。這是 debug 或是開發用的。
 def debugInfo(intent, args):
     if DEBUG_Weather:
-        print(intent, "===>", args)
+        print("Intent:", intent, "\nArguments:", args)
 
 def getResult(pattern, args, resultDICT):
     resultDICT["answer"] = ""
+
+    # [今天][台北]熱不[熱]
+    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>":
+        debugInfo("[今天][台北]熱不[熱]", args)
+        forecastDICT = getCityForecastDict(args[1])
+        queryDatetime = convertDatetime2ForecastFMT(args[0])
+        for weatherElement in forecastDICT["weatherElement"]:
+            #if weatherElement["elementName"] == "WeatherDescription":
+                #for elementTime in weatherElement["time"]:
+                    #if queryDatetime == elementTime["startTime"]:
+                        #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
+                        #break
+            if weatherElement["elementName"] == "Td":
+                for elementTime in weatherElement["time"]:
+                    if queryDatetime == elementTime["startTime"]:
+                        if "熱" in args[2] or "冷" in args[2]:
+                            pass
+                        else:
+                            break
+                        try:
+                            value = int(elementTime["elementValue"][0]["value"])
+                            if value >= 31:
+                                resultDICT["answer"] += "平均露點溫度為攝氏 {} 度，氣溫非常悶熱，容易中暑，請盡量補充水份。\n".format(value)
+                                if "熱" in args[2]:
+                                    resultDICT["answer"] = "非常熱。\n" + resultDICT["answer"]
+                                elif "冷" in args[2]:
+                                    resultDICT["answer"] = "不會冷，但非常熱。\n" + resultDICT["answer"]
+                            elif value >= 27:
+                                resultDICT["answer"] += "平均露點溫度為攝氏 {} 度，氣溫較為悶熱。\n".format(value)
+                            elif value >= 20:
+                                resultDICT["answer"] += "平均露點溫度為攝氏 {} 度，氣溫較為舒適。\n".format(value)
+                            else:
+                                resultDICT["answer"] += "平均露點溫度為攝氏 {} 度，氣溫稍有寒意。\n".format(value)
+                                if "熱" in args[2]:
+                                    resultDICT["answer"] = "不會熱。\n" + resultDICT["answer"]
+                                elif "冷" in args[2]:
+                                    resultDICT["answer"] = "會冷，若要外出建議穿著外套。\n" + resultDICT["answer"]
+                        except:
+                            pass
+                        break
+
+    # [今天][台北]會下雨嗎
+    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[下雨][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[下雨][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
+        debugInfo("[今天][台北]會下雨嗎", args)
+        forecastDICT = getCityForecastDict(args[1])
+        queryDatetime = convertDatetime2ForecastFMT(args[0])
+        for weatherElement in forecastDICT["weatherElement"]:
+            #if weatherElement["elementName"] == "WeatherDescription":
+                #for elementTime in weatherElement["time"]:
+                    #if queryDatetime == elementTime["startTime"]:
+                        #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
+                        #break
+            if weatherElement["elementName"] == "PoP12h":
+                for elementTime in weatherElement["time"]:
+                    if queryDatetime == elementTime["startTime"]:
+                        try:
+                            value = int(elementTime["elementValue"][0]["value"])
+                            if value >= 70:
+                                resultDICT["answer"] += "有 {}% 機率降雨，不建議進行戶外活動。\n".format(value)
+                            else:
+                                resultDICT["answer"] += "有 {}% 機率降雨，可以外出活動。\n".format(value)
+                        except:
+                            pass
+                        break
+
     # [台北][今天]可以不用帶傘嗎
     if pattern == "<LOCATION>[^<]*?</LOCATION><TIME_day>[^<]*?</TIME_day>(<MODAL>[^<]*?</MODAL>)?<FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[帶傘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶傘][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
         debugInfo("[台北][今天]可以不用帶傘嗎", args)
@@ -135,45 +200,9 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [今天][台北]熱不[熱]
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>":
-        debugInfo("[今天][台北]熱不[熱]", args)
-        forecastDICT = getCityForecastDict(args[1])
-        queryDatetime = convertDatetime2ForecastFMT(args[0])
-        for weatherElement in forecastDICT["weatherElement"]:
-            #if weatherElement["elementName"] == "WeatherDescription":
-                #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
-                        #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
-                        #break
-            if weatherElement["elementName"] == "Td":
-                for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
-                        try:
-                            value = int(elementTime["elementValue"][0]["value"])
-                            if value >= 31:
-                                resultDICT["answer"] += "平均露點溫度攝氏 {} 度，氣溫非常悶熱，容易中暑，請盡量補充水份。\n".format(value)
-                                if "熱" in args[2]:
-                                    resultDICT["answer"] = "非常熱。\n" + resultDICT["answer"]
-                                elif "冷" in args[2]:
-                                    resultDICT["answer"] = "不會冷，但非常熱。\n" + resultDICT["answer"]
-                            elif value >= 27:
-                                resultDICT["answer"] += "平均露點溫度攝氏 {} 度，氣溫較為悶熱。\n".format(value)
-                            elif value >= 20:
-                                resultDICT["answer"] += "平均露點溫度攝氏 {} 度，氣溫較為舒適。\n".format(value)
-                            else:
-                                resultDICT["answer"] += "平均露點溫度攝氏 {} 度，氣溫稍有寒意。\n".format(value)
-                                if "熱" in args[2]:
-                                    resultDICT["answer"] = "不會熱。\n" + resultDICT["answer"]
-                                elif "冷" in args[2]:
-                                    resultDICT["answer"] = "會冷，若要外出建議穿著外套。\n" + resultDICT["answer"]
-                        except:
-                            pass
-                        break
-
-    # [今天][台北]需不需要帶傘
+    # [今天][台北]需不[需]要帶傘
     if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[帶傘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶傘][^<不]*?</VerbP>))":
-        debugInfo("[今天][台北]需不需要帶傘", args)
+        debugInfo("[今天][台北]需不[需]要帶傘", args)
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -194,6 +223,10 @@ def getResult(pattern, args, resultDICT):
                         except:
                             pass
                         break
+
+    # [今天][台北]需不[需]要帶[陽傘]
+    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[帶][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
+        debugInfo("[今天][台北]需不[需]要帶[陽傘]", args)
 
     # [今天][台北][中午]過[後]天氣如何
     if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[過][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[過][^<不]*?</VerbP>))<RANGE>[^<]*?</RANGE><ENTITY_UserDefined>天氣</ENTITY_UserDefined><CLAUSE_WhatQ>[^<]*?</CLAUSE_WhatQ>":
@@ -234,30 +267,6 @@ def getResult(pattern, args, resultDICT):
                         except:
                             pass
                         break
-            if weatherElement["elementName"] == "PoP12h":
-                for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
-                        try:
-                            value = int(elementTime["elementValue"][0]["value"])
-                            if value >= 70:
-                                resultDICT["answer"] += "有 {}% 機率降雨，不建議進行戶外活動。\n".format(value)
-                            else:
-                                resultDICT["answer"] += "有 {}% 機率降雨，可以外出活動。\n".format(value)
-                        except:
-                            pass
-                        break
-
-    # [今天][台北]會下雨嗎
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[下雨][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[下雨][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
-        debugInfo("[今天][台北]會下雨嗎", args)
-        forecastDICT = getCityForecastDict(args[1])
-        queryDatetime = convertDatetime2ForecastFMT(args[0])
-        for weatherElement in forecastDICT["weatherElement"]:
-            #if weatherElement["elementName"] == "WeatherDescription":
-                #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
-                        #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
-                        #break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
                     if queryDatetime == elementTime["startTime"]:
