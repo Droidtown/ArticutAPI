@@ -38,9 +38,9 @@ from intent import Loki_Exchange
 try:
     infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/Loki", "")
     infoDICT = json.load(open(infoPath, "r"))
-    USERNAME = infoDICT["username"]
-    API_KEY = infoDICT["api_key"]
-    LOKI_KEY = infoDICT["loki_key"]
+    USERNAME = infoDICT["email"]
+    API_KEY = infoDICT["apikey"]
+    LOKI_KEY = infoDICT["lokikey"]
 except:
     # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
     USERNAME = ""
