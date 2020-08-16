@@ -1,4 +1,4 @@
-# ArticutAPI (文截斷詞）
+# ArticutAPI（文截斷詞）
 ## [依語法結構計算，而非統計方法的中文斷詞。]
 
 ### [Articut API Website](https://api.droidtown.co/)
