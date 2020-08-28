@@ -81,16 +81,16 @@ def convertDatetime2ForecastFMT(datetimeSTR):
 
 DEBUG_Weather = True
 # 將符合句型的參數列表印出。這是 debug 或是開發用的。
-def debugInfo(intent, args):
+def debugInfo(pattern, utterance, args):
     if DEBUG_Weather:
-        print("Intent:", intent, "\nArguments:", args)
+        print("[Weather]\n{} ===> {}\n".format(utterance, args))
+        #print("Pattern: ", pattern)
 
-def getResult(pattern, args, resultDICT):
+def getResult(pattern, utterance, args, resultDICT):
+    debugInfo(pattern, utterance, args)
     resultDICT["answer"] = ""
 
-    # [今天][台北]熱不[熱]
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>":
-        debugInfo("[今天][台北]熱不[熱]", args)
+    if utterance == "[今天][台北]熱不[熱]":
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -128,9 +128,7 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [今天][台北]會下雨嗎
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION>(<MODAL>[^<]*?</MODAL>)?((<ACTION_verb>[^<不]*?[下雨][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[下雨][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
-        debugInfo("[今天][台北]會下雨嗎", args)
+    if utterance == "[今天][台北]會下雨嗎":
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -152,9 +150,7 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [台北][今天]可以不用帶傘嗎
-    if pattern == "<LOCATION>[^<]*?</LOCATION><TIME_day>[^<]*?</TIME_day>(<MODAL>[^<]*?</MODAL>)?<FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[帶傘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶傘][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
-        debugInfo("[台北][今天]可以不用帶傘嗎", args)
+    if utterance == "[台北][今天]可以不用帶傘嗎":
         forecastDICT = getCityForecastDict(args[0])
         queryDatetime = convertDatetime2ForecastFMT(args[1])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -176,9 +172,7 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [今天][台北]可以不用帶傘嗎
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION>(<MODAL>[^<]*?</MODAL>)?<FUNC_negation>[^<]*?</FUNC_negation>((<ACTION_verb>[^<不]*?[帶傘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶傘][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
-        debugInfo("[今天][台北]可以不用帶傘嗎", args)
+    if utterance == "[今天][台北]可以不用帶傘嗎":
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -200,9 +194,7 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [今天][台北]需不[需]要帶傘
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[帶傘][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶傘][^<不]*?</VerbP>))":
-        debugInfo("[今天][台北]需不[需]要帶傘", args)
+    if utterance == "[今天][台北]需不[需]要帶傘":
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -224,13 +216,11 @@ def getResult(pattern, args, resultDICT):
                             pass
                         break
 
-    # [今天][台北]需不[需]要帶[陽傘]
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><CLAUSE_AnotAQ>[^<]*?</CLAUSE_AnotAQ>((<ACTION_verb>[^<不]*?[要][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[要][^<不]*?</VerbP>))((<ACTION_verb>[^<不]*?[帶][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[帶][^<不]*?</VerbP>))<ENTITY_UserDefined>[^<]*?</ENTITY_UserDefined>":
-        debugInfo("[今天][台北]需不[需]要帶[陽傘]", args)
+    if utterance == "[今天][台北]需不[需]要帶[陽傘]":
+        # write your code here
+        pass
 
-    # [今天][台北][中午]過[後]天氣如何
-    if pattern == "<TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION><TIME_day>[^<]*?</TIME_day>((<ACTION_verb>[^<不]*?[過][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[過][^<不]*?</VerbP>))<RANGE>[^<]*?</RANGE><ENTITY_UserDefined>天氣</ENTITY_UserDefined><CLAUSE_WhatQ>[^<]*?</CLAUSE_WhatQ>":
-        debugInfo("[今天][台北][中午]過[後]天氣如何", args)
+    if utterance == "[今天][台北][中午]過[後]天氣如何":
         forecastDICT = getCityForecastDict(args[1])
         queryDatetime = convertDatetime2ForecastFMT(args[0]+args[2])
         for weatherElement in forecastDICT["weatherElement"]:
@@ -241,12 +231,9 @@ def getResult(pattern, args, resultDICT):
                         resultDICT["answer"] = "WeatherDescription"
                         break
 
-    # [後天][晚上][台北]適合慢跑嗎
-    if pattern == "<TIME_day>[^<]*?</TIME_day><TIME_day>[^<]*?</TIME_day><LOCATION>[^<]*?</LOCATION>((<ACTION_verb>[^<不]*?[慢跑][^<不]*?</ACTION_verb>)|(<VerbP>[^<不]*?[慢跑][^<不]*?</VerbP>))<CLAUSE_YesNoQ>[^<]*?</CLAUSE_YesNoQ>":
-        debugInfo("[後天][晚上][台北]適合慢跑嗎", args)
+    if utterance == "[後天][晚上][台北]適合慢跑嗎":
         forecastDICT = getCityForecastDict(args[2])
         queryDatetime = convertDatetime2ForecastFMT(args[0]+args[1])
-
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:

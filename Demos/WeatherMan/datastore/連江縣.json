@@ -9,58 +9,18 @@
             "description": "12小時降雨機率",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "20",
+                            "value": "0",
                             "measures": "百分比"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "20",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "30",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "20",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "20",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
                             "value": "10",
@@ -69,8 +29,48 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "0",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "20",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "30",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "30",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -79,8 +79,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -89,8 +89,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -99,8 +99,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -109,8 +109,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -119,8 +119,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -129,8 +129,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -139,8 +139,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
                             "value": " ",
@@ -155,48 +155,8 @@
             "description": "平均溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "32",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "28",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "31",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "28",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
                             "value": "30",
@@ -205,8 +165,28 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "30",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -215,8 +195,48 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "30",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "30",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "31",
@@ -225,8 +245,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -235,38 +255,18 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
-                            "value": "31",
+                            "value": "30",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "28",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "31",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -275,18 +275,18 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "31",
+                            "value": "30",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -301,38 +301,128 @@
             "description": "平均相對濕度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "76",
+                            "value": "79",
                             "measures": "百分比"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
-                            "value": "85",
+                            "value": "91",
                             "measures": "百分比"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
-                            "value": "76",
+                            "value": "82",
                             "measures": "百分比"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "92",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "82",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "92",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "82",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "90",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "68",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "91",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "81",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "93",
+                            "measures": "百分比"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
                             "value": "83",
@@ -341,101 +431,11 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
-                            "value": "82",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "85",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "81",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "85",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "81",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "82",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "78",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "84",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "82",
-                            "measures": "百分比"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "84",
+                            "value": "91",
                             "measures": "百分比"
                         }
                     ]
@@ -447,18 +447,8 @@
             "description": "最高體感溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "35",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
                             "value": "30",
@@ -467,8 +457,38 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "29",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "37",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "32",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
                     "elementValue": [
                         {
                             "value": "33",
@@ -477,68 +497,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "28",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "34",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "29",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "34",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "29",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "35",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
                     "elementValue": [
                         {
                             "value": "30",
@@ -547,18 +507,38 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
                     "elementValue": [
                         {
-                            "value": "35",
+                            "value": "32",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "29",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "34",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": "31",
@@ -567,18 +547,38 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
-                            "value": "35",
+                            "value": "34",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "31",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "34",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
                             "value": "30",
@@ -593,8 +593,36 @@
             "description": "天氣現象",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "04",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "04",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
                             "value": "晴時多雲",
@@ -607,8 +635,78 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "04",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲短暫陣雨",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "08",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲短暫陣雨",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "08",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "晴時多雲",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "02",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "多雲",
+                            "measures": "自定義 Wx 文字"
+                        },
+                        {
+                            "value": "04",
+                            "measures": "自定義 Wx 單位"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "多雲時晴",
@@ -621,22 +719,22 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
-                            "value": "陰時多雲短暫陣雨或雷雨",
+                            "value": "多雲",
                             "measures": "自定義 Wx 文字"
                         },
                         {
-                            "value": "17",
+                            "value": "04",
                             "measures": "自定義 Wx 單位"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
                             "value": "晴時多雲",
@@ -649,141 +747,43 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲",
+                            "value": "多雲短暫陣雨",
                             "measures": "自定義 Wx 文字"
                         },
                         {
-                            "value": "02",
+                            "value": "08",
                             "measures": "自定義 Wx 單位"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲",
+                            "value": "多雲短暫陣雨",
                             "measures": "自定義 Wx 文字"
                         },
                         {
-                            "value": "02",
+                            "value": "08",
                             "measures": "自定義 Wx 單位"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲",
+                            "value": "多雲短暫陣雨",
                             "measures": "自定義 Wx 文字"
                         },
                         {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
-                            "measures": "自定義 Wx 單位"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "晴時多雲",
-                            "measures": "自定義 Wx 文字"
-                        },
-                        {
-                            "value": "02",
+                            "value": "08",
                             "measures": "自定義 Wx 單位"
                         }
                     ]
@@ -795,38 +795,28 @@
             "description": "最低溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "30",
+                            "value": "29",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
-                            "value": "27",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -835,8 +825,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -845,8 +835,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -855,8 +845,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -865,8 +855,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -875,8 +865,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -885,8 +875,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -895,8 +885,28 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -905,8 +915,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -915,18 +925,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -941,8 +941,22 @@
             "description": "紫外線指數",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "7",
+                            "measures": "紫外線指數"
+                        },
+                        {
+                            "value": "高量級",
+                            "measures": "曝曬級數"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
                             "value": "9",
@@ -955,8 +969,36 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "9",
+                            "measures": "紫外線指數"
+                        },
+                        {
+                            "value": "過量級",
+                            "measures": "曝曬級數"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "9",
+                            "measures": "紫外線指數"
+                        },
+                        {
+                            "value": "過量級",
+                            "measures": "曝曬級數"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "8",
@@ -969,8 +1011,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
                             "value": "8",
@@ -983,57 +1025,15 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "9",
+                            "value": "7",
                             "measures": "紫外線指數"
                         },
                         {
-                            "value": "過量級",
-                            "measures": "曝曬級數"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "9",
-                            "measures": "紫外線指數"
-                        },
-                        {
-                            "value": "過量級",
-                            "measures": "曝曬級數"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "9",
-                            "measures": "紫外線指數"
-                        },
-                        {
-                            "value": "過量級",
-                            "measures": "曝曬級數"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "9",
-                            "measures": "紫外線指數"
-                        },
-                        {
-                            "value": "過量級",
+                            "value": "高量級",
                             "measures": "曝曬級數"
                         }
                     ]
@@ -1045,141 +1045,141 @@
             "description": "天氣預報綜合描述",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。降雨機率 20%。溫度攝氏30至33度。悶熱至易中暑。偏南風 風速4級(每秒7公尺)。相對濕度76%。",
+                            "value": "多雲。降雨機率 0%。溫度攝氏29至30度。悶熱。偏南風 風速5級(每秒8公尺)。相對濕度79%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
-                            "value": "多雲時晴。降雨機率 20%。溫度攝氏27至29度。舒適至悶熱。東南風 風速3級(每秒5公尺)。相對濕度85%。",
+                            "value": "多雲。降雨機率 10%。溫度攝氏26至28度。舒適至悶熱。西南風 風速4級(每秒7公尺)。相對濕度91%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
-                            "value": "陰時多雲短暫陣雨或雷雨。降雨機率 30%。溫度攝氏27至33度。舒適至悶熱。偏南風 風速5級(每秒9公尺)。相對濕度76%。",
+                            "value": "晴時多雲。降雨機率 0%。溫度攝氏27至32度。舒適至悶熱。東南風 風速3級(每秒4公尺)。相對濕度82%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。降雨機率 20%。溫度攝氏27至29度。舒適至悶熱。西南風 風速5級(每秒9公尺)。相對濕度83%。",
+                            "value": "多雲。降雨機率 20%。溫度攝氏27至29度。舒適至悶熱。東南風 風速3級(每秒5公尺)。相對濕度92%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。降雨機率 20%。溫度攝氏27至32度。舒適至悶熱。偏南風 風速4級(每秒7公尺)。相對濕度82%。",
+                            "value": "多雲短暫陣雨。降雨機率 30%。溫度攝氏27至31度。舒適至悶熱。東北風 風速5級(每秒9公尺)。相對濕度82%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。降雨機率 10%。溫度攝氏27至29度。舒適至悶熱。偏南風 風速5級(每秒8公尺)。相對濕度85%。",
+                            "value": "多雲短暫陣雨。降雨機率 30%。溫度攝氏27至28度。舒適至悶熱。東北風 風速5級(每秒9公尺)。相對濕度92%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至33度。舒適至悶熱。偏南風 風速5級(每秒9公尺)。相對濕度81%。",
+                            "value": "晴時多雲。溫度攝氏27至32度。舒適至悶熱。東北風 風速>= 6級(每秒11公尺)。相對濕度82%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至29度。舒適至悶熱。西南風 風速4級(每秒7公尺)。相對濕度85%。",
+                            "value": "多雲。溫度攝氏27至28度。舒適至悶熱。西北風 風速5級(每秒8公尺)。相對濕度90%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至33度。舒適至易中暑。偏南風 風速4級(每秒7公尺)。相對濕度81%。",
+                            "value": "多雲時晴。溫度攝氏27至33度。舒適至悶熱。西北風 風速4級(每秒6公尺)。相對濕度68%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至29度。舒適至悶熱。西南風 風速5級(每秒8公尺)。相對濕度82%。",
+                            "value": "多雲。溫度攝氏28至29度。舒適至悶熱。西南風 風速4級(每秒6公尺)。相對濕度91%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至33度。舒適至易中暑。西南風 風速5級(每秒8公尺)。相對濕度78%。",
+                            "value": "晴時多雲。溫度攝氏28至32度。舒適至悶熱。偏南風 風速4級(每秒6公尺)。相對濕度81%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至29度。舒適至悶熱。西南風 風速4級(每秒6公尺)。相對濕度84%。",
+                            "value": "多雲短暫陣雨。溫度攝氏27至29度。舒適至悶熱。西南風 風速4級(每秒7公尺)。相對濕度93%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至33度。舒適至易中暑。西南風 風速4級(每秒6公尺)。相對濕度82%。",
+                            "value": "多雲短暫陣雨。溫度攝氏27至32度。舒適至悶熱。東北風 風速4級(每秒7公尺)。相對濕度83%。",
                             "measures": "NA"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
-                            "value": "晴時多雲。溫度攝氏27至29度。舒適至悶熱。偏南風 風速4級(每秒6公尺)。相對濕度84%。",
+                            "value": "多雲短暫陣雨。溫度攝氏27至28度。舒適至悶熱。東北風 風速4級(每秒7公尺)。相對濕度91%。",
                             "measures": "NA"
                         }
                     ]
@@ -1191,18 +1191,28 @@
             "description": "最低體感溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "32",
+                            "value": "28",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
                             "value": "29",
@@ -1211,8 +1221,68 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "26",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "25",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": "29",
@@ -1221,38 +1291,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "26",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -1261,58 +1301,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "26",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "26",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": "28",
@@ -1321,11 +1311,21 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "28",
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "27",
                             "measures": "攝氏度"
                         }
                     ]
@@ -1337,48 +1337,28 @@
             "description": "最高溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "33",
+                            "value": "30",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
-                            "value": "29",
+                            "value": "28",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "33",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "29",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
                             "value": "32",
@@ -1387,8 +1367,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
                     "elementValue": [
                         {
                             "value": "29",
@@ -1397,8 +1377,48 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "31",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
+                    "elementValue": [
+                        {
+                            "value": "32",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "28",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "33",
@@ -1407,8 +1427,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": "29",
@@ -1417,18 +1437,18 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
-                            "value": "33",
+                            "value": "32",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": "29",
@@ -1437,41 +1457,21 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "33",
+                            "value": "32",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
                     "elementValue": [
                         {
-                            "value": "29",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "33",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
-                    "elementValue": [
-                        {
-                            "value": "29",
+                            "value": "28",
                             "measures": "攝氏度"
                         }
                     ]
@@ -1483,98 +1483,88 @@
             "description": "平均露點溫度",
             "time": [
                 {
-                    "startTime": "2020-08-10 12:00:00",
-                    "endTime": "2020-08-10 18:00:00",
+                    "startTime": "2020-08-28 12:00:00",
+                    "endTime": "2020-08-28 18:00:00",
                     "elementValue": [
                         {
-                            "value": "28",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-10 18:00:00",
-                    "endTime": "2020-08-11 06:00:00",
+                    "startTime": "2020-08-28 18:00:00",
+                    "endTime": "2020-08-29 06:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 06:00:00",
-                    "endTime": "2020-08-11 18:00:00",
+                    "startTime": "2020-08-29 06:00:00",
+                    "endTime": "2020-08-29 18:00:00",
                     "elementValue": [
                         {
-                            "value": "27",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-11 18:00:00",
-                    "endTime": "2020-08-12 06:00:00",
+                    "startTime": "2020-08-29 18:00:00",
+                    "endTime": "2020-08-30 06:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 06:00:00",
-                    "endTime": "2020-08-12 18:00:00",
+                    "startTime": "2020-08-30 06:00:00",
+                    "endTime": "2020-08-30 18:00:00",
                     "elementValue": [
                         {
-                            "value": "27",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-12 18:00:00",
-                    "endTime": "2020-08-13 06:00:00",
+                    "startTime": "2020-08-30 18:00:00",
+                    "endTime": "2020-08-31 06:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 06:00:00",
-                    "endTime": "2020-08-13 18:00:00",
+                    "startTime": "2020-08-31 06:00:00",
+                    "endTime": "2020-08-31 18:00:00",
                     "elementValue": [
                         {
-                            "value": "27",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-13 18:00:00",
-                    "endTime": "2020-08-14 06:00:00",
+                    "startTime": "2020-08-31 18:00:00",
+                    "endTime": "2020-09-01 06:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-14 06:00:00",
-                    "endTime": "2020-08-14 18:00:00",
-                    "elementValue": [
-                        {
-                            "value": "27",
-                            "measures": "攝氏度"
-                        }
-                    ]
-                },
-                {
-                    "startTime": "2020-08-14 18:00:00",
-                    "endTime": "2020-08-15 06:00:00",
+                    "startTime": "2020-09-01 06:00:00",
+                    "endTime": "2020-09-01 18:00:00",
                     "elementValue": [
                         {
                             "value": "24",
@@ -1583,8 +1573,8 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 06:00:00",
-                    "endTime": "2020-08-15 18:00:00",
+                    "startTime": "2020-09-01 18:00:00",
+                    "endTime": "2020-09-02 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -1593,18 +1583,18 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-15 18:00:00",
-                    "endTime": "2020-08-16 06:00:00",
+                    "startTime": "2020-09-02 06:00:00",
+                    "endTime": "2020-09-02 18:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 06:00:00",
-                    "endTime": "2020-08-16 18:00:00",
+                    "startTime": "2020-09-02 18:00:00",
+                    "endTime": "2020-09-03 06:00:00",
                     "elementValue": [
                         {
                             "value": "27",
@@ -1613,11 +1603,21 @@
                     ]
                 },
                 {
-                    "startTime": "2020-08-16 18:00:00",
-                    "endTime": "2020-08-17 06:00:00",
+                    "startTime": "2020-09-03 06:00:00",
+                    "endTime": "2020-09-03 18:00:00",
                     "elementValue": [
                         {
-                            "value": "25",
+                            "value": "27",
+                            "measures": "攝氏度"
+                        }
+                    ]
+                },
+                {
+                    "startTime": "2020-09-03 18:00:00",
+                    "endTime": "2020-09-04 06:00:00",
+                    "elementValue": [
+                        {
+                            "value": "26",
                             "measures": "攝氏度"
                         }
                     ]
