@@ -7,9 +7,7 @@
     Request:
         {
             "username": "your_username",
-            "api_key": "your_articut_key",
             "input_str": "your_sentence",
-            "version": "latest", # Articut Version
             "loki_key": "your_loki_key"
         }
 
@@ -23,6 +21,7 @@
                 {
                     "intent": "intentName",
                     "pattern": "matchPattern",
+                    "utterance": "matchUtterance",
                     "argument": ["arg1", "arg2", ... "argN"]
                 },
                 ...
@@ -38,9 +37,9 @@ from intent import Loki_Exchange
 try:
     infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/Loki", "")
     infoDICT = json.load(open(infoPath, "r"))
-    USERNAME = infoDICT["email"]
-    API_KEY = infoDICT["apikey"]
-    LOKI_KEY = infoDICT["lokikey"]
+    USERNAME = infoDICT["username"]
+    API_KEY = infoDICT["api_key"]
+    LOKI_KEY = infoDICT["loki_key"]
 except:
     # HINT: 在這裡填入您在 https://api.droidtown.co 的帳號、Articut 的 API_Key 以及 Loki 專案的 Loki_Key
     USERNAME = ""
@@ -65,9 +64,7 @@ class LokiResult():
         try:
             result = requests.post("https://api.droidtown.co/Loki/API/", json={
                 "username": USERNAME,
-                "api_key": API_KEY,
                 "input_str": input_str,
-                "version": "latest",
                 "loki_key": LOKI_KEY
             })
 
@@ -127,6 +124,14 @@ class LokiResult():
 
         return rst
 
+    def getUtterance(self, index):
+        rst = ""
+        lokiResultDICT = self.getLokiResult(index)
+        if lokiResultDICT is not None:
+            rst = lokiResultDICT["utterance"]
+
+        return rst
+
     def getArgs(self, index):
         rst = []
         lokiResultDICT = self.getLokiResult(index)
@@ -179,19 +184,21 @@ def amountSTRconvert(amountSTR):
 def runLoki(input_str):
     resultDICT = {}
     lokiRst = LokiResult(input_str)
-    for i in range(0, lokiRst.getLen()):
-        # Exchange
-        if lokiRst.getIntent(i) == "Exchange":
-            resultDICT = Loki_Exchange.getResult(lokiRst.getPattern(i), lokiRst.getArgs(i), resultDICT)
-
+    if lokiRst.getStatus():
+        for i in range(0, lokiRst.getLen()):
+            # Exchange
+            if lokiRst.getIntent(i) == "Exchange":
+                resultDICT = Loki_Exchange.getResult(lokiRst.getPattern(i), lokiRst.getUtterance(i), lokiRst.getArgs(i), resultDICT)
         getCurrencyExRate()
         # 兌換數字 * 貨幣轉換匯率
         resultDICT["answer"] = amountSTRconvert(resultDICT["amount"]) * getSrc2TgtCurrencyExRate(resultDICT["source"], resultDICT["target"])
+    else:
+        resultDICT = {"msg": lokiRst.getMessage()}
 
     return resultDICT
 
 if __name__ == "__main__":
-    input_str = "我想買美金100元"
+    input_str = "100台幣換美金"
     resultDICT = runLoki(input_str)
     print(resultDICT)
     print("需要 {} 元".format(resultDICT["answer"]))
