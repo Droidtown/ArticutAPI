@@ -1,9 +1,9 @@
 # 快速上手
 
 ### 1 建立 Discord Bot 環境
-1. 把 template.env 檔案打開，在 [Discord Developer Portal](https://discord.com/developers/application)中取得的 Bot Token 取代 **{DISCORD_BOT_TOKEN}** (包括左右兩個大括號)。注意等號前後不留空格。
+1. 把 template.env 檔案打開，在 [Discord Developer Portal](https://discord.com/developers/application)中取得的 Bot Token 取代 **{DISCORD_BOT_TOKEN}** (包括左右兩個大括號也一起取代掉)。注意等號前後不留空格。
 
-2. 完成後，檔案另存為 .env 。(注意！在 Linux/Mac 下，以「點」開頭的檔案預設是隱藏檔。
+2. 完成後，檔案另存為 .env 。(注意！在 Linux/Mac 下，以「點」開頭的檔案預設是隱藏檔。)
 
 ### 2 建立 Loki Bot
 1. 在畫面右上角登入 [卓騰 API 網站](https://api.droidtown.co/), 在畫面下方的「加值應用」點擊 [Loki]，進入 Loki 控制台。
