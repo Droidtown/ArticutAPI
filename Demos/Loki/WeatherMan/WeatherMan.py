@@ -139,6 +139,8 @@ class LokiResult():
 
 def runLoki(input_str):
     resultDICT = {}
+
+    #視需要做些正規化的操作 (例如「台/臺」或是 "11:30" 變為「十一點三十」)
     lokiRst = LokiResult(input_str.replace("台", "臺"))
     if lokiRst.getStatus():
         resultDICT = {"answer": ""}
