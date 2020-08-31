@@ -27,7 +27,7 @@ datetimeFMT = "%Y-%m-%d %H:%M:%S"
 defualtDatetime = datetime.datetime.now()
 
 try:
-    infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/WeatherMan/intent", "")
+    infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/Loki/WeatherMan/intent", "")
     infoDICT = json.load(open(infoPath, "r"))
     USERNAME = infoDICT["username"]
     API_KEY = infoDICT["api_key"]
@@ -62,18 +62,9 @@ def getDatetime(inputSTR, timeRef=None):
 
 def convertDatetime2ForecastFMT(datetimeSTR):
     try:
-        inputDatetime = datetime.datetime.strptime(getDatetime(datetimeSTR)[0]["datetime"], datetimeFMT)
-        forecastStartTime = datetime.datetime.combine(inputDatetime.date(), datetime.time(hour=6))
-        forecastEndTime = datetime.datetime.combine(inputDatetime.date(), datetime.time(hour=18))
-        resultDatetime = forecastStartTime
-
+        resultDatetime = datetime.datetime.strptime(getDatetime(datetimeSTR)[0]["datetime"], datetimeFMT)
         if datetimeSTR in ["今天", "今日"]:
-            resultDatetime = forecastStartTime + datetime.timedelta(hours=6)
-        elif inputDatetime < forecastStartTime:
-            resultDatetime = forecastStartTime + datetime.timedelta(hours=-12)
-        elif inputDatetime >= forecastEndTime:
-            resultDatetime = forecastEndTime
-        #print("InputTime ===>", inputDatetime, "\nResultTime ===>", resultDatetime)
+            resultDatetime = resultDatetime.replace(hour=12)
         return resultDatetime.strftime(datetimeFMT)
     except:
         return ""
@@ -88,7 +79,6 @@ def debugInfo(pattern, utterance, args):
 
 def getResult(pattern, utterance, args, resultDICT):
     debugInfo(pattern, utterance, args)
-    resultDICT["answer"] = ""
 
     if utterance == "[今天][台北]熱不[熱]":
         forecastDICT = getCityForecastDict(args[1])
@@ -96,12 +86,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "Td":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         if "熱" in args[2] or "冷" in args[2]:
                             pass
                         else:
@@ -134,12 +124,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 70:
@@ -156,12 +146,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 50:
@@ -178,12 +168,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 50:
@@ -200,12 +190,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 50:
@@ -226,7 +216,7 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             if weatherElement["elementName"] == "WeatherDescription":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         resultDICT["answer"] = "WeatherDescription"
                         break
@@ -237,12 +227,12 @@ def getResult(pattern, utterance, args, resultDICT):
         for weatherElement in forecastDICT["weatherElement"]:
             #if weatherElement["elementName"] == "WeatherDescription":
                 #for elementTime in weatherElement["time"]:
-                    #if queryDatetime == elementTime["startTime"]:
+                    #if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         #resultDICT["WeatherDescription"] = elementTime["elementValue"][0]["value"]
                         #break
             if weatherElement["elementName"] == "UVI":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 7:
@@ -256,7 +246,7 @@ def getResult(pattern, utterance, args, resultDICT):
                         break
             if weatherElement["elementName"] == "PoP12h":
                 for elementTime in weatherElement["time"]:
-                    if queryDatetime == elementTime["startTime"]:
+                    if queryDatetime >= elementTime["startTime"] and queryDatetime <= elementTime["endTime"]:
                         try:
                             value = int(elementTime["elementValue"][0]["value"])
                             if value >= 70:

@@ -35,7 +35,7 @@ import requests
 from intent import Loki_Weather
 
 try:
-    infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/WeatherMan", "")
+    infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/Loki/WeatherMan", "")
     infoDICT = json.load(open(infoPath, "r"))
     USERNAME = infoDICT["username"]
     LOKI_KEY = infoDICT["weather_loki_key"]
@@ -141,6 +141,7 @@ def runLoki(input_str):
     resultDICT = {}
     lokiRst = LokiResult(input_str.replace("台", "臺"))
     if lokiRst.getStatus():
+        resultDICT = {"answer": ""}
         for i in range(0, lokiRst.getLen()):
             # Weather
             if lokiRst.getIntent(i) == "Weather":
@@ -155,4 +156,7 @@ if __name__ == "__main__":
     input_str = "明天台北可以不用帶傘嗎"
     print("Input:", input_str)
     resultDICT = runLoki(input_str)
-    print("Output:", resultDICT["answer"])
+    if "answer" in resultDICT:
+        print("Output:", resultDICT["answer"])
+    else:
+        print("Error:", resultDICT["msg"])

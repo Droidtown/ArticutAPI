@@ -8,7 +8,7 @@ import requests
 from pprint import pprint
 
 BASEPATH = os.path.dirname(os.path.abspath(__file__))
-infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/WeatherMan", "")
+infoPath = "{}/account.info".format(os.path.dirname(os.path.abspath(__file__))).replace("/Demos/Loki/WeatherMan", "")
 infoDICT = json.load(open(infoPath, "r"))
 AuthorizationKEY = infoDICT["weather_api_key"]
 
