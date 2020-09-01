@@ -190,7 +190,7 @@ def runLoki(inputSTR):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    input_str = "動物有大象44隻，長頸鹿比大象少16隻。長頸鹿有多少隻？一共有多少隻動物？？"
+    input_str = "小毛有10架紙飛機，小毛比大毛多摺7架紙飛機，總共有幾架紙飛機"
     resultDICT = runLoki(input_str)
     print("Result ===>")
     pprint(resultDICT)

@@ -29,6 +29,10 @@ def debugInfo(pattern, utterance, args):
 def getResult(pattern, utterance, args, inputUtterance, questionDICT):
     debugInfo(pattern, utterance, args)
 
+    if utterance == "[甲數]是[20]":
+        questionDICT = existential("", args[0], int(args[1]), "", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}".format(args[0], args[1])])
+
     if utterance == "有[公雞][44隻]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
@@ -69,23 +73,17 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
 
         questionDICT["Process"].append([inputUtterance, "{}{}={}; {}{}={}".format(args[1], args[2], args[0], args[4], args[5], args[3])])
 
-    if utterance == "[小玲]寫了[4行][國字]":
+    if utterance == "[蘋果派]有[9個]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
-        questionDICT = existential(args[0], args[2], amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(args[0], args[2], amount, unit)])
+        questionDICT = existential("", args[0], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
 
     if utterance == "[養雞場]有[公雞][44隻]":
         numberSTR, amount = amountSTRconvert(args[2])
         unit = args[2].replace(numberSTR, "")
         questionDICT = existential(args[0], args[1], amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], amount, unit)])
-
-    if utterance == "[蘋果派]有[9個]":
-        numberSTR, amount = amountSTRconvert(args[1])
-        unit = args[1].replace(numberSTR, "")
-        questionDICT = existential("", args[0], amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
 
     if utterance == "[小卓]有[7張][色紙]":
         numberSTR, amount = amountSTRconvert(args[1])
@@ -107,45 +105,12 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         questionDICT = existential(args[0], entity, amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(args[0], entity, amount, unit)])
 
-    if utterance == "[男生]有[35]人":
-        if "其中" not in inputUtterance:
-            numberSTR, amount = amountSTRconvert(args[1])
-            questionDICT = existential("", args[0], amount, "人", questionDICT)
-            questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], amount)])
-
-    if utterance == "[小雨]有[7元]":
-        numberSTR, amount = amountSTRconvert(args[1])
-        unit = args[1].replace(numberSTR, "")
-        questionDICT = existential(args[0], "", amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
-
-    if utterance == "[甲數]是[20]":
-        questionDICT = existential("", args[0], int(args[1]), "", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}".format(args[0], args[1])])
-
     if utterance == "[CD][盒][裡]有[12片][光碟]":
         numberSTR, amount = amountSTRconvert(args[3])
         subject = args[0]+args[1]+args[2]
         unit = args[3].replace(numberSTR, "")
         questionDICT = existential(subject, args[4], amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[4], amount, unit)])
-
-    if utterance == "[女生][16]人":
-        numberSTR, amount = amountSTRconvert(args[1])
-        questionDICT = existential("", args[0], amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], amount)])
-
-    if utterance == "[瑋瑋]原有[13元]":
-        numberSTR, amount = amountSTRconvert(args[1])
-        unit = args[1].replace(numberSTR, "")
-        questionDICT = existential(args[0], "", amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
-
-    if utterance == "[車][上]有[乘客][45]人":
-        numberSTR, amount = amountSTRconvert(args[3])
-        subject = args[0]+args[1]
-        questionDICT = existential(subject, args[2], amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}_{}={}人".format(subject, args[3], amount)])
 
     if utterance == "[池][裡]有[30條][小魚]":
         numberSTR, amount = amountSTRconvert(args[2])
@@ -196,13 +161,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
 
         questionDICT["Process"].append([inputUtterance, "{0}_{1}={2}; {0}_{3}={4}".format(subject, args[3]+args[4], args[2], entity, args[5])])
 
-    if utterance == "[撲滿][裡]有[22元]":
-        numberSTR, amount = amountSTRconvert(args[2])
-        unit = args[2].replace(numberSTR, "")
-        subject = args[0]+args[1]
-        questionDICT = existential(subject, "", amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(subject, amount, unit)])
-
     if utterance == "[車][上]原有[6隻][貓]":
         numberSTR, amount = amountSTRconvert(args[2])
         subject = args[0]+args[1]
@@ -210,30 +168,13 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         questionDICT = existential(subject, args[3], amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[3], amount, unit)])
 
-    if utterance == "[球場][上]原有[33]人":
-        numberSTR, amount = amountSTRconvert(args[2])
-        subject = args[0]+args[1]
-        questionDICT = existential(subject, "", amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}_人={}人".format(subject, amount)])
-
-    if utterance == "[約翰]有[10元]":
-        numberSTR, amount = amountSTRconvert(args[1])
-        unit = args[1].replace(numberSTR, "")
-        questionDICT = existential(args[0], "", amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
-
-    if utterance == "其中[男生]有[9個]":
-        numberSTR, amount = amountSTRconvert(args[1])
-        unit = args[1].replace(numberSTR, "")
-        questionDICT = existential("", args[0], -amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], -amount, unit)])
-
-    if utterance == "其中[女生]有[7]人":
-        numberSTR, amount = amountSTRconvert(args[1])
-        questionDICT = existential("", args[0], -amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], -amount)])
-
     if utterance == "[兔屋外]有[10隻][兔子]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], amount, unit)])
+
+    if utterance == "[弟弟]有[3塊][巧克力]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
         questionDICT = existential(args[0], args[2], amount, unit, questionDICT)
@@ -246,11 +187,130 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         questionDICT = existential("", entity, amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, amount, unit)])
 
-    if utterance == "[弟弟]有[3塊][巧克力]":
+    if utterance == "[小玲]寫了[4行][國字]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
         questionDICT = existential(args[0], args[2], amount, unit, questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], amount, unit)])
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(args[0], args[2], amount, unit)])
+
+    if utterance == "[二]班有[男生][27名]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject = args[0]+"班"
+        questionDICT = existential(subject, args[1], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[1], amount, unit)])
+
+    if utterance == "[二]班有[27名][男生]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        subject = args[0]+"班"
+        questionDICT = existential(subject, args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[2], amount, unit)])
+
+    if utterance == "[二]班[男生][27名]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject = args[0]+"班"
+        questionDICT = existential(subject, args[1], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[1], amount, unit)])
+
+    if utterance == "[二]班[27名][男生]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        subject = args[0]+"班"
+        questionDICT = existential(subject, args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[2], amount, unit)])
+
+    if utterance == "[二]班[圖書]有[67本]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject = args[0]+"班"
+        questionDICT = existential(subject, args[1], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, args[1], amount, unit)])
+
+    if utterance == "[一]班有[42]人":
+        subject = args[1]+"班"
+        entity = args[0]+"年級"
+        questionDICT = existential(subject, entity, int(args[2]), "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}人".format(entity, subject, args[1])])
+
+    if utterance == "[5年][1]班有[46]人":
+        subject = args[0]
+        entity = args[1]+"班"
+        questionDICT = existential(subject, entity, int(args[2]), "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}人".format(entity, subject, args[1])])
+
+    if utterance == "[二]年級[一]班有[42]人":
+        subject = args[1]+"班"
+        entity = args[0]+"年級"
+        questionDICT = existential(subject, entity, int(args[2]), "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}人".format(entity, subject, args[1])])
+
+    if utterance == "[車][上]有[乘客][45]人":
+        numberSTR, amount = amountSTRconvert(args[3])
+        subject = args[0]+args[1]
+        questionDICT = existential(subject, args[2], amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}人".format(subject, args[3], amount)])
+
+    if utterance == "[球場][上]原有[33]人":
+        numberSTR, amount = amountSTRconvert(args[2])
+        subject = args[0]+args[1]
+        questionDICT = existential(subject, "", amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_人={}人".format(subject, amount)])
+
+    if utterance == "[女生][16]人":
+        numberSTR, amount = amountSTRconvert(args[1])
+        questionDICT = existential("", args[0], amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], amount)])
+
+    if utterance == "[男生]有[35]人":
+        if "其中" not in inputUtterance:
+            numberSTR, amount = amountSTRconvert(args[1])
+            questionDICT = existential("", args[0], amount, "人", questionDICT)
+            questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], amount)])
+
+    if utterance == "[小雨]有[7元]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
+
+    if utterance == "[瑋瑋]原有[13元]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
+
+    if utterance == "[撲滿][裡]有[22元]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject = args[0]+args[1]
+        questionDICT = existential(subject, "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(subject, amount, unit)])
+
+    if utterance == "[約翰]有[10元]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
+
+    if utterance == "其中[1200雙]是[塑料][涼鞋]":
+        entity = args[1]+args[2]
+        numberSTR, amount = amountSTRconvert(args[0])
+        unit = args[0].replace(numberSTR, "")
+        questionDICT = existential("", entity, -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, -amount, unit)])
+
+    if utterance == "其中[男生]有[9個]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential("", args[0], -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], -amount, unit)])
+
+    if utterance == "其中[女生]有[7]人":
+        numberSTR, amount = amountSTRconvert(args[1])
+        questionDICT = existential("", args[0], -amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], -amount)])
 
     ###############################################################################################
     # 未實做
@@ -295,7 +355,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[電視機]原價是[5800元]":
+    if utterance == "[電視機][原價]是[5800元]":
         # write your code here
         pass
 
@@ -347,43 +407,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[二]年級[一]班有[42]人":
-        # write your code here
-        pass
-
-    if utterance == "[二]班有[男生][27名]":
-        # write your code here
-        pass
-
-    if utterance == "[二]班有[27名][男生]":
-        # write your code here
-        pass
-
-    if utterance == "[一]班有[42]人":
-        # write your code here
-        pass
-
-    if utterance == "[二]班[圖書]有[67本]":
-        # write your code here
-        pass
-
-    if utterance == "[二]班[男生][27名]":
-        # write your code here
-        pass
-
-    if utterance == "[二]班[27名][男生]":
-        # write your code here
-        pass
-
     if utterance == "原計畫[8月]生產[手帕][780打]":
-        # write your code here
-        pass
-
-    if utterance == "其中[1200雙]是[塑料][涼鞋]":
-        # write your code here
-        pass
-
-    if utterance == "[5年][1]班有[46]人":
         # write your code here
         pass
 

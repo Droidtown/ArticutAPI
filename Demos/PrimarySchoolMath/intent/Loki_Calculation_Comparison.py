@@ -35,24 +35,50 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(args[0], args[1], amount, unit)])
 
-    if utterance == "[乙數]比[甲數]多[5]":
-        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", int(args[2]), "", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}+{}".format(args[0], args[1], args[2])])
-
-    if utterance == "[男生]比[女生]多[2]人":
-        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", int(args[2]), "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}+{}人".format(args[0], args[1], args[2])])
-
     if utterance == "[妹妹]比[姊姊]少[5張]":
         numberSTR, amount = amountSTRconvert(args[2])
         unit = args[2].replace(numberSTR, "")
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}{}".format(args[0], args[1], -amount, unit)])
 
+    if utterance == "[乙數]比[甲數]多[5]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, "", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}".format(args[0], args[1], args[2])])
+
+    if utterance == "[乙數]比[甲數]少[5]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, "", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}".format(args[0], args[1], amount)])
+
+    if utterance == "[男生]比[女生]多[2]人":
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", int(args[2]), "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}人".format(args[0], args[1], args[2])])
+
     if utterance == "[男生]比[女生]少[2]人":
         numberSTR, amount = amountSTRconvert(args[2])
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, "人", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}-{}人".format(args[0], args[1], amount)])
+
+    if utterance == "[3]班比[1]班多[3]人":
+        numberSTR, amount = amountSTRconvert(args[2])
+        subject1 = args[0] + "班"
+        subject2 = args[1] + "班"
+        subject, refOBJ, questionDICT = bitransitive(subject1, subject2, "", "", amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}人".format(args[0], args[1], amount)])
+
+    if utterance == "[2]班比[3]班少[7]人":
+        numberSTR, amount = amountSTRconvert(args[2])
+        subject1 = args[0] + "班"
+        subject2 = args[1] + "班"
+        subject, refOBJ, questionDICT = bitransitive(subject1, subject2, "", "", -amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}人".format(args[0], args[1], amount)])
+
+    if utterance == "[哥哥]比[弟弟]多[5元]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
 
     if utterance == "[哥哥]比[弟弟]少[5元]":
         numberSTR, amount = amountSTRconvert(args[2])
@@ -99,6 +125,30 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject1, subject2, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(subject1, subject2, amount, unit)])
 
+    if utterance == "[小毛]比[大毛]多摺了[8架]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(args[0], args[1], amount, unit)])
+
+    if utterance == "[小毛]比[大毛]少摺了[8架]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
+
+    if utterance == "[小毛]比[大毛]多摺了[8架][紙飛機]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], args[3], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}_{}+{}{}".format(args[0], args[1], args[3], amount, unit)])
+
+    if utterance == "[小毛]比[大毛]少摺了[8架][紙飛機]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], args[3], "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}_{}-{}{}".format(args[0], args[1], args[3], amount, unit)])
+
     if utterance == "[姊姊]比[弟弟]多踢[9][下]":
         numberSTR, amount = amountSTRconvert(args[2])
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, args[3], questionDICT)
@@ -136,21 +186,22 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, refOBJ, questionDICT = bitransitive("", "", entity1, entity2, -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(entity1, entity2, amount, unit)])
 
+    if utterance == "[小白兔]的[蘿蔔]比[小灰兔]少[12根]":
+        numberSTR, amount = amountSTRconvert(args[3])
+        unit = args[3].replace(numberSTR, "")
+        subject1, subject2, questionDICT = bitransitive(args[0], args[2], args[1], args[1], -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[2], amount, unit)])
+
+    if utterance == "[小白兔]的[蘿蔔]比[小灰兔]多[12根]":
+        numberSTR, amount = amountSTRconvert(args[3])
+        unit = args[3].replace(numberSTR, "")
+        subject1, subject2, questionDICT = bitransitive(args[0], args[2], args[1], args[1], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(args[0], args[2], amount, unit)])
+
 
     ###############################################################################################
     # 未實做
 
-    if utterance == "[乙數]比[甲數]少[5]":
-        # write your code here
-        pass
-
-    if utterance == "[姊姊]比[心慈]多[6]歲":
-        # write your code here
-        pass
-
-    if utterance == "[哥哥]比[弟弟]多[5元]":
-        # write your code here
-        pass
     if utterance == "比[房子]高出[3米]":
         # write your code here
         pass
@@ -163,23 +214,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[小毛]比[大毛]多摺了[8架]":
-        # write your code here
-        pass
-
-    if utterance == "[小毛]比[大毛]多摺了[8架][紙飛機]":
-        # write your code here
-        pass
-
     if utterance == "[小明]比[小東]多跳[3][下]":
-        # write your code here
-        pass
-
-    if utterance == "[小毛]比[大毛]少摺了[8架]":
-        # write your code here
-        pass
-
-    if utterance == "[小毛]比[大毛]少摺了[8架][紙飛機]":
         # write your code here
         pass
 
@@ -188,10 +223,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         pass
 
     if utterance == "[媽媽]給[小明]的[糖]比[爸爸]少[2顆]":
-        # write your code here
-        pass
-
-    if utterance == "[小白兔]的[蘿蔔]比[小灰兔]少[12根]":
         # write your code here
         pass
 
@@ -204,22 +235,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         pass
 
     if utterance == "[小車][上]的人比[大車][上]的少[9]人":
-        # write your code here
-        pass
-
-    if utterance == "[3]班比[1]班多[3]人":
-        # write your code here
-        pass
-
-    if utterance == "[2]班比[3]班少[7]人":
-        # write your code here
-        pass
-
-    if utterance == "[姊姊]比[心慈]少[6]歲":
-        # write your code here
-        pass
-
-    if utterance == "[姊姊]比[心慈]大[6]歲":
         # write your code here
         pass
 

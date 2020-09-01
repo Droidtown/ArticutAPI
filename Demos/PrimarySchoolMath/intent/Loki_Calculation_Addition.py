@@ -135,6 +135,24 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, questionDICT = transitive("", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}{}{}".format(entity, -amount, unit)])
 
+    if utterance == "借出[40本]":
+        numberSTR, amount = amountSTRconvert(args[0])
+        unit = args[0].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(entity, -amount, unit)])
+
+    if utterance == "壞掉[6個]":
+        numberSTR, amount = amountSTRconvert(args[0])
+        unit = args[0].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(entity, -amount, unit)])
+
+    if utterance == "吃了[9顆][巧克力]":
+        numberSTR, amount = amountSTRconvert(args[0])
+        unit = args[0].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", args[1], -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(args[1], -amount, unit)])
+
     if utterance == "[小娟]做了[3個]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
@@ -183,7 +201,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, questionDICT = transitive(args[0], args[2], -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}{}{}".format(args[2], -amount, unit)])
 
-    if utterance == "[大棕熊]堆疊了[28個][魚罐頭]":
+    if utterance == "[棕熊]堆疊了[28個][魚罐頭]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
         subject, entity, questionDICT = transitive(args[0], args[2], amount, unit, questionDICT)
@@ -311,6 +329,24 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, questionDICT = transitive(args[0], entity, -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(entity, amount, unit)])
 
+    if utterance == "[小兔]摘了[136個][果子]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive(args[0], args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(args[2], amount, unit)])
+
+    if utterance == "[大毛]摺了[14架][紙飛機]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive(args[0], args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(args[2], amount, unit)])
+
+    if utterance == "[小宏]買給[小華][4顆][蘋果]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive(args[1], args[3], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}+{}{}; ".format(args[1], amount, unit)])
+
     if utterance == "[花園][裡]開了[11朵][白花]和[8朵][紅花]":
         subject = args[0]+args[1]
         numberSTR, amount = amountSTRconvert(args[2])
@@ -409,6 +445,12 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, questionDICT = transitive("", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}{}{}".format(entity, -amount, unit)])
 
+    if utterance == "又跑來[6隻]":
+        numberSTR, amount = amountSTRconvert(args[0])
+        unit = args[0].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(entity, amount, unit)])
+
     if utterance == "又給[弟弟][10元]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
@@ -457,6 +499,22 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         ent, amount, unit, questionDICT = intransitive(args[0], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}{}{}".format(ent, -amount, unit)])
 
+    if utterance == "其餘的全部是[蘋果][樹]":
+        ent, amount, unit, questionDICT = intransitive(args[0]+args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(ent, -amount, unit)])
+
+    if utterance == "其餘的是[紅][蘋果]":
+        ent, amount, unit, questionDICT = intransitive(args[0]+args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(ent, -amount, unit)])
+
+    if utterance == "剩餘的是[柳樹]":
+        ent, amount, unit, questionDICT = intransitive(args[0], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(ent, -amount, unit)])
+
+    if utterance == "剩餘的是[蘋果][樹]":
+        ent, amount, unit, questionDICT = intransitive(args[0]+args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}{}".format(ent, -amount, unit)])
+
     if utterance == "再堆疊[10個]":
         numberSTR, amount = amountSTRconvert(args[0])
         unit = args[0].replace(numberSTR, "")
@@ -475,6 +533,12 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, questionDICT = transitive("", "", amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(entity, amount, unit)])
 
+    if utterance == "[昨天]賣出[6雙][鞋子]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[0].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", args[2], amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}+{}{}".format(args[2], amount, unit)])
+
     if utterance == "[上午]來了[遊客][583]人":
         numberSTR, amount = amountSTRconvert(args[2])
         subject, entity, questionDICT = transitive("", args[1], amount, "人", questionDICT)
@@ -484,6 +548,17 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         numberSTR, amount = amountSTRconvert(args[1])
         subject, entity, questionDICT = transitive("", "", -amount, "人", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}人".format(-amount)])
+
+    if utterance == "[中午]有[215]人離去":
+        numberSTR, amount = amountSTRconvert(args[1])
+        subject, entity, questionDICT = transitive("", "", -amount, "人", questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}人".format(-amount)])
+
+    if utterance == "[中午]離去[186]人":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        subject, entity, questionDICT = transitive("", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}{}".format(-amount, unit)])
 
     ###############################################################################################
     # 未實做
@@ -536,10 +611,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "借出[40本]":
-        # write your code here
-        pass
-
     if utterance == "做[數學][作業]用去[0.15小時]":
         # write your code here
         pass
@@ -548,27 +619,11 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "剩餘的是[柳樹]":
-        # write your code here
-        pass
-
-    if utterance == "剩餘的是[蘋果][樹]":
-        # write your code here
-        pass
-
     if utterance == "參加[美術][小組]的有[12]人":
         # write your code here
         pass
 
     if utterance == "參加了[3個][興趣][小組]":
-        # write your code here
-        pass
-
-    if utterance == "吃了[9顆][巧克力]":
-        # write your code here
-        pass
-
-    if utterance == "壞掉[6個]":
         # write your code here
         pass
 
@@ -676,14 +731,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[小兔]摘了[136個][果子]":
-        # write your code here
-        pass
-
-    if utterance == "[大毛]摺了[14架][紙飛機]":
-        # write your code here
-        pass
-
     if utterance == "[他]獲得[29枚][金牌]":
         # write your code here
         pass
@@ -697,10 +744,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         pass
 
     if utterance == "[樂樂]買[書]用去[8.55元]":
-        # write your code here
-        pass
-
-    if utterance == "[小宏]買給[小華][4顆][蘋果]":
         # write your code here
         pass
 
@@ -768,23 +811,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "又跑來[6隻]":
-        # write your code here
-        pass
-
     if utterance == "[英國]獲得[29枚][金牌]":
-        # write your code here
-        pass
-
-    if utterance == "其餘的全部是[蘋果][樹]":
-        # write your code here
-        pass
-
-    if utterance == "其餘的是[紅][蘋果]":
-        # write your code here
-        pass
-
-    if utterance == "再過[5年]":
         # write your code here
         pass
 
@@ -808,14 +835,6 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[中午]有[215]人離去":
-        # write your code here
-        pass
-
-    if utterance == "[昨天]賣出[6雙][鞋子]":
-        # write your code here
-        pass
-
     if utterance == "[上午]賣出[132公斤]":
         # write your code here
         pass
@@ -824,8 +843,5 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         # write your code here
         pass
 
-    if utterance == "[中午]離去[186]人":
-        # write your code here
-        pass
 
     return questionDICT
