@@ -140,8 +140,6 @@ API_KEY  = "YOUR_ARTICUT_KEY"
 Launch server
 
 ```
-$ sudo apt-get install nginx
-$ pip install uWSGI
 $ pip install flask
 $ pip install requests
 $ python app.py
