@@ -42,7 +42,7 @@ def debugInfo(pattern, utterance, args):
 
 def getResult(pattern, utterance, args, resultDICT, input_str):
     debugInfo(pattern, utterance, args)
-    if utterance == "忘了關[冷氣]":
+    if utterance == "忘記關[冷氣]":
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "--"
         if args[0] in entityDICT["ac"]:
@@ -50,10 +50,10 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = False
 
-    if utterance == "忘了關燈":
+    if utterance == "忘記關燈":
         resultDICT["question_action"] = "--"
 
-    if utterance == "[燈]忘了開":
+    if utterance == "[燈]忘記開":
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "++"
         if args[0] in entityDICT["ac"]:
@@ -61,7 +61,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = True
 
-    if utterance == "[燈]忘了關":
+    if utterance == "[燈]忘記關":
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "--"
         if args[0] in entityDICT["ac"]:
@@ -69,7 +69,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = False
 
-    if utterance == "[燈]忘了開":
+    if utterance == "[燈]忘記開":
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "++"
         if args[0] in entityDICT["ac"]:
@@ -85,15 +85,15 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = False
 
-    if utterance == "[好像]忘了關燈":
+    if utterance == "[好像]忘記關燈":
         if args[0] in ["好像"]:
             resultDICT["question_action"] = "--"
 
-    if utterance == "[好像]忘了開燈":
+    if utterance == "[好像]忘記開燈":
         if args[0] in ["好像"]:
             resultDICT["question_action"] = "++"
 
-    if utterance == "[燈][好像]忘了關":
+    if utterance == "[燈][好像]忘記關":
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "--"
         if args[0] in entityDICT["ac"]:
@@ -101,7 +101,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = False
 
-    if utterance in ["[好像]忘了關[冷氣]", "[好像]沒關[冷氣]"]:
+    if utterance in ["[好像]忘記關[冷氣]", "[好像]沒關[冷氣]"]:
         if entityDICT["action"] in args[1]:
             resultDICT["question_action"] = "--"
         if args[1] in entityDICT["ac"]:
@@ -109,7 +109,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[1] in entityDICT["tv"]:
             resultDICT["question_tv"] = False
 
-    if utterance in ["忘了開[冷氣]", "沒開[冷氣]", "[燈][好像]忘了開"]:
+    if utterance in ["忘記開[冷氣]", "沒開[冷氣]", "[燈][好像]忘記開"]:
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "++"
         if args[0] in entityDICT["ac"]:
@@ -117,7 +117,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = True
 
-    if utterance in ["[好像]忘了開[冷氣]", "[好像]沒開[冷氣]"]:
+    if utterance in ["[好像]忘記開[冷氣]", "[好像]沒開[冷氣]"]:
         if entityDICT["action"] in args[1]:
             resultDICT["question_action"] = "++"
         if args[1] in entityDICT["ac"]:
@@ -125,7 +125,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[1] in entityDICT["tv"]:
             resultDICT["question_tv"] = True
 
-    if utterance in ["[燈][好像]忘了開", "[冷氣][好像]沒開"]:
+    if utterance in ["[燈][好像]忘記開", "[冷氣][好像]沒開"]:
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "++"
         if args[0] in entityDICT["ac"]:
@@ -133,7 +133,7 @@ def getResult(pattern, utterance, args, resultDICT, input_str):
         if args[0] in entityDICT["tv"]:
             resultDICT["question_tv"] = True
 
-    if utterance in ["[燈][好像]忘了關", "[冷氣][好像]沒關"]:
+    if utterance in ["[燈][好像]忘記關", "[冷氣][好像]沒關"]:
         if entityDICT["action"] in args[0]:
             resultDICT["question_action"] = "--"
         if args[0] in entityDICT["ac"]:
