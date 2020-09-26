@@ -13,7 +13,8 @@ entityReLIST = ["(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)",
                 "(<ENTITY_noun>[^<]*?</ENTITY_noun>)",
                 "(<ENTITY_nounHead>[^<]*?</ENTITY_nounHead>)",
                 "(<ENTITY_nouny>[^<]*?</ENTITY_nouny>)",
-                "(<ENTITY_oov>[^<]*?</ENTITY_oov>)"]
+                "(<ENTITY_oov>[^<]*?</ENTITY_oov>)",
+                "(<UserDefined>)[^<]*?(</UserDefined>)"]
 entityReSTR = "(<ENTITY_possessive>[^<]*?</ENTITY_possessive>)?"+"|".join(entityReLIST)
 
 from ArticutAPI.ArticutAPI import Articut
@@ -50,7 +51,7 @@ def posTagPurger(posSTR):
     '''
     移除 POS 的標記，並把所有的詞彙結合成單一字串
     '''
-    pat = re.compile("</?[a-zA-Z]+_[a-zA-Z]+>")
+    pat = re.compile("</?[a-zA-Z]+(_[a-zA-Z]+)?>")
     resultSTR = re.sub(pat, "", posSTR)
     return resultSTR
 
@@ -58,9 +59,11 @@ if __name__ == "__main__":
 
     with open("../../account.info", encoding="utf-8") as f:
         accountINFO = json.loads(f.read())
+    myDICT = "./myDICT.json"
 
     articut = Articut(username=accountINFO["userName"], apikey=accountINFO["apiKey"])
-    articutResult = articut.parse(caseLIST[-1])
+    articutResult = articut.parse(caseLIST[-1], userDefinedDictFILE=myDICT)
+
     verbSTR = "佯裝"
     targetSentenceLIST = []
     for a in articutResult["result_pos"]:
