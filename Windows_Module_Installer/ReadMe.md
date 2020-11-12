@@ -20,7 +20,7 @@
 7. 如安裝上有問題，便會顯示 **"呃…好像出了什麼錯，總之是沒裝成功。請把這個畫面擷圖傳給 info@droidtown.co ，我們會再做調整。"** 字樣，再請您與我們聯繫 :) 
 
 #### 方法二、使用IDE(例如Wing)安裝
-
+![](https://github.com/Droidtown/ArticutAPI/blob/master/Screenshots/requests_installer.png)
 1. 執行**requests_installer.py**
 2. 程式將列出你的系統中所有的 **Python 環境**
 範例:
