@@ -16,12 +16,14 @@ def main(moduleNameSTR):
 
     pythonSelection = int(input("您選擇(輸入數字)："))
     if pythonSelection in range(1, len(pythonLIST)+1):
-        try:
-            os.system("{} -m pip install {}".format(pythonLIST[pythonSelection-1], moduleNameSTR))
-
-            print("裝…好啦！")
-        except:
-            print("呃…好像出了什麼錯，總之是沒裝成功。請把這個畫面擷圖傳給 info@droidtown.co ，我們會再做調整。")
+        if "conda" in pythonLIST[pythonSelection-1]:
+            os.system("conda install {}".format(moduleNameSTR))
+        else:
+            try:
+                os.system("{} -m pip install {}".format(pythonLIST[pythonSelection-1], moduleNameSTR))
+                print("裝…好啦！")
+            except:
+                print("呃…好像出了什麼錯，總之是沒裝成功。請把這個畫面擷圖傳給 info@droidtown.co ，我們會再做調整。")
     else:
         print("看不懂你在選什麼，請重新執行一次。")
 
