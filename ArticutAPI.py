@@ -4,7 +4,19 @@
 import json
 import os
 import re
-import requests
+
+try:
+    import requests
+except Exception as e:
+    import platform
+    if "windows" in platform.system().lower():
+        print("""
+        Module, \"requests\" is not installed.
+        If you don't know how to install "requests" under Windows,
+        please use our request_installer.py in "Windows_Module_Installer" folder.
+        """)
+    else:
+        print(e)
 
 try:
     from Toolkit.analyse import AnalyseManager
@@ -533,6 +545,7 @@ if __name__ == "__main__":
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
     inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
+    inputSTR = "處有期徒刑參月"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
