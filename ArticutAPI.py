@@ -758,7 +758,7 @@ if __name__ == "__main__":
     except:
         print("No module named 'graphene'")
         print("Articut-graphQL requires 'graphene' module.")
-        print("Please use pip/conda install graphene-python to install the module and reload ArticutAPI.")
+        print("Please use pip/conda install graphene to install the module and reload ArticutAPI.")
 
 
     inputSTR = "前天你說便宜的油還在海上，怎麼兩天後就到港口了？"
