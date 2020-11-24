@@ -69,7 +69,6 @@ class Articut:
         self.userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
         self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
         self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-        self.eventPat = re.compile("<ACTION_lightVerb>[^<]</ACTION_lightVerb>((?<!</LOCATION>)<ENTITY_nouny>[^<]</ENTITY_nouny>)?((<ACTION_verb>[^<]*?</ACTION_verb>)|(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>$))|<ACTION_verb>.?[有現到見道]</ACTION_verb>(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)$|(?<=[有現到見道]</ACTION_verb>)((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>$|((?<!</LOCATION>)<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>)?<ACTION_verb>[^<有現到見道]{1,2}</ACTION_verb>(?!<ACTION)(?!<LOCATION)(?!<KNOWLEDGE)(?!<MODIFIER>)(?!<ENTITY_classifier)(?!<ENTITY_pronoun>)(<ENTITY_nouny?>[^<]*?</ENTITY_nouny?>|<ENTITY_person>[^<]*?</ENTITY_person>)?|<ACTION_lightVerb>.</ACTION_lightVerb><VerbP>[^<]*?</VerbP>|<ACTION_verb>[^<]*?</ACTION_verb>($|(?=<ACTION_verb>))")
         self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
         self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
@@ -543,9 +542,9 @@ if __name__ == "__main__":
     #inputSTR = "蔡英文總統明日到台北市政府找柯文哲開會討論他的想法，請你安排一下！" #getPersonLIST() Demo
     #inputSTR = "地址：宜蘭縣宜蘭市縣政北七路六段55巷1號2樓" #localRE 工具包 Demo
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
-    inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
-    inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
-    inputSTR = "處有期徒刑參月"
+    #inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
+    #inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
+    #inputSTR = "處有期徒刑參月"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
@@ -565,7 +564,7 @@ if __name__ == "__main__":
 
     #取得斷詞結果
     if not resultExistBOOL:
-        result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=True, wikiDataBOOL=True)
+        result = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=False, wikiDataBOOL=False)
 
         #儲存斷詞結果
         try:

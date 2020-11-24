@@ -61,7 +61,7 @@ if __name__ == "__main__":
         accountINFO = json.loads(f.read())
     myDICT = "./myDICT.json"
 
-    articut = Articut(username=accountINFO["userName"], apikey=accountINFO["apiKey"])
+    articut = Articut(username=accountINFO["email"], apikey=accountINFO["apikey"])
     articutResult = articut.parse(caseLIST[-1], userDefinedDictFILE=myDICT)
 
     verbSTR = "佯裝"
