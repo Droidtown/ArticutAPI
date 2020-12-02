@@ -116,7 +116,7 @@ class MP_Articut:
         resultAppend = resultLIST.append
         #print(inputLIST2)
         for i, inputLIST in enumerate(inputLIST2):
-            resultAppend(pool.apply_async(self.run, (i, inputLIST, level, userDefinedDICT, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
+            resultAppend(pool.apply_async(self._run, (i, inputLIST, level, userDefinedDICT, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
         pool.close()
         pool.join()
 
@@ -126,7 +126,7 @@ class MP_Articut:
 
         return [x[1] for x in resultLIST]
 
-    def run(self, index, inputLIST, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         payload = {"input_list": inputLIST,
                    "level": level,
                    "user_defined_dict_file": userDefinedDICT,
