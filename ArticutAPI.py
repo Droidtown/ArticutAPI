@@ -62,28 +62,6 @@ class Articut:
         self.openDataPlaceAccessBOOL=False
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
-        # Regex Pattern
-        self.verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
-        self.verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
-        self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
-        self.modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
-        self.modifierPPat = re.compile("(?<=<DegreeP>)[^<]*?(?=</DegreeP>)|(?<=<ModifierP>)[^<]*?(?=</ModifierP>)")
-        self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
-        self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
-        self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
-        self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)|(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)|(?<=<KNOWLEDGE_routeTW>)[^<]*?(?=</KNOWLEDGE_routeTW>)")
-        self.userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
-        self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
-        self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-        self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
-        self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
-        self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
-        self.currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
-        self.wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
-        self.stripPat = re.compile("(?<=>).*?(?=<)")
-        self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
-        self.contentPat = re.compile("|".join([self.verbPPat.pattern, self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.modifierPPat.pattern, self.userDefinedPat.pattern]))
-
         # Toolkit
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
@@ -293,7 +271,7 @@ if __name__ == "__main__":
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
     #inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
     #inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
-    #inputSTR = "處有期徒刑參月"
+    inputSTR = "處有期徒刑參月"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
