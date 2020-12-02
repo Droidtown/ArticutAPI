@@ -1,4 +1,4 @@
-# ArticutAPI（文截斷詞）
+# Articut 中文斷詞暨詞性標記服務
 ## [依語法結構計算，而非統計方法的中文斷詞。]
 
 ### [Articut API Website](https://api.droidtown.co/)
@@ -6,6 +6,11 @@
 ### [![Articut Demo](https://img.youtube.com/vi/AnvdKmVLlcA/0.jpg)](https://youtu.be/AnvdKmVLlcA "Articut Demo")
 
 ----------------------
+
+# ArticutAPI
+
+## 說明文件
+函數說明請參閱 Docs/index.html
 
 ## 使用方法
 ### Articut CWS (Chinese word segmentation)
