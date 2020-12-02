@@ -39,10 +39,15 @@ except: #供外部載入時使用。
 class WS_Articut:
     def __init__(self, url="ws://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None):
         self.port = port
-        if "ws" not in url:
-            self.ws_url = "ws://{}:{}/Articut/WebSocket".format(url, port)
-        else:
+        if "ws" in url:
+            self.ws_url = "{}:{}/Articut/WebSocket".format(url, port)
+            self.url = "{}:{}".format(url.replace("ws", "http"), port)
+        elif "http" in url:
             self.ws_url = "{}:{}/Articut/WebSocket".format(url.replace("http", "ws"), port)
+            self.url = "{}:{}".format(url, port)
+        else:
+            self.ws_url = "ws://{}:{}/Articut/WebSocket".format(url, port)
+            self.url = "http://{}:{}".format(url, port)
         #enableTrace(True)
         self.ws = create_connection("{}/API/".format(self.ws_url))
         self.ws_bulk = create_connection("{}/BulkAPI/".format(self.ws_url))
