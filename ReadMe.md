@@ -5,6 +5,31 @@
 ### [Document](https://api.droidtown.co/document/)
 ### [![Articut Demo](https://img.youtube.com/vi/AnvdKmVLlcA/0.jpg)](https://youtu.be/AnvdKmVLlcA "Articut Demo")
 
+## Benchmark
+### 設計目標
+名稱        | ArticutAPI          | MP_ArticutAPI   | WS_ArticutAPI | 
+:----------:|:-------------------:|:-------------------:|:------------------:|
+產品        | Online / Docker  | Docker                | Docker              |
+技術        | HTTP Request    | MultiProcessing | WebSocket        |
+特色        | 簡單易用             | 批次處理             | 即時處理            |
+適用情景 | 任何                    | 文本分析             | 聊天機器人         |
+
+### 處理速度
+名稱         | ArticutAPI | MP_ArticutAPI | WS_ArticutAPI | 
+:----------:|-------------:|-------------------:|-------------------:|
+時間         |  0.1252 秒 |         0.1206 秒 |          0.0677 秒 |
+
+### 大量文本
+句數         | ArticutAPI  | MP_ArticutAPI | WS_ArticutAPI |
+:----------:|--------------:|-------------------:|------------------:|
+1K           |        155 秒 |                   8 秒 |                18 秒 |
+2K           |        306 秒 |                 14 秒 |                35 秒 |
+3K           |        455 秒 |                 17 秒 |                43 秒 |
+
+- 測試平台爲 4 核心 CPU 並使用 4 個 Process。
+- `MP_ArticutAPI`使用 bulk_parse(bulkSize=20) 方法。
+- `WS_ArticutAPI`使用 parse() 方法。
+
 ----------------------
 
 # ArticutAPI
