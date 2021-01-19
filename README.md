@@ -2,7 +2,7 @@
 ## [依語法結構計算，而非統計方法的中文斷詞。]
 
 ### [Articut API Website](https://api.droidtown.co/)
-### [Document](https://api.droidtown.co/document/)
+### [Document](https://api.droidtown.co/ArticutAPI/document/)
 ### [![Articut Demo](https://img.youtube.com/vi/AnvdKmVLlcA/0.jpg)](https://youtu.be/AnvdKmVLlcA "Articut Demo")
 
 ## Benchmark
