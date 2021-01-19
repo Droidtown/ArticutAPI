@@ -4,3 +4,7 @@
 account.info
 __init__.py
 ForTest
+*.egg-info
+build
+dist
+build.md

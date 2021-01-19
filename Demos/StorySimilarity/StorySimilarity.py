@@ -8,9 +8,9 @@ from Bio import pairwise2
 try:
     import sys
     sys.path.append("../..")
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
 except:
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
 
 username = ""
 apikey = ""

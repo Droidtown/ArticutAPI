@@ -9,10 +9,11 @@
 try:
     import sys
     sys.path.append("../..")
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
 except:
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
 
+import json
 
 if __name__ == "__main__":
 

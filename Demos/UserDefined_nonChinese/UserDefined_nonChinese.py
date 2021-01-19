@@ -3,11 +3,11 @@
 
 
 try:
-    from ArticutAPI import Articut
-except:
     import sys
     sys.path.append("../..")
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
+except:
+    from articutapi.ArticutAPI import Articut
 
 import json
 import re

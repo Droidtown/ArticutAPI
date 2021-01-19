@@ -4,9 +4,10 @@
 try:
     import sys
     sys.path.append("../..")
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
 except:
-    from ArticutAPI import Articut
+    from articutapi.ArticutAPI import Articut
+
 from pprint import pprint
 import json
 

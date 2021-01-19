@@ -17,7 +17,12 @@ entityReLIST = ["(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)",
                 "(<UserDefined>)[^<]*?(</UserDefined>)"]
 entityReSTR = "(<ENTITY_possessive>[^<]*?</ENTITY_possessive>)?"+"|".join(entityReLIST)
 
-from ArticutAPI.ArticutAPI import Articut
+try:
+    import sys
+    sys.path.append("../..")
+    from articutapi.ArticutAPI import Articut
+except:
+    from articutapi.ArticutAPI import Articut
 
 import json
 import re
