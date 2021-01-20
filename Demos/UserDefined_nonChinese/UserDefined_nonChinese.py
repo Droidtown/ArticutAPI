@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-
 try:
+    # Installed via pip install
+    try:
+        from .ArticutAPI import Articut
+    except:
+        from ArticutAPI import Articut
+except:
+    # Installed via git clone
     import sys
     sys.path.append("../..")
-    from articutapi.ArticutAPI import Articut
-except:
-    from articutapi.ArticutAPI import Articut
+    from ArticutAPI import Articut
 
 import json
 import re

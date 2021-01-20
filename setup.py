@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="articutapi",
+    name="ArticutAPI",
     version="1.0.2",
     author="Droidtown Linguistic Tech. Co. Ltd.",
     author_email="info@droidtown.co",

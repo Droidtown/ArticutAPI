@@ -1,1 +1,1 @@
-articutapi/Toolkit/graphQL.py
+ArticutAPI/Toolkit/graphQL.py

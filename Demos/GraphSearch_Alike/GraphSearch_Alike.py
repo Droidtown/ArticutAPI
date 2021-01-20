@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+try:
+    # Installed via pip install
+    try:
+        from .ArticutAPI import Articut
+    except:
+        from ArticutAPI import Articut
+except:
+    # Installed via git clone
+    import sys
+    sys.path.append("../..")
+    from ArticutAPI import Articut
+
+import json
+import re
+
 caseLIST = [
     "吳金順於108年8月21日下午6時18分許起，接到詐欺集團成員佯裝為其友人之電話向其借款云云，致其陷於錯誤，因而先後於108年8月22日中午12時37分許、同日下午2時50分許，在桃園市桃園區中山東路32之20號之5陽信商業銀行桃園分行，臨櫃匯款15萬元、25萬元至右列帳戶。",
     "林凌強於108年8月22日晚間7時30分許，接到詐欺集團成員佯裝為廠商人員，佯稱須依其指示操作始得取消重複訂單云云，致其陷於錯誤，因而於同日晚間8時17分許、8時26分許，在新北市淡水區民族路56號全家便利商店淡水竹勝店，轉帳2萬9,989元2筆至右列帳戶。",
@@ -16,16 +31,6 @@ entityReLIST = ["(<ENTITY_pronoun>[^<]*?</ENTITY_pronoun>)",
                 "(<ENTITY_oov>[^<]*?</ENTITY_oov>)",
                 "(<UserDefined>)[^<]*?(</UserDefined>)"]
 entityReSTR = "(<ENTITY_possessive>[^<]*?</ENTITY_possessive>)?"+"|".join(entityReLIST)
-
-try:
-    import sys
-    sys.path.append("../..")
-    from articutapi.ArticutAPI import Articut
-except:
-    from articutapi.ArticutAPI import Articut
-
-import json
-import re
 
 def graphExtractor_verb(posSTR, verbSTR):
     ''''
@@ -67,7 +72,7 @@ if __name__ == "__main__":
     myDICT = "./myDICT.json"
 
     articut = Articut(username=accountINFO["email"], apikey=accountINFO["apikey"])
-    articutResult = articut.parse(caseLIST[-1], userDefinedDictFILE=myDICT)
+    articutResult = articut.parse(caseLIST[0], userDefinedDictFILE=myDICT)
 
     verbSTR = "佯裝"
     targetSentenceLIST = []

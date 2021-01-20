@@ -1,1 +1,1 @@
-articutapi/ArticutAPI.py
+ArticutAPI/ArticutAPI.py

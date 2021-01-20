@@ -37,7 +37,7 @@
 
 ## 安裝方法
 ```sh
-pip3 install articutapi
+pip3 install ArticutAPI
 ```
 
 ## 說明文件
@@ -46,7 +46,7 @@ pip3 install articutapi
 ## 使用方法
 ### Articut CWS (Chinese word segmentation)
 ```
-from articutapi.ArticutAPI import Articut
+from ArticutAPI import Articut
 from pprint import pprint
 
 articut = Articut()
@@ -188,7 +188,7 @@ UserDefinedFile.json
 
 runArticut.py
 ```
-from articutapi.ArticutAPI import Articut
+from ArticutAPI import Articut
 from pprint import pprint
 
 articut = Articut()

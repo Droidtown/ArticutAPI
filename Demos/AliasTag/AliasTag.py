@@ -2,8 +2,13 @@
 # -*- coding:utf-8 -*-
 
 try:
-    from ArticutAPI import Articut
+    # Installed via pip install
+    try:
+        from .ArticutAPI import Articut
+    except:
+        from ArticutAPI import Articut
 except:
+    # Installed via git clone
     import sys
     sys.path.append("../..")
     from ArticutAPI import Articut

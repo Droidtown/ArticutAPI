@@ -6,11 +6,16 @@ from Bio import pairwise2
 #from Bio.pairwise2 import format_alignment
 
 try:
+    # Installed via pip install
+    try:
+        from .ArticutAPI import Articut
+    except:
+        from ArticutAPI import Articut
+except:
+    # Installed via git clone
     import sys
     sys.path.append("../..")
-    from articutapi.ArticutAPI import Articut
-except:
-    from articutapi.ArticutAPI import Articut
+    from ArticutAPI import Articut
 
 username = ""
 apikey = ""
