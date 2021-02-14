@@ -1,14 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+import os
 import re
 
-from ArticutAPI import Articut
+try:
+    # Installed via pip install
+    try:
+        from .ArticutAPI import Articut
+    except:
+        from ArticutAPI import Articut
+except:
+    # Installed via git clone
+    import sys
+    sys.path.append("../..")
+    from ArticutAPI import Articut
+
 
 #username 和 apikey 留空的話，就只有每小時 2000 字的公用額度可以玩囉。
 username = ""
 apikey = ""
 articut = Articut(username=username, apikey=apikey)
+
+userDefinedDictFILE = "./KNOWLEDGE_三國人物.json"
+if os.path.exists(userDefinedDictFILE):
+    pass
+else:
+    raise IOError("請到 https://github.com/Droidtown/ArticutAPI/blob/master/Public_UserDefinedDict/ 下載 KNOWLEDGE_三國人物.json 字典檔配合使用。")
 
 #取出所有依字典被標為人名的字串
 UserDefinedPat = re.compile("<UserDefined>[^<]*?</UserDefined>")
