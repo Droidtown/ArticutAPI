@@ -36,7 +36,7 @@ ArticutAPI 的回傳結果裡，有三種格式。
 ```
 本次的 Demo 程式，就是利用 **`result_obj`** 配合在 [Public_UserDefinedDict](https://github.com/Droidtown/ArticutAPI/blob/master/Public_UserDefinedDict/KNOWLEDGE_%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9.json) 裡釋出的「三國人物字典」來操作。
 
-![Demo Text](https://lh3.googleusercontent.com/z29ylEeGOP1RHnOUTRepKaacKwUOXVVx1mbZHoSPzNhGvLW1cgUO0ASnl6SIdE1O6DRbaICCW-8zrxzktkfaEv9prQNFIViiQ8NpG9zo8WEq78YkVuwMZkYx-LFSxC05sEURNdI6saWV2GeN5O8AqQF0iijdpD4bVP7TlGD9_L-b80qssn_XiXi7ax-JitvWc0PpEETk1QiK25Lkpxf5bfROEmAAhUUyZdl4ZLH6814iOS3TPNVHXTVxNZyoZuG_xNyo4y_F2_oF9slCicmAYNfjFo28mQIsMnwwMg8Vg6QtAgcfZvxqMtTvE6I13BVsC8cv1UBdy22bLHspHHCJSdfY_DFqFGCCQxLfZ59Iw-PUWQziN1n_UCrIvAaqzyEnRXCVa3v4wkuKVPSH3UBri-1dsn9bPGg_37TnC9ntJJpc_NhB2fCjyEGX6z-uUJzFJbeejWlutbI8zEFsdwSGj7RdHgtxIiw7XdaSbA0cdYcqzm5QSJDawqxX431ykrHKfVGga_KQBYGbesldyk09Se56Gh7xbfvTdKR1RQxURWu84rxjfG9n14LhuLVTP4d3ppAGEg4pnL5A3ynqqL9F9zGtxj5vQgU0sRBo3jgTNdAYhpeH4OUynvOgt-_8WXVJhcTkA0iQJfI5kQ6RG2TP4cKeSoxiMXbxigExmB_wjEObQHJDZMq0hId3_6P1=w518-h263-no?authuser=1)
+![Demo Text](https://64.media.tumblr.com/fc61f3ff32828d9e12883a8ae2482989/f488dd2c76f7c846-0f/s500x750/ca8f5b98619781663e05eeaf9401b18e6b66ccbb.png)
 
 程式目標是把「趙雲」以及在「同一句裡出現趙雲以及他做的動作」擷取出來。
 
