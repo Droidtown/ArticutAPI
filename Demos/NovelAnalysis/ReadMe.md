@@ -22,11 +22,11 @@
 想瞭解這個問題，利用  Articut 就對了！
 
 ArticutAPI 的回傳結果裡，有三種格式。  
-#### 一是帶著詞性標記的 **`result_pos`**：
+#### 第一種是帶著詞性標記的 **`result_pos`**：
 ```
 ['<UserDefined>趙雲</UserDefined><VerbP>聽了</VerbP>', '，', '<FUNC_inner>連</FUNC_inner><ACTION_verb>忙</ACTION_verb><ACTION_verb>追尋</ACTION_verb>...
 ```
-#### 二是單純用斜線把詞彙切開的 **`result_segmentation`**：
+#### 第二種是單純用斜線把詞彙切開的 **`result_segmentation`**：
 ```
 '趙雲/聽了/，/連/忙/追尋/...
 ```
@@ -35,6 +35,10 @@ ArticutAPI 的回傳結果裡，有三種格式。
 [{'text': '趙雲', 'pos': 'UserDefined'}, {'text': '聽了', 'pos': 'VerbP'}], [{'text': '，', 'pos': 'PUNCTUATION'}], [{'text': '連', 'pos': 'FUNC_inner'}, {'text': '忙', 'pos': 'ACTION_verb'}, {'text': '追尋', 'pos': 'ACTION_verb'}]
 ```
 本次的 Demo 程式，就是利用 **`result_obj`** 配合在 [Public_UserDefinedDict](https://github.com/Droidtown/ArticutAPI/blob/master/Public_UserDefinedDict/KNOWLEDGE_%E4%B8%89%E5%9C%8B%E4%BA%BA%E7%89%A9.json) 裡釋出的「三國人物字典」來操作。
+
+![Demo Text](https://lh3.googleusercontent.com/z29ylEeGOP1RHnOUTRepKaacKwUOXVVx1mbZHoSPzNhGvLW1cgUO0ASnl6SIdE1O6DRbaICCW-8zrxzktkfaEv9prQNFIViiQ8NpG9zo8WEq78YkVuwMZkYx-LFSxC05sEURNdI6saWV2GeN5O8AqQF0iijdpD4bVP7TlGD9_L-b80qssn_XiXi7ax-JitvWc0PpEETk1QiK25Lkpxf5bfROEmAAhUUyZdl4ZLH6814iOS3TPNVHXTVxNZyoZuG_xNyo4y_F2_oF9slCicmAYNfjFo28mQIsMnwwMg8Vg6QtAgcfZvxqMtTvE6I13BVsC8cv1UBdy22bLHspHHCJSdfY_DFqFGCCQxLfZ59Iw-PUWQziN1n_UCrIvAaqzyEnRXCVa3v4wkuKVPSH3UBri-1dsn9bPGg_37TnC9ntJJpc_NhB2fCjyEGX6z-uUJzFJbeejWlutbI8zEFsdwSGj7RdHgtxIiw7XdaSbA0cdYcqzm5QSJDawqxX431ykrHKfVGga_KQBYGbesldyk09Se56Gh7xbfvTdKR1RQxURWu84rxjfG9n14LhuLVTP4d3ppAGEg4pnL5A3ynqqL9F9zGtxj5vQgU0sRBo3jgTNdAYhpeH4OUynvOgt-_8WXVJhcTkA0iQJfI5kQ6RG2TP4cKeSoxiMXbxigExmB_wjEObQHJDZMq0hId3_6P1=w518-h263-no?authuser=1)
+
+程式目標是把「趙雲」以及在「同一句裡出現趙雲以及他做的動作」擷取出來。
 
 程式分成兩大區塊。第一個區塊先把三國演義中常常使用的「用名字的一個字，來指稱前面提過的某人」 ，利用三國人物字典將它還原成「全名」。例如以「雲」表示剛剛提過的「趙雲」，用「琮」代指前文裡的「劉琮」…等等的「雲」和「琮」就要被還原成「趙雲」和「劉琮」。
 
