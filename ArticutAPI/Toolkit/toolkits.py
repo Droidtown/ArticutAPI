@@ -26,6 +26,7 @@ addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
 currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
 currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
 currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
+chemicalPat = re.compile("(?<=<KNOWLEDGE_chemical>)[^<]*?(?=</KNOWLEDGE_chemical>)")
 wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
 stripPat = re.compile("(?<=>).*?(?=<)")
 clausePat = re.compile("\<CLAUSE_.*?Q\>")
@@ -105,6 +106,25 @@ def getContentWordLIST(parseResultDICT, indexWithPOS=True):
     if not indexWithPOS:
         contentWordLIST = _segIndexConverter(parseResultDICT, contentWordLIST)
     return contentWordLIST
+
+def getChemicalLIST(parseResultDICT, indexWithPOS=True):
+    '''
+    取出斷詞結果中的 KNOWLEDGE_chemical。
+    每個句子內的 KNOWLEDGE_chemical 為一個 list.
+    '''
+    if "result_pos" in parseResultDICT:
+        pass
+    else:
+        return None
+    chemicalLIST = []
+    for p in parseResultDICT["result_pos"]:
+        if len(p) > 1:
+            chemicalLIST.append([(c.start(), c.end(), c.group(0)) for c in list(chemicalPat.finditer(p))])
+        else:
+            chemicalLIST.append([])
+    if not indexWithPOS:
+        chemicalLIST = _segIndexConverter(parseResultDICT, chemicalLIST)
+    return chemicalLIST
 
 def getVerbStemLIST(parseResultDICT, indexWithPOS=True):
     '''

@@ -97,10 +97,11 @@ class WS_Articut:
                 print("WebSocket[Bulk] Connection Failed.", e)
         return self.ws.connected
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         if self._wsCreateConnection():
             payload = {"input_str": inputSTR,
                        "level": level,
+                       "chemical": chemicalBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
@@ -119,12 +120,13 @@ class WS_Articut:
                 print("Exception", e, "\nInputSTR", inputSTR)
                 return None
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         resultLIST = []
         if self._wsCreateConnection():
             resultAppend = resultLIST.append
             inputLen = len(inputLIST)
             payload = {"level": level,
+                       "chemical": chemicalBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
@@ -184,6 +186,13 @@ class WS_Articut:
         每個句子內的實詞為一個 list。
         '''
         return getContentWordLIST(parseResultDICT, indexWithPOS)
+
+    def getChemicalLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        return getChemicalLIST(parseResultDICT, indexWithPOS)
 
     def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
@@ -277,6 +286,14 @@ class WS_Articut:
         每個句子內的實詞為一個 list。
         '''
         resultLIST = [getContentWordLIST(x, indexWithPOS) for x in parseResultLIST]
+        return resultLIST
+
+    def bulk_getChemicalLIST(self, parseResultLIST, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        resultLIST = [getChemicalLIST(x, indexWithPOS) for x in parseResultLIST]
         return resultLIST
 
     def bulk_getVerbStemLIST(self, parseResultLIST, indexWithPOS=True):

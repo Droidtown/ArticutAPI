@@ -76,9 +76,10 @@ class MP_Articut:
     def __str__(self):
         return "Articut Multiprocessing API"
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
             payload = {"input_str": inputSTR,
                        "level": level,
+                       "chemical": chemicalBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
@@ -95,7 +96,7 @@ class MP_Articut:
                 #pprint(response.json())
                 return response.json()
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         inputLIST2 = []
         inputLen = len(inputLIST)
 
@@ -116,7 +117,7 @@ class MP_Articut:
         resultAppend = resultLIST.append
         #print(inputLIST2)
         for i, inputLIST in enumerate(inputLIST2):
-            resultAppend(pool.apply_async(self._run, (i, inputLIST, level, userDefinedDICT, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
+            resultAppend(pool.apply_async(self._run, (i, inputLIST, level, chemicalBOOL, userDefinedDICT, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
         pool.close()
         pool.join()
 
@@ -126,9 +127,10 @@ class MP_Articut:
 
         return [x[1] for x in resultLIST]
 
-    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         payload = {"input_list": inputLIST,
                    "level": level,
+                   "chemical": chemicalBOOL,
                    "user_defined_dict_file": userDefinedDICT,
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
@@ -179,6 +181,13 @@ class MP_Articut:
         每個句子內的實詞為一個 list。
         '''
         return getContentWordLIST(parseResultDICT, indexWithPOS)
+
+    def getChemicalLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        return getChemicalLIST(parseResultDICT, indexWithPOS)
 
     def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
@@ -272,6 +281,14 @@ class MP_Articut:
         每個句子內的實詞為一個 list。
         '''
         resultLIST = [getContentWordLIST(x, indexWithPOS) for x in parseResultLIST]
+        return resultLIST
+
+    def bulk_getChemicalLIST(self, parseResultLIST, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        resultLIST = [getChemicalLIST(x, indexWithPOS) for x in parseResultLIST]
         return resultLIST
 
     def bulk_getVerbStemLIST(self, parseResultLIST, indexWithPOS=True):

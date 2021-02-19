@@ -60,6 +60,7 @@ class Articut:
 
         self.userDefinedDictFILE = None
         self.openDataPlaceAccessBOOL=False
+        self.chemicalBOOL=True
         self.fileSizeLimit = 1024 * 1024 * 10    # 10 MB
 
         # Toolkit
@@ -101,12 +102,13 @@ class Articut:
             return None
         return segIndexLIST
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         if level not in ("lv1", "lv2", "lv3"):
             level = self.level
 
         self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
         self.wikiDataBOOL=wikiDataBOOL
+        self.chemicalBOOL=chemicalBOOL
         url = "{}/Articut/API/".format(self.url)
         if level in ("lv1", "lv2"):
             payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
@@ -114,6 +116,7 @@ class Articut:
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                        "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                       "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
         else:
@@ -122,6 +125,7 @@ class Articut:
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                        "level": level,                                #String Type：指定為 lv3 語意斷詞。
+                       "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
                        "index_with_pos":False,
@@ -181,6 +185,13 @@ class Articut:
         每個句子內的實詞為一個 list。
         '''
         return getContentWordLIST(parseResultDICT, indexWithPOS)
+
+    def getChemicalLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        return getChemicalLIST(parseResultDICT, indexWithPOS)
 
     def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
@@ -271,7 +282,7 @@ if __name__ == "__main__":
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
     #inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
     #inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
-    inputSTR = "處有期徒刑參月"
+    inputSTR = "在常溫下可將銀氧化成氧化銀"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
@@ -315,6 +326,11 @@ if __name__ == "__main__":
     contentWordLIST = articut.getContentWordLIST(result)
     print("\n##ContentWord:")
     pprint(contentWordLIST)
+
+    #列出所有的化學類名詞.
+    chemicalLIST = articut.getChemicalLIST(result)
+    print("\n##Chemical:")
+    pprint(chemicalLIST)
 
     #列出所有的人名 (不含代名詞).
     personLIST = articut.getPersonLIST(result, includePronounBOOL=False)
