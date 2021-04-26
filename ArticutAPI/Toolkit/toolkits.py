@@ -141,7 +141,8 @@ def getVerbStemLIST(parseResultDICT, indexWithPOS=True):
         if len(p) > 1:
             if "VerbP" in p:
                 verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPPat.finditer(p))])
-            verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPat.finditer(p))])
+            else:
+                verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPat.finditer(p))])
         else:
             verbLIST.append([])
     if not indexWithPOS:
