@@ -135,7 +135,7 @@ class MP_Articut:
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
                    "index_with_pos": indexWithPOS,
-                   "time_ref": timeRef,
+                   "time_ref": str(timeRef),
                    "pinyin": pinyin}
         #print(payload)
         response = requests.post("{}/Articut/BulkAPI/".format(self.url), json=payload)
