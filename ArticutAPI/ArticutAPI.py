@@ -129,9 +129,10 @@ class Articut:
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
                        "index_with_pos":False,
-                       "time_ref":str(timeRef),
                        "pinyin":pinyin
             }
+            if timeRef:
+                payload["time_ref"] = str(timeRef)
 
 
         if userDefinedDictFILE:

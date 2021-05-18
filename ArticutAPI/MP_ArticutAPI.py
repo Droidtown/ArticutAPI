@@ -83,12 +83,14 @@ class MP_Articut:
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
-                       "time_ref": str(timeRef),
                        "pinyin": pinyin}
             if userDefinedDICT:
                 payload["user_defined_dict_file"] = userDefinedDICT
             else:
                 payload["user_defined_dict_file"] = self.userDefinedDICT
+
+            if timeRef:
+                payload["time_ref"] = str(timeRef)
 
             response = requests.post("{}/Articut/API/".format(self.url), json=payload)
             print(response)
@@ -135,8 +137,9 @@ class MP_Articut:
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
                    "index_with_pos": indexWithPOS,
-                   "time_ref": str(timeRef),
                    "pinyin": pinyin}
+        if timeRef:
+            payload["time_ref"] = str(timeRef)
         #print(payload)
         response = requests.post("{}/Articut/BulkAPI/".format(self.url), json=payload)
         print(response)

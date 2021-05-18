@@ -105,12 +105,14 @@ class WS_Articut:
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
-                       "time_ref": str(timeRef),
                        "pinyin": pinyin}
             if userDefinedDICT:
                 payload["user_defined_dict_file"] = userDefinedDICT
             else:
                 payload["user_defined_dict_file"] = self.userDefinedDICT
+
+            if timeRef:
+                payload["time_ref"] = str(timeRef)
 
             try:
                 self.ws.send(json.dumps(payload))
@@ -130,12 +132,14 @@ class WS_Articut:
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
-                       "time_ref": str(timeRef),
                        "pinyin": pinyin}
             if userDefinedDICT:
                 payload["user_defined_dict_file"] = userDefinedDICT
             else:
                 payload["user_defined_dict_file"] = self.userDefinedDICT
+
+            if timeRef:
+                payload["time_ref"] = str(timeRef)
 
             for i in range(0, inputLen, self.bulkSize):
                 if i+self.bulkSize > inputLen:
