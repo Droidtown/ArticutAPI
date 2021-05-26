@@ -8,7 +8,7 @@ class GenericNER:
         self.mainDishSTR = "([乳包味啡嗲奶心手排果柳棗椒油湯漿炒焿煎煙燒爐瓜皮盅盤米粄粉粑粥粽粿糊糍粑糕糖糬糰線羹翅翼肉肚肺肝膽腐腦腩腳腸胃腿胗芛薏花茄茶草莓菊菜蓮蔗蔥薑蒜薩薯蘆蕉蜜筍檳豆豉栗菇虱蚵蛋卵蝦蟹螺貝蟳血角酒酥醬趖銼鍋雜頭飩飯飴餃飩餅麵餐骨鬆鬚魚鯧鰻鮪鮭魽鯛鰾鱉龜雞鴨鵝牛豬羊兔鼠鴿豚鷄堡]|"
         self.sideDishSTR = "[丸冰圓塊卷捲粄條扒仔乾]|[俄德法美日義英西歐中台泰越韓粵港]式|星州|客家|花枝|鴛鴦|石斑|黑輪|伯勞|藥燉|愛玉|珍珠|熱狗|阿給|燒賣|料理|飲料|糖[水醋]|鳳梨|蜜餞|花生|[壽土吐]司|便當|飯盒|鍋貼|扁食|雲吞|刺身|山蘇|多士|咖哩|沙拉|沙母|沙公|海參|鴨賞|旗魚|燒賣|海鮮|河鮮|龍珠|鮟鱇|牛河|熊掌|糕渣|自助餐|沙威[馬瑪]|三明治|沙淇瑪|原住民|棺材板|官財板|地瓜球|綠豆椪|冰淇淋|佛跳牆|[洋和][菓果]子)"
         self.cookMethodSTR = "[煎煮炒炸蒸煨魯滷漬醃炊爆燒拌剝湯焢焗烘烤佐釀]"
-        self.cookModSTR = "([麻辣]|酥[脆炸]|[蔥薑蒜]爆|[干乾紅]燒|清){1,2}"
+        self.cookModSTR = "([麻辣酸清]|酥[脆炸]|[蔥薑蒜]爆|[干乾紅]燒){1,2}"
         self.extenedLIST = [("串燒", "(<ACTION_verb>串燒</ACTION_verb>)"),
                             ("烤肉", "(<ACTION_verb>烤肉</ACTION_verb>)"),
                             ("切雞", "(<VerbP>切雞</VerbP>)"),
@@ -63,10 +63,10 @@ class GenericNER:
                             ("韭菜盒子", "(<ENTITY_oov>韭菜</ENTITY_oov><ENTITY_noun>盒子</ENTITY_noun>)"),
                             ("黯然銷魂飯", "(<MODIFIER>黯然</MODIFIER><ENTITY_nounHead>銷魂飯</ENTITY_nounHead>)")
                             ]
-        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州")
+        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊")
 
-        self.foodPat = re.compile("{0}|(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
-        self.foodPatWLoc = re.compile("{0}|(<LOCATION>[^<]+?</LOCATION>)(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
+        self.foodPat = re.compile("{0}|(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
+        self.foodPatWLoc = re.compile("{0}|(<LOCATION>[^<]+?</LOCATION>)?(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
 
         self.stripPat = re.compile("</?[A-Za-z]+?_?[A-Za-z]*?>")
 
@@ -106,28 +106,32 @@ class GenericNER:
 
         resultLIST = []
         if withLocation == False:
-            for p in ArticutResultDICT["result_pos"]:
-                if len(p) > 1:
-                    resultLIST.append([[f.start(), f.end(), re.sub(self.stripPat, "", f.group(0))] for f in list(self.foodPat.finditer(p)) if re.sub(self.stripPat, "", f.group(0)) not in self.escapeTUPLE])
-                else:
-                    resultLIST.append([])
+            self.pat = self.foodPat
+        else:
+            self.pat = self.foodPatWLoc
 
-            for sentenceINDEX in range(0, len(resultLIST)):
-                for foodINDEX in range(0, len(resultLIST[sentenceINDEX])-1):
-                    if resultLIST[sentenceINDEX][foodINDEX][0] != None:
-                        if resultLIST[sentenceINDEX][foodINDEX][1] == resultLIST[sentenceINDEX][foodINDEX+1][0]:
-                            resultLIST[sentenceINDEX][foodINDEX][1] = resultLIST[sentenceINDEX][foodINDEX+1][1]
-                            resultLIST[sentenceINDEX][foodINDEX][2] = resultLIST[sentenceINDEX][foodINDEX][2] + resultLIST[sentenceINDEX][foodINDEX+1][2]
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), re.sub(self.stripPat, "", f.group(0))] for f in list(self.pat.finditer(p)) if re.sub(self.stripPat, "", f.group(0)) not in self.escapeTUPLE])
+            else:
+                resultLIST.append([])
 
-                            resultLIST[sentenceINDEX][foodINDEX+1][0] = None
-                            try:
-                                if resultLIST[sentenceINDEX][foodINDEX][1] == resultLIST[sentenceINDEX][foodINDEX+2][0]:
-                                    resultLIST[sentenceINDEX][foodINDEX][1] = resultLIST[sentenceINDEX][foodINDEX+2][1]
-                                    resultLIST[sentenceINDEX][foodINDEX][2] = resultLIST[sentenceINDEX][foodINDEX][2] + resultLIST[sentenceINDEX][foodINDEX+2][2]
+        for sentenceINDEX in range(0, len(resultLIST)):
+            for foodINDEX in range(0, len(resultLIST[sentenceINDEX])-1):
+                if resultLIST[sentenceINDEX][foodINDEX][0] != None:
+                    if resultLIST[sentenceINDEX][foodINDEX][1] == resultLIST[sentenceINDEX][foodINDEX+1][0]:
+                        resultLIST[sentenceINDEX][foodINDEX][1] = resultLIST[sentenceINDEX][foodINDEX+1][1]
+                        resultLIST[sentenceINDEX][foodINDEX][2] = resultLIST[sentenceINDEX][foodINDEX][2] + resultLIST[sentenceINDEX][foodINDEX+1][2]
 
-                                    resultLIST[sentenceINDEX][foodINDEX+2][0] = None
-                            except:
-                                pass
+                        resultLIST[sentenceINDEX][foodINDEX+1][0] = None
+                        try:
+                            if resultLIST[sentenceINDEX][foodINDEX][1] == resultLIST[sentenceINDEX][foodINDEX+2][0]:
+                                resultLIST[sentenceINDEX][foodINDEX][1] = resultLIST[sentenceINDEX][foodINDEX+2][1]
+                                resultLIST[sentenceINDEX][foodINDEX][2] = resultLIST[sentenceINDEX][foodINDEX][2] + resultLIST[sentenceINDEX][foodINDEX+2][2]
+
+                                resultLIST[sentenceINDEX][foodINDEX+2][0] = None
+                        except:
+                            pass
         resultLIST = [[food for food in sentence if food[0]!=None] for sentence in resultLIST]
 
         if not indexWithPOS:
