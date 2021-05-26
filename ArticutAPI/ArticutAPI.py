@@ -26,10 +26,12 @@ try:
     from Toolkit.analyse import AnalyseManager
     from Toolkit.localRE import TaiwanAddressAnalizer
     from Toolkit.toolkits import *
+    from Toolkit.NER import GenericNER
 except: #供外部載入時使用。
     from .Toolkit.analyse import AnalyseManager
     from .Toolkit.localRE import TaiwanAddressAnalizer
     from .Toolkit.toolkits import *
+    from .Toolkit.NER import GenericNER
 
 #try:
     #from Toolkit.graphQL import GraphQL
@@ -66,6 +68,7 @@ class Articut:
         # Toolkit
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
+        self.NER = GenericNER()
         #try:
             #self.graphQL = GraphQL()
         #except:
