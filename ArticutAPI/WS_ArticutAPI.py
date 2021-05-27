@@ -30,10 +30,12 @@ try:
     from Toolkit.analyse import AnalyseManager
     from Toolkit.localRE import TaiwanAddressAnalizer
     from Toolkit.toolkits import *
+    from Toolkit.NER import GenericNER
 except: #供外部載入時使用。
     from .Toolkit.analyse import AnalyseManager
     from .Toolkit.localRE import TaiwanAddressAnalizer
     from .Toolkit.toolkits import *
+    from .Toolkit.NER import GenericNER
 
 
 class WS_Articut:
@@ -78,6 +80,7 @@ class WS_Articut:
         # Toolkit
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
+        self.NER = GenericNER()
 
     def __str__(self):
         return "Articut WebSocket API"

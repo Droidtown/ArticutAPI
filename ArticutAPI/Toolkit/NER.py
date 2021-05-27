@@ -99,7 +99,7 @@ class GenericNER:
                 if len(ArticutResultDICT["result_pos"][sentenceINDEX]) == 1: #略過標點符號
                     pass
                 else:
-                    sentenceSTR = re.sub(self.stripPat, "", ArticutResultDICT["result_pos"][sentenceINDEX])
+                    sentenceSTR = self.stripPat.sub("", ArticutResultDICT["result_pos"][sentenceINDEX])
                     refINDEX = 0
                     for i in posIndexLIST[sentenceINDEX]:
                         startINDEX = sentenceSTR[refINDEX:].find(i[2])
@@ -127,7 +127,7 @@ class GenericNER:
 
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), re.sub(self.stripPat, "", f.group(0))] for f in list(self.pat.finditer(p)) if re.sub(self.stripPat, "", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.pat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
             else:
                 resultLIST.append([])
 
@@ -170,7 +170,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), re.sub(self.stripPat, "", f.group(0))] for f in list(self.agePat.finditer(p)) if re.sub(self.stripPat, "", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.agePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
