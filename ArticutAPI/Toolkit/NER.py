@@ -66,7 +66,22 @@ class GenericNER:
         self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊", "味")
 
         self.foodPat = re.compile("{0}|(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
-        self.foodPatWLoc = re.compile("{0}|(<LOCATION>[^<]+?</LOCATION>)?(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<]*?</ENTITY_oov>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
+        self.foodPatWLoc = re.compile(r"""{0}|
+        (<LOCATION>[^<]+?</LOCATION>)?
+        ((<ENTITY_nounHead>[^<]*?({1})+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?({1})+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?({1})+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?({1})+[^<]*?</ENTITY_oov>))?
+        (<ACTION_verb>[^<]*?{2}+?[^<]*?</ACTION_verb>)?
+        (<MODIFIER>{3}</MODIFIER>)?
+        (<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?
+        (<MODIFIER_color>[黑紅]</MODIFIER_color>)?
+        (<ENTITY_classifier>三杯</ENTITY_classifier>)?
+        ((<ENTITY_nounHead>[^<]*?{4}+[^<]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{4}+[^<]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{4}+[^<]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{4}+[^<]*?</ENTITY_oov>))""".format("|".join([p[1] for p in self.extenedLIST]),
+                                                                                                                                                                                                            "|".join(self.escapeTUPLE[:-2]),
+                                                                                                                                                                                                            self.cookMethodSTR,
+                                                                                                                                                                                                            self.cookModSTR,
+                                                                                                                                                                                                            self.mainDishSTR+self.sideDishSTR), re.X)
+
+        self.agePat     = None
+        self.measurePat =None
 
         self.stripPat = re.compile("</?[A-Za-z]+?_?[A-Za-z]*?>")
 
@@ -138,8 +153,57 @@ class GenericNER:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
 
+    def getAGE(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的「歲數」字串
+        '''
+        if self.agePat !=None:
+            pass
+        else:
+            self.agePat = re.compile("<ENTITY_num>[^<]+?</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), re.sub(self.stripPat, "", f.group(0))] for f in list(self.agePat.finditer(p)) if re.sub(self.stripPat, "", f.group(0)) not in self.escapeTUPLE])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getMEASURE(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的「測量值」字串
+        '''
+        if self.measurePat !=None:
+            pass
+        else:
+            self.measurePat = re.compile("<ENTITY_measurement>[^<]+?</ENTITY_measurement>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+
+
 if __name__ == "__main__":
-    testDICT = {"result_pos":["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]}
     gNER = GenericNER()
-    foodLIST = gNER.getFood(testDICT, indexWithPOS=False)
+
+    foodTestDICT = {"result_pos":["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]}
+    foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
     print(foodLIST)
+
+    foodTestDICT = {'result_pos': ['<TIME_day>今晚</TIME_day><ACTION_verb>來</ACTION_verb><ACTION_verb>點</ACTION_verb><ENTITY_classifier>一道</ENTITY_classifier><ENTITY_nouny>法式</ENTITY_nouny><ACTION_verb>焗烤</ACTION_verb><ENTITY_nouny>龍蝦</ENTITY_nouny>']}
+    foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
+    print(foodLIST)
+
+    ageTestDICT = {"result_pos":["<ENTITY_num>六</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>"]}
+    ageLIST = gNER.getAGE(ageTestDICT)
+    print(ageLIST)
