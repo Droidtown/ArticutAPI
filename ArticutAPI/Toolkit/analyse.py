@@ -230,7 +230,7 @@ class AnalyseManager(object):
         if idf_path != None:
             self.tfidfOBJ._getIdfDict(idf_path)
 
-    def extractTags(self, parseResultDICT, topK=50, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+    def extractTags(self, parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         if "result_segmentation" in parseResultDICT:
             pass
         else:
@@ -243,7 +243,7 @@ class AnalyseManager(object):
             print(str(e))
             return None
 
-    def extract_tags(self, parseResultDICT, topK=50, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+    def extract_tags(self, parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Alias of extractTags() for developers from older CWS solutions.
         return self.extractTags(parseResultDICT)
 
