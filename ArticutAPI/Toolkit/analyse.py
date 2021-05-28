@@ -245,7 +245,7 @@ class AnalyseManager(object):
 
     def extract_tags(self, parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Alias of extractTags() for developers from older CWS solutions.
-        return self.extractTags(parseResultDICT)
+        return self.extractTags(parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
 
     def textrank(self, parseResultDICT, topK=10, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Key word extraction and rank by the TextRank algorithm
