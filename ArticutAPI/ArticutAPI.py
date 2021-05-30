@@ -69,6 +69,7 @@ class Articut:
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
         self.NER = GenericNER()
+        self.LawsToolkit = LawsToolkit()
         #try:
             #self.graphQL = GraphQL()
         #except:

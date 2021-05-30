@@ -337,8 +337,8 @@ def getWikiDataLIST(parseResultDICT, indexWithPOS=True):
 
 
 class LawsToolkit:
-    def __init__(self, articutResult):
-        self.articutResult = articutResult
+    def __init__(self):
+        self.articutResult = None
         self.articlePat = re.compile("<KNOWLEDGE_lawTW>[^<]+?</KNOWLEDGE_lawTW>")
         self.crimePat = re.compile("(?<=[犯判決]</ACTION_verb>)[^犯罪]*?(>(?=<KNOWLEDGE_lawTW>第)|罪(?=<))")
         self.criminalResponsibilityPat = re.compile("(?<=<ACTION_verb>處</ACTION_verb>)[^處極重]*?[刑役](?=<)(<[^>]*?>)?(<TIME_year>[^<]+?</TIME_year>)?(<TIME_month>[^<]+?</TIME_month>)?")
