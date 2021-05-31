@@ -337,8 +337,8 @@ def getWikiDataLIST(parseResultDICT, indexWithPOS=True):
 
 
 class LawsToolkit:
-    def __init__(self):
-        self.articutResult = None
+    def __init__(self, articutResult=None):
+        self.articutResult = articutResult
         self.articlePat = re.compile("<KNOWLEDGE_lawTW>[^<]+?</KNOWLEDGE_lawTW>")
         self.crimePat = re.compile("(?<=[犯判決]</ACTION_verb>)[^犯罪]*?(>(?=<KNOWLEDGE_lawTW>第)|罪(?=<))")
         self.criminalResponsibilityPat = re.compile("(?<=<ACTION_verb>處</ACTION_verb>)[^處極重]*?[刑役](?=<)(<[^>]*?>)?(<TIME_year>[^<]+?</TIME_year>)?(<TIME_month>[^<]+?</TIME_month>)?")
@@ -370,6 +370,7 @@ class LawsToolkit:
     def getCriminalResponsibility(self, parseResultDICT={}):
         '''
         取得刑責
+        To be deprecated soon.
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
@@ -379,6 +380,13 @@ class LawsToolkit:
             return crTextLIST
         except KeyError:
             return []
+
+    def getPenalty(self, parseResultDICT={}):
+        '''
+        取得刑責。
+        Dummy Function of getCriminalResponsibility()
+        '''
+        return self.getCriminalResponsibility(self, parseResultDICT={})
 
     def getEventRef(self, parseResultDICT={}):
         '''
