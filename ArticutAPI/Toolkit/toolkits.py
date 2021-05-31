@@ -386,7 +386,7 @@ class LawsToolkit:
         取得刑責。
         Dummy Function of getCriminalResponsibility()
         '''
-        return self.getCriminalResponsibility(self, parseResultDICT={})
+        return self.getCriminalResponsibility(parseResultDICT)
 
     def getEventRef(self, parseResultDICT={}):
         '''
