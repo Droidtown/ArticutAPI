@@ -10,8 +10,7 @@ import os
 import re
 
 # Regex Pattern
-verbPPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)")
-verbPat = re.compile("(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
+verbPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)|(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
 nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
 modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
 modifierPPat = re.compile("(?<=<DegreeP>)[^<]*?(?=</DegreeP>)|(?<=<ModifierP>)[^<]*?(?=</ModifierP>)")
@@ -30,7 +29,7 @@ chemicalPat = re.compile("(?<=<KNOWLEDGE_chemical>)[^<]*?(?=</KNOWLEDGE_chemical
 wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
 stripPat = re.compile("(?<=>).*?(?=<)")
 clausePat = re.compile("\<CLAUSE_.*?Q\>")
-contentPat = re.compile("|".join([verbPPat.pattern, verbPat.pattern, nounPat.pattern, modifierPat.pattern, modifierPPat.pattern, userDefinedPat.pattern]))
+contentPat = re.compile("|".join([verbPat.pattern, nounPat.pattern, modifierPat.pattern, modifierPPat.pattern, userDefinedPat.pattern]))
 
 
 def _segIndexConverter(parseResultDICT, posIndexLIST):
@@ -139,10 +138,7 @@ def getVerbStemLIST(parseResultDICT, indexWithPOS=True):
 
     for p in parseResultDICT["result_pos"]:
         if len(p) > 1:
-            if "VerbP" in p:
-                verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPPat.finditer(p))])
-            else:
-                verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPat.finditer(p))])
+            verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPat.finditer(p))])
         else:
             verbLIST.append([])
     if not indexWithPOS:
@@ -354,7 +350,7 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        articleLIST = list(set([self.tagPurger(a.group(0)) for a in re.finditer(self.articlePat, "".join(self.articutResult["result_pos"]))]))
+        articleLIST = list(set([self.tagPurger(a.group(0)) for a in self.articlePat.finditer("".join(self.articutResult["result_pos"]))]))
         return articleLIST
 
     def getCrime(self, parseResultDICT={}):
@@ -363,7 +359,7 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        crimePosLIST = set([c.group(0) for c in re.finditer(self.crimePat, "".join(self.articutResult["result_pos"]))])
+        crimePosLIST = set([c.group(0) for c in self.crimePat.finditer("".join(self.articutResult["result_pos"]))])
         crimeTextLIST = [self.tagPurger(c) for c in crimePosLIST]
         return crimeTextLIST
 
@@ -375,7 +371,7 @@ class LawsToolkit:
         if parseResultDICT:
             self.articutResult = parseResultDICT
         try:
-            crPosLIST = set([c.group(0) for c in re.finditer(self.criminalResponsibilityPat, "".join(self.articutResult["result_pos"]))])
+            crPosLIST = set([c.group(0) for c in self.criminalResponsibilityPat.finditer("".join(self.articutResult["result_pos"]))])
             crTextLIST = [self.tagPurger(c) for c in crPosLIST]
             return crTextLIST
         except KeyError:
@@ -394,7 +390,7 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        erPosLIST = set([e.group(0) for e in re.finditer(self.eventRefPat, "".join(self.articutResult["result_pos"]))])
+        erPosLIST = set([e.group(0) for e in self.eventRefPat.finditer("".join(self.articutResult["result_pos"]))])
         erTextLIST = [self.tagPurger(e) for e in erPosLIST]
         return erTextLIST
 
