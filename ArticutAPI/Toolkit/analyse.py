@@ -193,8 +193,8 @@ class WordExtractionTextRank(object):
         wordLIST = [x.group() for x in self.stripPat.finditer(resultSTR) if len(x.group())>0]
         return wordLIST
 
-    def extractKeyword(self, articutDICT, iterTimesINT=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
-        resultLIST = articutDICT['result_pos']
+    def extractKeyword(self, resultDICT, iterTimesINT=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+        resultLIST = resultDICT['result_pos']
         # resultLIST =
         # [ '<articut_tag>沒有人可以決定你的命運</articut_tag>',
         #   '，',
@@ -230,34 +230,34 @@ class AnalyseManager(object):
         if idf_path != None:
             self.tfidfOBJ._getIdfDict(idf_path)
 
-    def extractTags(self, parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
-        if "result_segmentation" in parseResultDICT:
+    def extractTags(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+        if "result_segmentation" in resultDICT:
             pass
         else:
             return None
         try:
             allowPOS = self.convertPOS(allowPOS)
-            result = self.tfidfOBJ.extractKeyword(parseResultDICT["result_segmentation"], topK, withWeight, allowPOS)
+            result = self.tfidfOBJ.extractKeyword(resultDICT["result_segmentation"], topK, withWeight, allowPOS)
             return result
         except Exception as e:
             print(str(e))
             return None
 
-    def extract_tags(self, parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+    def extract_tags(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Alias of extractTags() for developers from older CWS solutions.
-        return self.extractTags(parseResultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'))
+        return self.extractTags(resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'))
 
-    def textrank(self, parseResultDICT, topK=10, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+    def textrank(self, resultDICT, topK=10, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Key word extraction and rank by the TextRank algorithm
         # Alias of jieba textrank()
         # topK = iterative times
-        if "result_segmentation" in parseResultDICT and "result_pos" in parseResultDICT:
+        if "result_segmentation" in resultDICT and "result_pos" in resultDICT:
             pass
         else:
             return None
         try:
             allowPOS = self.convertPOS(allowPOS)
-            return self.txtrankOBJ.extractKeyword(parseResultDICT, topK, withWeight, allowPOS)
+            return self.txtrankOBJ.extractKeyword(resultDICT, topK, withWeight, allowPOS)
         except Exception as e:
             print(str(e))
             return None
