@@ -404,14 +404,14 @@ if __name__ == "__main__":
     startTime = time.time()
     # 一次一句 N=1
     for inputSTR in inputLIST:
-        result = articut.parse(inputSTR, "lv2")
-        pprint(result)
-    pprint(articut.getContentWordLIST(result))
+        resultDICT = articut.parse(inputSTR, "lv2")
+        pprint(resultDICT)
+    pprint(articut.getContentWordLIST(resultDICT))
 
     # 一次多句 (BulkSize=N)
-    result = articut.bulk_parse(inputLIST, "lv2")
-    #pprint(result)
-    resultLIST = articut.mergeBulkResult(result)
+    resultDICT = articut.bulk_parse(inputLIST, "lv2")
+    #pprint(resultDICT)
+    resultLIST = articut.mergeBulkResult(resultDICT)
     #pprint(resultLIST)
     pprint(articut.bulk_getContentWordLIST(resultLIST))
     print("Execution Time:", round(time.time() - startTime, 4))
