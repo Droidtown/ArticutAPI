@@ -29,6 +29,8 @@ class GenericNER:
                             ("關東煮", "(<ENTITY_noun>關東煮</ENTITY_noun>)"),
                             ("廣島燒", "(<ENTITY_noun>廣島燒</ENTITY_noun>)"),
                             ("大阪燒", "(<ENTITY_noun>大阪燒</ENTITY_noun>)"),
+                            ("雞白湯拉麵", "(<ENTITY_oov>雞</ENTITY_oov><MODIFIER_color>白</MODIFIER_color><ENTITY_nounHead>湯拉麵</ENTITY_nounHead>)"),
+                            ("漢堡排", "(<ENTITY_oov>漢堡</ENTITY_oov><ACTION_verb>排</ACTION_verb>)"),
                             #</日式食物名：動詞在後>
                             ("宮保", "(<ENTITY_oov>宮</ENTITY_oov><ACTION_verb>保</ACTION_verb>)"),
                             ("西多士", "(<ENTITY_oov>西</ENTITY_oov><ENTITY_nouny>多士</ENTITY_nouny>)"),
@@ -64,7 +66,7 @@ class GenericNER:
                             ("韭菜盒子", "(<ENTITY_oov>韭菜</ENTITY_oov><ENTITY_noun>盒子</ENTITY_noun>)"),
                             ("黯然銷魂飯", "(<MODIFIER>黯然</MODIFIER><ENTITY_nounHead>銷魂飯</ENTITY_nounHead>)")
                             ]
-        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊", "味")
+        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊", "菜單", "味")
 
         self.foodPat = re.compile("{0}|(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<民]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<民]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<民]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<民]*?</ENTITY_oov>|<VerbP>{1}{3}</VerbP>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
         self.foodPatWLoc = re.compile(r"""{0}|
