@@ -22,6 +22,7 @@ userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
 placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
 timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
 addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
+colorPat = re.compile("(?<=<MODIFIER_color>)[^<]+?(?=</MODIFIER_color>)")
 currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
 currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
 currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
@@ -255,6 +256,26 @@ def getQuestionLIST(parseResultDICT, indexWithPOS=True):
     if not indexWithPOS:
         questionLIST = _segIndexConverter(parseResultDICT, questionLIST)
     return questionLIST
+
+def getColorLIST(resultDICT, indexWithPOS=True):
+    '''
+    取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
+    該字串為一顏色表述字串
+    '''
+    if "result_pos" in resultDICT:
+        pass
+    else:
+        return None
+    colorLIST = []
+    for p in resultDICT["result_pos"]:
+        if len(p) > 1:
+            colorLIST.append([(a.start(), a.end(), a.group(0)) for a in list(colorPat.finditer(p))])
+        else:
+            colorLIST.append([])
+    if not indexWithPOS:
+        colorLIST = _segIndexConverter(resultDICT, colorLIST)
+    return colorLIST
+
 
 def getAddTWLIST(parseResultDICT, indexWithPOS=True):
     '''
