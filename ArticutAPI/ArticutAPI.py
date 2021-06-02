@@ -252,9 +252,9 @@ class Articut:
     def getColorLIST(self, resultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
-        該字串為一顏色表述字串
+        該字串為一顏色表述字串。
         '''
-        return getColorLIST(resultDICT)
+        return getColorLIST(resultDICT, indexWithPOS)
 
     def getAddTWLIST(self, resultDICT, indexWithPOS=True):
         '''
