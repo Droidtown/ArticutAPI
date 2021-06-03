@@ -204,7 +204,7 @@ class GenericNER:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
 
-    def getAGE(self, ArticutResultDICT, indexWithPOS=True):
+    def getAge(self, ArticutResultDICT, indexWithPOS=True):
         '''
         依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的「歲數」字串
         '''
@@ -221,7 +221,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.agePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.agePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -245,7 +245,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.measurePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.measurePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -259,7 +259,7 @@ class GenericNER:
         if self.anglePat !=None:
             pass
         else:
-            self.anglePat = re.compile("(?<!燒</ACTION_verb>)(?<![溫氏]</ENTITY_nounHead>)(?<![溫氏]</ENTITY_nouny>)(?<![溫氏]</ENTITY_oov>)<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>")
+            self.anglePat = re.compile("(?<!燒</ACTION_verb>)(?<![溫氏]</ENTITY_nounHead>)(?<![溫氏]</ENTITY_nouny>)(?<![溫氏]</ENTITY_oov>)<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>|<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>(?=<ENTITY_nouny>角<)")
         if "result_pos" in ArticutResultDICT:
             pass
         else:
@@ -268,7 +268,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.anglePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.anglePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -282,7 +282,7 @@ class GenericNER:
         if self.temperaturePat !=None:
             pass
         else:
-            self.temperaturePat = re.compile("((?<![燒達到]</ACTION_verb>)|(?<=[溫氏]</ENTITY_nounHead>)|(?<=[溫氏]</ENTITY_nouny>)|(?<=[溫氏]</ENTITY_oov>))<ENTITY_measurement>[^<]+?[度℃℉]</ENTITY_measurement>")
+            self.temperaturePat = re.compile("((?<![^燒達到]</ACTION_verb>)|(?<=[溫氏]</ENTITY_nounHead>)|(?<=[溫氏]</ENTITY_nouny>)|(?<=[溫氏]</ENTITY_oov>))<ENTITY_measurement>[^<]+?[度℃℉]</ENTITY_measurement>")
         if "result_pos" in ArticutResultDICT:
             pass
         else:
@@ -291,7 +291,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.temperaturePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.temperaturePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -314,7 +314,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.capacityPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.capacityPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -337,7 +337,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.fractionPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.fractionPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -361,7 +361,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.frequencyPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.frequencyPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -385,7 +385,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.lengthPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.lengthPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -409,7 +409,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.percentPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.percentPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -433,7 +433,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ratePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ratePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -447,7 +447,7 @@ class GenericNER:
         if self.speedPat !=None:
             pass
         else:
-            self.speedPat = re.compile("(<ENTITY_measurement>[^<]+?馬赫</ENTITY_measurement>)|(<ENTITY_nounHead>[時秒分]速</ENTITY_nounHead>|<ENTITY_nouny>[時秒分]速</ENTITY_nouny>|<ENTITY_noun>[時秒分]速</ENTITY_noun>|<ENTITY_oov>[時秒分]速</ENTITY_oov>)<ENTITY_measurement>[^<]+?(?<!方)(公分|光年|[哩里碼吋呎尺米mM])</ENTITY_measurement>|((((<QUANTIFIER>每</QUANTIFIER>)|(<ENTITY_num>[一1１]</ENTITY_num>))(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>))<ENTITY_measurement>[^<]+?(?<!方)(公分|光年|[哩里碼吋呎尺米mM])</ENTITY_measurement>)")
+            self.speedPat = re.compile("(<ENTITY_measurement>[^<]+?馬赫</ENTITY_measurement>)|(<ENTITY_nounHead>[時秒分]速</ENTITY_nounHead>|<ENTITY_nouny>[時秒分]速</ENTITY_nouny>|<ENTITY_noun>[時秒分]速</ENTITY_noun>|<ENTITY_oov>[時秒分]速</ENTITY_oov>)<ENTITY_measurement>[^<]+?(?<!方)(公分|光年|[哩里碼吋呎尺米mM])</ENTITY_measurement>|((((<QUANTIFIER>每</QUANTIFIER>)|(<MODIFIER>每秒</MODIFIER>)|(<ENTITY_num>[一1１]</ENTITY_num>))(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>))<ENTITY_measurement>[^<]+?(?<!方)(公分|光年|[哩里碼吋呎尺米mM])</ENTITY_measurement>)")
 
         if "result_pos" in ArticutResultDICT:
             pass
@@ -457,7 +457,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.speedPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.speedPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -481,7 +481,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.weightPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.weightPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -529,7 +529,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.areaPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.areaPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -553,7 +553,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.datePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.datePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -567,7 +567,7 @@ class GenericNER:
         if self.timePat !=None:
             pass
         else:
-            self.timePat = re.compile("(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>))")
+            self.timePat = re.compile("(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)")
 
         if "result_pos" in ArticutResultDICT:
             pass
@@ -577,7 +577,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.timePat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.timePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -591,8 +591,8 @@ class GenericNER:
         if self.durationPat !=None:
             pass
         else:
-            self.durationPat = re.compile("""(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>))((<MODIFIER>一?直</MODIFIER>)?<ACTION_verb>到</ACTION_verb>|<FUNC_inner>至</FUNC_inner>)(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>))|
-                                         (<TIME_justtime>[^<]+?分鐘</TIME_justtime>)|(<TIME_day>[^<星禮]+?天</TIME_day>)|(<TIME_week>[^<周週]+?([周週]|個星期|個禮拜)</TIME_week>)|(<TIME_month>[^<周週]+?個月</TIME_week>)|(<TIME_season>[^<]+?</TIME_season>)|(<TIME_year>[^<]+?</TIME_year>)|(<TIME_decade>[^<]+?</TIME_decade>)""", re.X)
+            self.durationPat = re.compile("""(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)(<MODIFIER>一?直</MODIFIER>)?(<ACTION_verb>到</ACTION_verb>|<AUX>到</AUX>|<FUNC_inner>至</FUNC_inner>)(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)|
+                                         (<TIME_justtime>[^<]+?分鐘</TIME_justtime>)|(<TIME_day>[^<星禮今明昨前後]+?天</TIME_day>)|(<TIME_week>[^<周週]+?([周週]|個星期|個禮拜)</TIME_week>)|(<TIME_month>[^<周週]+?個月</TIME_week>)|(<TIME_season>[^<]+?</TIME_season>)|(<TIME_year>[^<]+?</TIME_year>)|(<TIME_decade>[^<]+?</TIME_decade>)""", re.X)
 
         if "result_pos" in ArticutResultDICT:
             pass
@@ -602,7 +602,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.durationPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.durationPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -626,7 +626,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.integerPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.integerPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -650,7 +650,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.decimalPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.decimalPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -674,7 +674,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ordinalPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ordinalPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -767,7 +767,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.wwwPat.finditer(p)) if self.stripPat.sub("", f.group(0)) not in self.escapeTUPLE])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.wwwPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
