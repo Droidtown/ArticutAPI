@@ -164,6 +164,173 @@ class GenericNER:
             return None
         return segIndexLIST
 
+    def getAge(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的「歲數」字串
+        '''
+        if self.agePat !=None:
+            pass
+        else:
+            self.agePat = re.compile("<ENTITY_num>[^<]+?</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.agePat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getAngle(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「角度」的字串
+        '''
+        if self.anglePat !=None:
+            pass
+        else:
+            self.anglePat = re.compile("(?<!燒</ACTION_verb>)(?<![溫氏]</ENTITY_nounHead>)(?<![溫氏]</ENTITY_nouny>)(?<![溫氏]</ENTITY_oov>)<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>|<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>(?=<ENTITY_nouny>角<)")
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.anglePat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getArea(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「週邊地區」的字串
+        '''
+        if self.areaPat !=None:
+            pass
+        else:
+            self.areaPat = re.compile("((<LOCATION>[^<]+?</LOCATION>)|(<KNOWLEDGE_addTW>[^<]+?</KNOWLEDGE_addTW>)|(<KNOWLEDGE_routeTW>[^<]+?</KNOWLEDGE_routeTW>)|(<KNOWLEDGE_place>[^<]+?</KNOWLEDGE_place>)|(<ENTITY_nounHead>[^<]+?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]+?</ENTITY_nouny>)|(<ENTITY_noun>[^<]+?</ENTITY_noun>)|(<ENTITY_oov>[^<]+?</ENTITY_oov>))(<RANGE_locality>[^<]+?</RANGE_locality>)")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.areaPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getCapacity(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「容量」的字串
+        '''
+        if self.capacityPat !=None:
+            pass
+        else:
+            self.capacityPat = re.compile("<ENTITY_measurement>[^<度°]+?([升勺合斗石GMBTcb]|加侖|品脫|(b[iy]tes?)|[Mm][Ll]|mol||oz)</ENTITY_measurement>")
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.capacityPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getDate(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「日期」的字串
+        '''
+        if self.datePat !=None:
+            pass
+        else:
+            self.datePat = re.compile("(<TIME_year>[^<]+?</TIME_year>)?<TIME_month>[^<]+?</TIME_month><TIME_day>[^<]+?</TIME_day>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.datePat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getDecimal(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「小數」的字串
+        '''
+        if self.decimalPat !=None:
+            pass
+        else:
+            self.decimalPat = re.compile("<ENTITY_num>[^<.．點]*?[.．點][^<.．點]+?</ENTITY_num>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.decimalPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getDuration(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「時間區間」的字串
+        '''
+        if self.durationPat !=None:
+            pass
+        else:
+            self.durationPat = re.compile("""(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)(<MODIFIER>一?直</MODIFIER>)?(<ACTION_verb>到</ACTION_verb>|<AUX>到</AUX>|<FUNC_inner>至</FUNC_inner>)(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)|
+                                         (<TIME_justtime>[^<]+?分鐘</TIME_justtime>)|(<TIME_day>[^<星禮今明昨前後]+?天</TIME_day>)|(<TIME_week>[^<周週]+?([周週]|個星期|個禮拜)</TIME_week>)|(<TIME_month>[^<周週]+?個月</TIME_week>)|(<TIME_season>[^<]+?</TIME_season>)|(<TIME_year>[^<]+?</TIME_year>)|(<TIME_decade>[^<]+?</TIME_decade>)""", re.X)
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.durationPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
     def getFood(self, ArticutResultDICT, withLocation=False, indexWithPOS=True):
         if "result_pos" in ArticutResultDICT:
             pass
@@ -200,123 +367,6 @@ class GenericNER:
                             pass
         resultLIST = [[food for food in sentence if food[0]!=None] for sentence in resultLIST]
 
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getAge(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的「歲數」字串
-        '''
-        if self.agePat !=None:
-            pass
-        else:
-            self.agePat = re.compile("<ENTITY_num>[^<]+?</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.agePat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getMeasure(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中為「測量值」的字串
-        '''
-        if self.measurePat !=None:
-            pass
-        else:
-            self.measurePat = re.compile("<ENTITY_measurement>[^<]+?</ENTITY_measurement>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.measurePat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getAngle(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「角度」的字串
-        '''
-        if self.anglePat !=None:
-            pass
-        else:
-            self.anglePat = re.compile("(?<!燒</ACTION_verb>)(?<![溫氏]</ENTITY_nounHead>)(?<![溫氏]</ENTITY_nouny>)(?<![溫氏]</ENTITY_oov>)<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>|<ENTITY_measurement>[^<]+?[度°]</ENTITY_measurement>(?=<ENTITY_nouny>角<)")
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.anglePat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getTemperature(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「溫度」的字串
-        '''
-        if self.temperaturePat !=None:
-            pass
-        else:
-            self.temperaturePat = re.compile("((?<![^燒達到]</ACTION_verb>)|(?<=[溫氏]</ENTITY_nounHead>)|(?<=[溫氏]</ENTITY_nouny>)|(?<=[溫氏]</ENTITY_oov>))<ENTITY_measurement>[^<]+?[度℃℉]</ENTITY_measurement>")
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.temperaturePat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getCapacity(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「容量」的字串
-        '''
-        if self.capacityPat !=None:
-            pass
-        else:
-            self.capacityPat = re.compile("<ENTITY_measurement>[^<度°]+?([升勺合斗石GMBTcb]|加侖|品脫|(b[iy]tes?)|[Mm][Ll]|mol||oz)</ENTITY_measurement>")
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.capacityPat.finditer(p))])
-            else:
-                resultLIST.append([])
         if not indexWithPOS:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
@@ -368,6 +418,30 @@ class GenericNER:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
 
+    def getInteger(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「整數」的字串
+        '''
+        if self.integerPat !=None:
+            pass
+        else:
+            self.integerPat = re.compile("<ENTITY_num>[^<.．點]+?</ENTITY_num>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.integerPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
     def getLength(self, ArticutResultDICT, indexWithPOS=True):
         '''
         依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「長度」的字串
@@ -386,6 +460,110 @@ class GenericNER:
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
                 resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.lengthPat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getLocation(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「重量」的字串。
+        此功能和 ArticutAPI 中的 getLoctionStemLIST() 等效。
+        '''
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+        if self.locationPat != None:
+            pass
+        else:
+            self.locationPat = re.compile("(?<=<LOCATION>)[^<]+?(?=</LOCATION>)|(?<=<KNOWLEDGE_addTW>)[^<]+?(?=</KNOWLEDGE_addTW>)|(?<=<KNOWLEDGE_routeTW>)[^<]+?(?=</KNOWLEDGE_routeTW>)")
+
+        locationLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.locationPat.finditer(p))])
+            else:
+                locationLIST.append([])
+        if not indexWithPOS:
+            locationLIST = self._segIndexConverterNAIVE(ArticutResultDICT, locationLIST)
+        return locationLIST
+
+    def getMeasure(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中為「測量值」的字串
+        '''
+        if self.measurePat !=None:
+            pass
+        else:
+            self.measurePat = re.compile("<ENTITY_measurement>[^<]+?</ENTITY_measurement>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.measurePat.finditer(p))])
+            else:
+                resultLIST.append([])
+        if not indexWithPOS:
+            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
+        return resultLIST
+
+    def getMoney(self, ArticutResultDICT, greedyBOOL=False, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「金額」的字串
+        此功能和 ArticutAPI 中的 getCurrencyLIST() 等效。
+        '''
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+        currencyLIST = []
+        for i, p in enumerate(ArticutResultDICT["result_pos"]):
+            if len(p) > 1:
+                currencyLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.currencyPat.finditer(p))])
+                if greedyBOOL:
+                    greedyLIST = []
+                    try:
+                        if ArticutResultDICT["result_pos"][i-1][-14:] == "</ENTITY_noun>" and ArticutResultDICT["result_pos"][i-1][-15] in "元金幣圜圓比布索鎊盾銖令朗郎":
+                            greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyGapPat.finditer(p))]
+                    except:
+                        pass
+                    if greedyLIST:
+                        greedyLIST.extend([(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))])
+                    else:
+                        greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))]
+                    if greedyLIST:
+                        currencyLIST[-1].extend(greedyLIST)
+            else:
+                currencyLIST.append([])
+        if not indexWithPOS:
+            currencyLIST = self._segIndexConverterNAIVE(ArticutResultDICT, currencyLIST)
+        return currencyLIST
+
+    def getOrdinal(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「序數」的字串
+        '''
+        if self.ordinalPat !=None:
+            pass
+        else:
+            self.ordinalPat = re.compile("<ENTITY_DetPhrase>第[^<]+?</ENTITY_DetPhrase>")
+
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+
+        resultLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p) > 1:
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ordinalPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -415,6 +593,43 @@ class GenericNER:
         if not indexWithPOS:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
+
+    def getPerson(self, ArticutResultDICT, includePronounBOOL=True, indexWithPOS=True):
+        '''
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「人名」的字串
+        此功能和 ArticutAPI 中的 getPersonLIST() 等效。
+        取出斷詞結果中的人名 (Person)
+        若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
+        '''
+        if "result_pos" in ArticutResultDICT:
+            pass
+        else:
+            return None
+        if self.personPat != None:
+            pass
+        else:
+            self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
+        if self.pronounPat !=None:
+            pass
+        else:
+            self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
+
+        person_pronounLIST = []
+        for p in ArticutResultDICT["result_pos"]:
+            if len(p)>1:
+                personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(self.personPat.finditer(p))]
+                person_pronounLIST.append(personLIST)
+            else:
+                person_pronounLIST.append([])
+        if includePronounBOOL == True:
+            for p in ArticutResultDICT["result_pos"]:
+                if len(p)==1:
+                    pass
+                else:
+                    person_pronounLIST[ArticutResultDICT["result_pos"].index(p)].extend([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
+        if not indexWithPOS:
+            person_pronounLIST = self._segIndexConverterNAIVE(ArticutResultDICT, person_pronounLIST)
+        return person_pronounLIST
 
     def getRate(self, ArticutResultDICT, indexWithPOS=True):
         '''
@@ -464,15 +679,14 @@ class GenericNER:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
 
-    def getWeight(self, ArticutResultDICT, indexWithPOS=True):
+    def getTemperature(self, ArticutResultDICT, indexWithPOS=True):
         '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「重量」的字串
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「溫度」的字串
         '''
-        if self.weightPat !=None:
+        if self.temperaturePat !=None:
             pass
         else:
-            self.weightPat = re.compile("(<ENTITY_measurement>[^<]+?([克斤噸頓磅兩錢]|[Kk]g|KG|盎斯)</ENTITY_measurement>)")
-
+            self.temperaturePat = re.compile("((?<![^燒達到]</ACTION_verb>)|(?<=[溫氏]</ENTITY_nounHead>)|(?<=[溫氏]</ENTITY_nouny>)|(?<=[溫氏]</ENTITY_oov>))<ENTITY_measurement>[^<]+?[度℃℉]</ENTITY_measurement>")
         if "result_pos" in ArticutResultDICT:
             pass
         else:
@@ -481,79 +695,7 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.weightPat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getLocation(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「重量」的字串。
-        此功能和 ArticutAPI 中的 getLoctionStemLIST() 等效。
-        '''
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-        if self.locationPat != None:
-            pass
-        else:
-            self.locationPat = re.compile("(?<=<LOCATION>)[^<]+?(?=</LOCATION>)|(?<=<KNOWLEDGE_addTW>)[^<]+?(?=</KNOWLEDGE_addTW>)|(?<=<KNOWLEDGE_routeTW>)[^<]+?(?=</KNOWLEDGE_routeTW>)")
-
-        locationLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.locationPat.finditer(p))])
-            else:
-                locationLIST.append([])
-        if not indexWithPOS:
-            locationLIST = self._segIndexConverterNAIVE(ArticutResultDICT, locationLIST)
-        return locationLIST
-
-    def getArea(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「週邊地區」的字串
-        '''
-        if self.areaPat !=None:
-            pass
-        else:
-            self.areaPat = re.compile("((<LOCATION>[^<]+?</LOCATION>)|(<KNOWLEDGE_addTW>[^<]+?</KNOWLEDGE_addTW>)|(<KNOWLEDGE_routeTW>[^<]+?</KNOWLEDGE_routeTW>)|(<KNOWLEDGE_place>[^<]+?</KNOWLEDGE_place>)|(<ENTITY_nounHead>[^<]+?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]+?</ENTITY_nouny>)|(<ENTITY_noun>[^<]+?</ENTITY_noun>)|(<ENTITY_oov>[^<]+?</ENTITY_oov>))(<RANGE_locality>[^<]+?</RANGE_locality>)")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.areaPat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getDate(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「日期」的字串
-        '''
-        if self.datePat !=None:
-            pass
-        else:
-            self.datePat = re.compile("(<TIME_year>[^<]+?</TIME_year>)?<TIME_month>[^<]+?</TIME_month><TIME_day>[^<]+?</TIME_day>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.datePat.finditer(p))])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.temperaturePat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
@@ -584,15 +726,14 @@ class GenericNER:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
 
-    def getDuration(self, ArticutResultDICT, indexWithPOS=True):
+    def getWeight(self, ArticutResultDICT, indexWithPOS=True):
         '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「時間區間」的字串
+        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「重量」的字串
         '''
-        if self.durationPat !=None:
+        if self.weightPat !=None:
             pass
         else:
-            self.durationPat = re.compile("""(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)(<MODIFIER>一?直</MODIFIER>)?(<ACTION_verb>到</ACTION_verb>|<AUX>到</AUX>|<FUNC_inner>至</FUNC_inner>)(<TIME_justtime>[^<]+?</TIME_justtime>|<TIME_[^>]{3,6}>[^<]+?</TIME_[^>]{3,6}>)|
-                                         (<TIME_justtime>[^<]+?分鐘</TIME_justtime>)|(<TIME_day>[^<星禮今明昨前後]+?天</TIME_day>)|(<TIME_week>[^<周週]+?([周週]|個星期|個禮拜)</TIME_week>)|(<TIME_month>[^<周週]+?個月</TIME_week>)|(<TIME_season>[^<]+?</TIME_season>)|(<TIME_year>[^<]+?</TIME_year>)|(<TIME_decade>[^<]+?</TIME_decade>)""", re.X)
+            self.weightPat = re.compile("(<ENTITY_measurement>[^<]+?([克斤噸頓磅兩錢]|[Kk]g|KG|盎斯)</ENTITY_measurement>)")
 
         if "result_pos" in ArticutResultDICT:
             pass
@@ -602,153 +743,12 @@ class GenericNER:
         resultLIST = []
         for p in ArticutResultDICT["result_pos"]:
             if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.durationPat.finditer(p))])
+                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.weightPat.finditer(p))])
             else:
                 resultLIST.append([])
         if not indexWithPOS:
             resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
         return resultLIST
-
-    def getInteger(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「整數」的字串
-        '''
-        if self.integerPat !=None:
-            pass
-        else:
-            self.integerPat = re.compile("<ENTITY_num>[^<.．點]+?</ENTITY_num>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.integerPat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getDecimal(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「小數」的字串
-        '''
-        if self.decimalPat !=None:
-            pass
-        else:
-            self.decimalPat = re.compile("<ENTITY_num>[^<.．點]*?[.．點][^<.．點]+?</ENTITY_num>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.decimalPat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getOrdinal(self, ArticutResultDICT, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「序數」的字串
-        '''
-        if self.ordinalPat !=None:
-            pass
-        else:
-            self.ordinalPat = re.compile("<ENTITY_DetPhrase>第[^<]+?</ENTITY_DetPhrase>")
-
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-
-        resultLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p) > 1:
-                resultLIST.append([[f.start(), f.end(), self.stripPat.sub("", f.group(0))] for f in list(self.ordinalPat.finditer(p))])
-            else:
-                resultLIST.append([])
-        if not indexWithPOS:
-            resultLIST = self._segIndexConverter(ArticutResultDICT, resultLIST)
-        return resultLIST
-
-    def getMoney(self, ArticutResultDICT, greedyBOOL=False, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「金額」的字串
-        此功能和 ArticutAPI 中的 getCurrencyLIST() 等效。
-        '''
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-        currencyLIST = []
-        for i, p in enumerate(ArticutResultDICT["result_pos"]):
-            if len(p) > 1:
-                currencyLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.currencyPat.finditer(p))])
-                if greedyBOOL:
-                    greedyLIST = []
-                    try:
-                        if ArticutResultDICT["result_pos"][i-1][-14:] == "</ENTITY_noun>" and ArticutResultDICT["result_pos"][i-1][-15] in "元金幣圜圓比布索鎊盾銖令朗郎":
-                            greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyGapPat.finditer(p))]
-                    except:
-                        pass
-                    if greedyLIST:
-                        greedyLIST.extend([(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))])
-                    else:
-                        greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))]
-                    if greedyLIST:
-                        currencyLIST[-1].extend(greedyLIST)
-            else:
-                currencyLIST.append([])
-        if not indexWithPOS:
-            currencyLIST = self._segIndexConverterNAIVE(ArticutResultDICT, currencyLIST)
-        return currencyLIST
-
-    def getPerson(self, ArticutResultDICT, includePronounBOOL=True, indexWithPOS=True):
-        '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「人名」的字串
-        此功能和 ArticutAPI 中的 getPersonLIST() 等效。
-        取出斷詞結果中的人名 (Person)
-        若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
-        '''
-        if "result_pos" in ArticutResultDICT:
-            pass
-        else:
-            return None
-        if self.personPat != None:
-            pass
-        else:
-            self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
-        if self.pronounPat !=None:
-            pass
-        else:
-            self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
-
-        person_pronounLIST = []
-        for p in ArticutResultDICT["result_pos"]:
-            if len(p)>1:
-                personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(self.personPat.finditer(p))]
-                person_pronounLIST.append(personLIST)
-            else:
-                person_pronounLIST.append([])
-        if includePronounBOOL == True:
-            for p in ArticutResultDICT["result_pos"]:
-                if len(p)==1:
-                    pass
-                else:
-                    person_pronounLIST[ArticutResultDICT["result_pos"].index(p)].extend([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
-        if not indexWithPOS:
-            person_pronounLIST = self._segIndexConverterNAIVE(ArticutResultDICT, person_pronounLIST)
-        return person_pronounLIST
 
     def getWWW(self, ArticutResultDICT, indexWithPOS=True):
         '''
@@ -775,19 +775,17 @@ class GenericNER:
         return resultLIST
 
 
-
-
 if __name__ == "__main__":
     gNER = GenericNER()
 
-    foodTestDICT = {"result_pos":["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]}
+    foodTestDICT = {"result_pos":["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>排骨</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]}
     foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
     print(foodLIST)
 
-    foodTestDICT = {'result_pos': ['<TIME_day>今晚</TIME_day><ACTION_verb>來</ACTION_verb><ACTION_verb>點</ACTION_verb><ENTITY_classifier>一道</ENTITY_classifier><ENTITY_nouny>法式</ENTITY_nouny><ACTION_verb>焗烤</ACTION_verb><ENTITY_nouny>龍蝦</ENTITY_nouny>']}
+    foodTestDICT = {"result_pos": ["<TIME_day>今晚</TIME_day><ACTION_verb>來</ACTION_verb><ACTION_verb>點</ACTION_verb><ENTITY_classifier>一道</ENTITY_classifier><ENTITY_nouny>法式</ENTITY_nouny><ACTION_verb>焗烤</ACTION_verb><ENTITY_nouny>龍蝦</ENTITY_nouny>"]}
     foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
     print(foodLIST)
 
     ageTestDICT = {"result_pos":["<ENTITY_num>六</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>"]}
-    ageLIST = gNER.getAGE(ageTestDICT)
+    ageLIST = gNER.getAge(ageTestDICT)
     print(ageLIST)

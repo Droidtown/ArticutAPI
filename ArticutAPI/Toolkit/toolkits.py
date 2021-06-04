@@ -9,349 +9,349 @@ except:
 import os
 import re
 
-# Regex Pattern
-verbPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)|(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
-nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
-modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
-modifierPPat = re.compile("(?<=<DegreeP>)[^<]*?(?=</DegreeP>)|(?<=<ModifierP>)[^<]*?(?=</ModifierP>)")
-funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
-personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
-pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
-locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)|(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)|(?<=<KNOWLEDGE_routeTW>)[^<]*?(?=</KNOWLEDGE_routeTW>)")
-userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
-placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
-timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
-addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
-colorPat = re.compile("(?<=<MODIFIER_color>)[^<]+?(?=</MODIFIER_color>)")
-currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
-currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
-currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
-chemicalPat = re.compile("(?<=<KNOWLEDGE_chemical>)[^<]*?(?=</KNOWLEDGE_chemical>)")
-wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
-stripPat = re.compile("(?<=>).*?(?=<)")
-clausePat = re.compile("\<CLAUSE_.*?Q\>")
-contentPat = re.compile("|".join([verbPat.pattern, nounPat.pattern, modifierPat.pattern, modifierPPat.pattern, userDefinedPat.pattern]))
 
+class ArticutPOS:
+    def __init__(self):
+        # Regex Pattern
+        self.verbPat = re.compile("(?<=<VerbP>)[^<]*?(?=.</VerbP>)|(?<=<ACTION_verb>)[^<]*?(?=</ACTION_verb>)")
+        self.nounPat = re.compile("(?<=<ENTITY_nounHead>)[^<]*?(?=</ENTITY_nounHead>)|(?<=<ENTITY_nouny>)[^<]*?(?=</ENTITY_nouny>)|(?<=<ENTITY_noun>)[^<]*?(?=</ENTITY_noun>)|(?<=<ENTITY_oov>)[^<]*?(?=</ENTITY_oov>)")
+        self.modifierPat = re.compile("(?<=<MODIFIER>)[^<]*?(?=</MODIFIER>)")
+        self.modifierPPat = re.compile("(?<=<DegreeP>)[^<]*?(?=</DegreeP>)|(?<=<ModifierP>)[^<]*?(?=</ModifierP>)")
+        self.funcPat = re.compile("(?<=<AUX>)[^<]*?(?=</AUX>)|(?<=<FUNC_in[nt]er>)[^<]*?(?=</FUNC_in[nt]er>)|(?<=<RANGE_locality>)[^<]*?(?=</RANGE_locality>)|(?<=<RANGE_period>)[^<]*?(?=</RANGE_period>)")
+        self.personPat = re.compile("(?<=<ENTITY_person>)[^<]*?(?=</ENTITY_person>)")
+        self.pronounPat = re.compile("(?<=<ENTITY_pronoun>)[^<]*?(?=</ENTITY_pronoun>)")
+        self.locationPat = re.compile("(?<=<LOCATION>)[^<]*?(?=</LOCATION>)|(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)|(?<=<KNOWLEDGE_routeTW>)[^<]*?(?=</KNOWLEDGE_routeTW>)")
+        self.userDefinedPat = re.compile("(?<=<UserDefined>)[^<]*?(?=</UserDefined>)")
+        self.placePat = re.compile("(?<=<KNOWLEDGE_place>)[^<]*?(?=</KNOWLEDGE_place>)")
+        self.timePat = re.compile("(?<=<TIME_decade>)[^<]*?(?=</TIME_decade>)|(?<=<TIME_year>)[^<]*?(?=</TIME_year>)|(?<=<TIME_season>)[^<]*?(?=</TIME_season>)|(?<=<TIME_month>)[^<]*?(?=</TIME_month>)|(?<=<TIME_week>)[^<]*?(?=</TIME_week>)|(?<=<TIME_day>)[^<]*?(?=</TIME_day>)|(?<=<TIME_justtime>)[^<]*?(?=</TIME_justtime>)")
+        self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
+        self.colorPat = re.compile("(?<=<MODIFIER_color>)[^<]+?(?=</MODIFIER_color>)")
+        self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
+        self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
+        self.currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
+        self.chemicalPat = re.compile("(?<=<KNOWLEDGE_chemical>)[^<]*?(?=</KNOWLEDGE_chemical>)")
+        self.wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
+        self.stripPat = re.compile("(?<=>).*?(?=<)")
+        self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
+        self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.modifierPPat.pattern, self.userDefinedPat.pattern]))
 
-def _segIndexConverter(parseResultDICT, posIndexLIST):
-    '''
-    Convert posIndex to segIndex
-    Return list
-    '''
+    def _segIndexConverter(self, parseResultDICT, posIndexLIST):
+        '''
+        Convert posIndex to segIndex
+        Return list
+        '''
 
-    if type(posIndexLIST) is list and "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-
-    segIndexLIST = []
-    try:
-        for i, posLIST in enumerate(posIndexLIST):
-            if posLIST:
-                tmpLIST = []
-                for start, end, seg in posLIST:
-                    posEndSTR = parseResultDICT["result_pos"][i][:start]
-                    segEndSTR = "".join([x.group() for x in stripPat.finditer(posEndSTR)])
-                    tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
-                segIndexLIST.append(tmpLIST)
-            else:
-                segIndexLIST.append(posLIST)
-    except Exception:
-        print("Invalid posIndexLIST format")
-        return None
-    return segIndexLIST
-
-def getPersonLIST(parseResultDICT, includePronounBOOL=True, indexWithPOS=True):
-    '''
-    取出斷詞結果中的人名 (Person)
-    若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
-    回傳結果為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    person_pronounLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p)>1:
-            personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(personPat.finditer(p))]
-            person_pronounLIST.append(personLIST)
+        if type(posIndexLIST) is list and "result_pos" in parseResultDICT:
+            pass
         else:
-            person_pronounLIST.append([])
-    if includePronounBOOL == True:
+            return None
+
+        segIndexLIST = []
+        try:
+            for i, posLIST in enumerate(posIndexLIST):
+                if posLIST:
+                    tmpLIST = []
+                    for start, end, seg in posLIST:
+                        posEndSTR = parseResultDICT["result_pos"][i][:start]
+                        segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
+                        tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
+                    segIndexLIST.append(tmpLIST)
+                else:
+                    segIndexLIST.append(posLIST)
+        except Exception:
+            print("Invalid posIndexLIST format")
+            return None
+        return segIndexLIST
+
+    def getAddTWLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中含有 (KNOWLEDGE_addTW) 標籤的字串。
+        該字串為一台灣地址。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        addTWLIST = []
         for p in parseResultDICT["result_pos"]:
-            if len(p)==1:
-                pass
+            if len(p) > 1:
+                addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.addTWPat.finditer(p))])
             else:
-                person_pronounLIST[parseResultDICT["result_pos"].index(p)].extend([(pn.start(), pn.end(), pn.group(0)) for pn in list(pronounPat.finditer(p))])
-    if not indexWithPOS:
-        person_pronounLIST = _segIndexConverter(parseResultDICT, person_pronounLIST)
-    return person_pronounLIST
+                addTWLIST.append([])
+        if not indexWithPOS:
+            addTWLIST = self._segIndexConverter(parseResultDICT, addTWLIST)
+        return addTWLIST
 
-def getContentWordLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的實詞 (content word)。
-    每個句子內的實詞為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    contentWordLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(contentPat.finditer(p))])
+    def getColorLIST(self, resultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
+        該字串為一顏色表述字串
+        '''
+        if "result_pos" in resultDICT:
+            pass
         else:
-            contentWordLIST.append([])
-    if not indexWithPOS:
-        contentWordLIST = _segIndexConverter(parseResultDICT, contentWordLIST)
-    return contentWordLIST
+            return None
+        colorLIST = []
+        for p in resultDICT["result_pos"]:
+            if len(p) > 1:
+                colorLIST.append([(a.start(), a.end(), a.group(0)) for a in list(self.colorPat.finditer(p))])
+            else:
+                colorLIST.append([])
+        if not indexWithPOS:
+            colorLIST = self._segIndexConverter(resultDICT, colorLIST)
+        return colorLIST
 
-def getChemicalLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的 KNOWLEDGE_chemical。
-    每個句子內的 KNOWLEDGE_chemical 為一個 list.
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    chemicalLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            chemicalLIST.append([(c.start(), c.end(), c.group(0)) for c in list(chemicalPat.finditer(p))])
+    def getCurrencyLIST(self, parseResultDICT, indexWithPOS=True, greedyBOOL=False):
+        '''
+        取出斷詞結果中的貨幣金額 (KNOWLEDGE_currency) 標籤的字串。
+        每個句子內的「貨幣金額」，將列為一個 list。
+        若 greedy = True，則以下格式會加到回傳 list
+            貨幣名稱 + 數字 (包含「'」與「,」符號)
+            新台幣 100
+            美金9.99
+            歐元 1,999'99
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            chemicalLIST.append([])
-    if not indexWithPOS:
-        chemicalLIST = _segIndexConverter(parseResultDICT, chemicalLIST)
-    return chemicalLIST
+            return None
+        currencyLIST = []
+        for i, p in enumerate(parseResultDICT["result_pos"]):
+            if len(p) > 1:
+                currencyLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.currencyPat.finditer(p))])
+                if greedyBOOL:
+                    greedyLIST = []
+                    try:
+                        if parseResultDICT["result_pos"][i-1][-14:] == "</ENTITY_noun>" and parseResultDICT["result_pos"][i-1][-15] in "元金幣圜圓比布索鎊盾銖令朗郎":
+                            greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyGapPat.finditer(p))]
+                    except:
+                        pass
+                    if greedyLIST:
+                        greedyLIST.extend([(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))])
+                    else:
+                        greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(self.currencyGreedyPat.finditer(p))]
+                    if greedyLIST:
+                        currencyLIST[-1].extend(greedyLIST)
+            else:
+                currencyLIST.append([])
+        if not indexWithPOS:
+            currencyLIST = self._segIndexConverter(parseResultDICT, currencyLIST)
+        return currencyLIST
 
-def getVerbStemLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
-    每個句子內的動詞為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    verbLIST = []
-
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(verbPat.finditer(p))])
+    def getContentWordLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的實詞 (content word)。
+        每個句子內的實詞為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            verbLIST.append([])
-    if not indexWithPOS:
-        verbLIST = _segIndexConverter(parseResultDICT, verbLIST)
-    return verbLIST
+            return None
+        contentWordLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                contentWordLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.contentPat.finditer(p))])
+            else:
+                contentWordLIST.append([])
+        if not indexWithPOS:
+            contentWordLIST = self._segIndexConverter(parseResultDICT, contentWordLIST)
+        return contentWordLIST
 
-def getNounStemLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
-    每個句子內的名詞為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    nounLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            nounLIST.append([(n.start(), n.end(), n.group(0)) for n in list(nounPat.finditer(p))])
+    def getChemicalLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的 KNOWLEDGE_chemical。
+        每個句子內的 KNOWLEDGE_chemical 為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            nounLIST.append([])
-    if not indexWithPOS:
-        nounLIST = _segIndexConverter(parseResultDICT, nounLIST)
-    return nounLIST
+            return None
+        chemicalLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                chemicalLIST.append([(c.start(), c.end(), c.group(0)) for c in list(self.chemicalPat.finditer(p))])
+            else:
+                chemicalLIST.append([])
+        if not indexWithPOS:
+            chemicalLIST = self._segIndexConverter(parseResultDICT, chemicalLIST)
+        return chemicalLIST
 
-def getTimeLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的時間 (time)。
-    每個句子內的「時間」詞列為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    timeLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            timeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(timePat.finditer(p))])
+    def getLocationStemLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
+        每個句子內的地理位置列為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            timeLIST.append([])
-    if not indexWithPOS:
-        timeLIST = _segIndexConverter(parseResultDICT, timeLIST)
-    return timeLIST
+            return None
+        locationLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.locationPat.finditer(p))])
+            else:
+                locationLIST.append([])
+        if not indexWithPOS:
+            locationLIST = self._segIndexConverter(parseResultDICT, locationLIST)
+        return locationLIST
 
-def getLocationStemLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
-    每個句子內的地理位置列為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    locationLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            locationLIST.append([(l.start(), l.end(), l.group(0)) for l in list(locationPat.finditer(p))])
+    def getNounStemLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
+        每個句子內的名詞為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            locationLIST.append([])
-    if not indexWithPOS:
-        locationLIST = _segIndexConverter(parseResultDICT, locationLIST)
-    return locationLIST
+            return None
+        nounLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                nounLIST.append([(n.start(), n.end(), n.group(0)) for n in list(self.nounPat.finditer(p))])
+            else:
+                nounLIST.append([])
+        if not indexWithPOS:
+            nounLIST = self._segIndexConverter(parseResultDICT, nounLIST)
+        return nounLIST
 
-def getOpenDataPlaceLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的景點 (KNOWLEDGE_place) 標籤的字串。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
-    每個句子內的景點為一個 list.
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-
-    placeLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            placeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(placePat.finditer(p))])
+    def getOpenDataPlaceLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的景點 (KNOWLEDGE_place) 標籤的字串。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
+        每個句子內的景點為一個 list.
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            placeLIST.append([])
-    if not indexWithPOS:
-        placeLIST = _segIndexConverter(parseResultDICT, placeLIST)
-    return placeLIST
+            return None
 
-def getQuestionLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中含有 (CLAUSE_Q) 標籤的句子。
-    此處指的是
-        <CLAUSE_AnotAQ>: A-not-A 問句
-        <CLAUSE_YesNoQ>: 是非問句
-        <CLAUSE_WhoQ">: 「誰」問句
-        <CLAUSE_WhatQ>: 「物」問句
-        <CLAUSE_WhereQ>: 「何地」問句
-        <CLAUSE_WhenQ>: 「何時」問句
-        <CLAUSE_HowQ>: 「程度/過程」問句
-        <CLAUSE_WhyQ>: 「原因」問句
-    每個句子內若有 <CLAUSE_Q> 標籤，整個句子將會存進 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
+        placeLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                placeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.placePat.finditer(p))])
+            else:
+                placeLIST.append([])
+        if not indexWithPOS:
+            placeLIST = self._segIndexConverter(parseResultDICT, placeLIST)
+        return placeLIST
 
-    questionLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            tmpLIST = [q for q in list(clausePat.finditer(p))]
-            if tmpLIST:
-                for q in tmpLIST:
-                    questionLIST.append([(q.group(0), "".join([x.group(0) for x in stripPat.finditer(p)])) for q in list(clausePat.finditer(p))])
+    def getPersonLIST(self, parseResultDICT, includePronounBOOL=True, indexWithPOS=True):
+        '''
+        取出斷詞結果中的人名 (Person)
+        若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
+        回傳結果為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+        person_pronounLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p)>1:
+                personLIST = [(pn.start(), pn.end(), pn.group(0)) for pn in list(self.personPat.finditer(p))]
+                person_pronounLIST.append(personLIST)
+            else:
+                person_pronounLIST.append([])
+        if includePronounBOOL == True:
+            for p in parseResultDICT["result_pos"]:
+                if len(p)==1:
+                    pass
+                else:
+                    person_pronounLIST[parseResultDICT["result_pos"].index(p)].extend([(pn.start(), pn.end(), pn.group(0)) for pn in list(self.pronounPat.finditer(p))])
+        if not indexWithPOS:
+            person_pronounLIST = self._segIndexConverter(parseResultDICT, person_pronounLIST)
+        return person_pronounLIST
+
+    def getQuestionLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中含有 (CLAUSE_Q) 標籤的句子。
+        此處指的是
+            <CLAUSE_AnotAQ>: A-not-A 問句
+            <CLAUSE_YesNoQ>: 是非問句
+            <CLAUSE_WhoQ">: 「誰」問句
+            <CLAUSE_WhatQ>: 「物」問句
+            <CLAUSE_WhereQ>: 「何地」問句
+            <CLAUSE_WhenQ>: 「何時」問句
+            <CLAUSE_HowQ>: 「程度/過程」問句
+            <CLAUSE_WhyQ>: 「原因」問句
+        每個句子內若有 <CLAUSE_Q> 標籤，整個句子將會存進 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
+        else:
+            return None
+
+        questionLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                tmpLIST = [q for q in list(self.clausePat.finditer(p))]
+                if tmpLIST:
+                    for q in tmpLIST:
+                        questionLIST.append([(q.group(0), "".join([x.group(0) for x in self.stripPat.finditer(p)])) for q in list(self.clausePat.finditer(p))])
+                else:
+                    questionLIST.append([])
             else:
                 questionLIST.append([])
+        if not indexWithPOS:
+            questionLIST = self._segIndexConverter(parseResultDICT, questionLIST)
+        return questionLIST
+
+    def getTimeLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的時間 (time)。
+        每個句子內的「時間」詞列為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            questionLIST.append([])
-    if not indexWithPOS:
-        questionLIST = _segIndexConverter(parseResultDICT, questionLIST)
-    return questionLIST
+            return None
+        timeLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                timeLIST.append([(l.start(), l.end(), l.group(0)) for l in list(self.timePat.finditer(p))])
+            else:
+                timeLIST.append([])
+        if not indexWithPOS:
+            timeLIST = self._segIndexConverter(parseResultDICT, timeLIST)
+        return timeLIST
 
-def getColorLIST(resultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
-    該字串為一顏色表述字串
-    '''
-    if "result_pos" in resultDICT:
-        pass
-    else:
-        return None
-    colorLIST = []
-    for p in resultDICT["result_pos"]:
-        if len(p) > 1:
-            colorLIST.append([(a.start(), a.end(), a.group(0)) for a in list(colorPat.finditer(p))])
+    def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
+        每個句子內的動詞為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            colorLIST.append([])
-    if not indexWithPOS:
-        colorLIST = _segIndexConverter(resultDICT, colorLIST)
-    return colorLIST
+            return None
+        verbLIST = []
 
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                verbLIST.append([(v.start(), v.end(), v.group(0)) for v in list(self.verbPat.finditer(p))])
+            else:
+                verbLIST.append([])
+        if not indexWithPOS:
+            verbLIST = self._segIndexConverter(parseResultDICT, verbLIST)
+        return verbLIST
 
-def getAddTWLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中含有 (KNOWLEDGE_addTW) 標籤的字串。
-    該字串為一台灣地址。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    addTWLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            addTWLIST.append([(a.start(), a.end(), a.group(0)) for a in list(addTWPat.finditer(p))])
+    def getWikiDataLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的 WikiData 標記文字。此處指的是 KNOWLEDGE_wikiData 標記的條目名稱。
+        每個句子內的條目名稱為一個 list。
+        '''
+        if "result_pos" in parseResultDICT:
+            pass
         else:
-            addTWLIST.append([])
-    if not indexWithPOS:
-        addTWLIST = _segIndexConverter(parseResultDICT, addTWLIST)
-    return addTWLIST
-
-def getCurrencyLIST(parseResultDICT, indexWithPOS=True, greedyBOOL=False):
-    '''
-    取出斷詞結果中的貨幣金額 (KNOWLEDGE_currency) 標籤的字串。
-    每個句子內的「貨幣金額」，將列為一個 list。
-    若 greedy = True，則以下格式會加到回傳 list
-        貨幣名稱 + 數字 (包含「'」與「,」符號)
-        新台幣 100
-        美金9.99
-        歐元 1,999'99
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    currencyLIST = []
-    for i, p in enumerate(parseResultDICT["result_pos"]):
-        if len(p) > 1:
-            currencyLIST.append([(c.start(), c.end(), c.group(0)) for c in list(currencyPat.finditer(p))])
-            if greedyBOOL:
-                greedyLIST = []
-                try:
-                    if parseResultDICT["result_pos"][i-1][-14:] == "</ENTITY_noun>" and parseResultDICT["result_pos"][i-1][-15] in "元金幣圜圓比布索鎊盾銖令朗郎":
-                        greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(currencyGreedyGapPat.finditer(p))]
-                except:
-                    pass
-                if greedyLIST:
-                    greedyLIST.extend([(c.start(), c.end(), c.group(0)) for c in list(currencyGreedyPat.finditer(p))])
-                else:
-                    greedyLIST = [(c.start(), c.end(), c.group(0)) for c in list(currencyGreedyPat.finditer(p))]
-                if greedyLIST:
-                    currencyLIST[-1].extend(greedyLIST)
-        else:
-            currencyLIST.append([])
-    if not indexWithPOS:
-        currencyLIST = _segIndexConverter(parseResultDICT, currencyLIST)
-    return currencyLIST
-
-def getWikiDataLIST(parseResultDICT, indexWithPOS=True):
-    '''
-    取出斷詞結果中的 WikiData 標記文字。此處指的是 KNOWLEDGE_wikiData 標記的條目名稱。
-    每個句子內的條目名稱為一個 list。
-    '''
-    if "result_pos" in parseResultDICT:
-        pass
-    else:
-        return None
-    wikiDataLIST = []
-    for p in parseResultDICT["result_pos"]:
-        if len(p) > 1:
-            wikiDataLIST.append([(n.start(), n.end(), n.group(0)) for n in list(wikiDataPat.finditer(p))])
-        else:
-            wikiDataLIST.append([])
-    if not indexWithPOS:
-        wikiDataLIST = _segIndexConverter(parseResultDICT, wikiDataLIST)
-    return wikiDataLIST
-
+            return None
+        wikiDataLIST = []
+        for p in parseResultDICT["result_pos"]:
+            if len(p) > 1:
+                wikiDataLIST.append([(n.start(), n.end(), n.group(0)) for n in list(self.wikiDataPat.finditer(p))])
+            else:
+                wikiDataLIST.append([])
+        if not indexWithPOS:
+            wikiDataLIST = self._segIndexConverter(parseResultDICT, wikiDataLIST)
+        return wikiDataLIST
 
 class LawsToolkit:
     def __init__(self, articutResult=None):
@@ -461,4 +461,3 @@ class Tokenizer:
         self.tag_ = []
         self.idx = []
         self.pos_ = []
-

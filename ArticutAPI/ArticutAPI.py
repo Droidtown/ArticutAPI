@@ -68,8 +68,10 @@ class Articut:
         # Toolkit
         self.analyse = AnalyseManager()
         self.localRE = TaiwanAddressAnalizer(locale="TW")
-        self.NER = GenericNER()
         self.LawsToolkit = LawsToolkit()
+        self.NER = GenericNER()
+        self.POS = ArticutPOS()
+
         #try:
             #self.graphQL = GraphQL()
         #except:
@@ -77,34 +79,6 @@ class Articut:
 
     def __str__(self):
         return "Articut API"
-
-    def _segIndexConverter(self, resultDICT, posIndexLIST):
-        '''
-        Convert posIndex to segIndex
-        Return list
-        '''
-
-        if type(posIndexLIST) is list and "result_pos" in resultDICT:
-            pass
-        else:
-            return None
-
-        segIndexLIST = []
-        try:
-            for i, posLIST in enumerate(posIndexLIST):
-                if posLIST:
-                    tmpLIST = []
-                    for start, end, seg in posLIST:
-                        posEndSTR = resultDICT["result_pos"][i][:start]
-                        segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
-                        tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
-                    segIndexLIST.append(tmpLIST)
-                else:
-                    segIndexLIST.append(posLIST)
-        except Exception:
-            print("Invalid posIndexLIST format")
-            return None
-        return segIndexLIST
 
     def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         if level not in ("lv1", "lv2", "lv3"):
@@ -176,64 +150,76 @@ class Articut:
     ##############################################################################
     #                                 Toolkits                                   #
     ##############################################################################
-    def getPersonLIST(self, resultDICT, includePronounBOOL=True, indexWithPOS=True):
+    def getAddTWLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中含有 (KNOWLEDGE_addTW) 標籤的字串。
+        該字串為一台灣地址。
+        '''
+        return self.POS.getAddTWLIST(parseResultDICT, indexWithPOS)
+
+    def getChemicalLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
+        每個句子內的化學類詞為一個 list。
+        '''
+        return self.POS.getChemicalLIST(parseResultDICT, indexWithPOS)
+
+    def getColorLIST(self, resultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
+        該字串為一顏色表述字串。
+        '''
+        return self.POS.getColorLIST(resultDICT, indexWithPOS)
+
+    def getContentWordLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的實詞 (content word)。
+        每個句子內的實詞為一個 list。
+        '''
+        return self.POS.getContentWordLIST(parseResultDICT, indexWithPOS)
+
+    def getCurrencyLIST(self, parseResultDICT, indexWithPOS=True, greedyBOOL=False):
+        '''
+        取出斷詞結果中的貨幣金額 (KNOWLEDGE_currency) 標籤的字串。
+        每個句子內的「貨幣金額」，將列為一個 list。
+        若 greedy = True，則以下格式會加到回傳 list
+            貨幣名稱 + 數字 (包含「'」與「,」符號)
+            新台幣 100
+            美金9.99
+            歐元 1,999'99
+        '''
+        return self.POS.getCurrencyLIST(parseResultDICT, indexWithPOS, greedyBOOL)
+
+    def getLocationStemLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
+        每個句子內的地理位置列為一個 list。
+        '''
+        return self.POS.getLocationStemLIST(parseResultDICT, indexWithPOS)
+
+    def getNounStemLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
+        每個句子內的名詞為一個 list。
+        '''
+        return self.POS.getNounStemLIST(parseResultDICT, indexWithPOS)
+
+    def getOpenDataPlaceLIST(self, parseResultDICT, indexWithPOS=True):
+        '''
+        取出斷詞結果中的景點 (KNOWLEDGE_place) 標籤的字串。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
+        每個句子內的景點為一個 list.
+        '''
+        return self.POS.getOpenDataPlaceLIST(parseResultDICT, indexWithPOS)
+
+    def getPersonLIST(self, parseResultDICT, includePronounBOOL=True, indexWithPOS=True):
         '''
         取出斷詞結果中的人名 (Person)
         若 includePronounBOOL 為 True，則連代名詞 (Pronoun) 一併回傳；若為 False，則只回傳人名。
         回傳結果為一個 list。
         '''
-        return getPersonLIST(resultDICT, includePronounBOOL, indexWithPOS)
+        return self.POS.getPersonLIST(parseResultDICT, includePronounBOOL, indexWithPOS)
 
-    def getContentWordLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的實詞 (content word)。
-        每個句子內的實詞為一個 list。
-        '''
-        return getContentWordLIST(resultDICT, indexWithPOS)
-
-    def getChemicalLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的化學類詞 (KNOWLEDGE_chemical)。
-        每個句子內的化學類詞為一個 list。
-        '''
-        return getChemicalLIST(resultDICT, indexWithPOS)
-
-    def getVerbStemLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
-        每個句子內的動詞為一個 list。
-        '''
-        return getVerbStemLIST(resultDICT, indexWithPOS)
-
-    def getNounStemLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的名詞 (noun)。此處指的是 ENTITY_noun、ENTITY_nouny、ENTITY_nounHead 或 ENTITY_oov 標記的名詞詞彙。
-        每個句子內的名詞為一個 list。
-        '''
-        return getNounStemLIST(resultDICT, indexWithPOS)
-
-    def getTimeLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的時間 (time)。
-        每個句子內的「時間」詞列為一個 list。
-        '''
-        return getTimeLIST(resultDICT, indexWithPOS)
-
-    def getLocationStemLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的地理位置 (location)。此處指的是地理位置標記的行政區地名詞彙，例如「台北」、「桃園」、「墨西哥」。
-        每個句子內的地理位置列為一個 list。
-        '''
-        return getLocationStemLIST(resultDICT, indexWithPOS)
-
-    def getOpenDataPlaceLIST(self, resultDICT, indexWithPOS=True):
-        '''
-        取出斷詞結果中的景點 (KNOWLEDGE_place) 標籤的字串。此處指的是景點 (KNOWLEDGE_place)標記的非行政地點名稱詞彙，例如「鹿港老街」、「宜蘭運動公園」。
-        每個句子內的景點為一個 list.
-        '''
-        return getOpenDataPlaceLIST(resultDICT, indexWithPOS)
-
-    def getQuestionLIST(self, resultDICT, indexWithPOS=True):
+    def getQuestionLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中含有 (CLAUSE_Q) 標籤的句子。
         此處指的是
@@ -247,41 +233,28 @@ class Articut:
             <CLAUSE_WhyQ>: 「原因」問句
         每個句子內若有 <CLAUSE_Q> 標籤，整個句子將會存進 list。
         '''
-        return getQuestionLIST(resultDICT, indexWithPOS)
+        return self.POS.getQuestionLIST(parseResultDICT, indexWithPOS)
 
-    def getColorLIST(self, resultDICT, indexWithPOS=True):
+    def getTimeLIST(self, parseResultDICT, indexWithPOS=True):
         '''
-        取出斷詞結果中含有 (MODIFIER_color) 標籤的字串。
-        該字串為一顏色表述字串。
+        取出斷詞結果中的時間 (time)。
+        每個句子內的「時間」詞列為一個 list。
         '''
-        return getColorLIST(resultDICT, indexWithPOS)
+        return self.POS.getTimeLIST(parseResultDICT, indexWithPOS)
 
-    def getAddTWLIST(self, resultDICT, indexWithPOS=True):
+    def getVerbStemLIST(self, parseResultDICT, indexWithPOS=True):
         '''
-        取出斷詞結果中含有 (KNOWLEDGE_addTW) 標籤的字串。
-        該字串為一台灣地址。
+        取出斷詞結果中的動詞 (verb)。此處指的是 ACTION_verb 標記的動詞詞彙。
+        每個句子內的動詞為一個 list。
         '''
-        return getAddTWLIST(resultDICT, indexWithPOS)
+        return self.POS.getVerbStemLIST(parseResultDICT, indexWithPOS)
 
-    def getCurrencyLIST(self, resultDICT, indexWithPOS=True, greedyBOOL=False):
-        '''
-        取出斷詞結果中的貨幣金額 (KNOWLEDGE_currency) 標籤的字串。
-        每個句子內的「貨幣金額」，將列為一個 list。
-        若 greedy = True，則以下格式會加到回傳 list
-            貨幣名稱 + 數字 (包含「'」與「,」符號)
-            新台幣 100
-            美金9.99
-            歐元 1,999'99
-        '''
-        return getCurrencyLIST(resultDICT, indexWithPOS, greedyBOOL)
-
-    def getWikiDataLIST(self, resultDICT, indexWithPOS=True):
+    def getWikiDataLIST(self, parseResultDICT, indexWithPOS=True):
         '''
         取出斷詞結果中的 WikiData 標記文字。此處指的是 KNOWLEDGE_wikiData 標記的條目名稱。
         每個句子內的條目名稱為一個 list。
         '''
-        return getWikiDataLIST(resultDICT, indexWithPOS)
-
+        return self.POS.getWikiDataLIST(parseResultDICT, indexWithPOS)
 
 
 if __name__ == "__main__":
