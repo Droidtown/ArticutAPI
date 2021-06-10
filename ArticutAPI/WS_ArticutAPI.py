@@ -41,10 +41,10 @@ except: #供外部載入時使用。
 class WS_Articut:
     def __init__(self, url="ws://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None):
         self.port = port
-        if "ws" in url:
+        if url.startswith("ws"):
             self.ws_url = "{}:{}/Articut/WebSocket".format(url, port)
             self.url = "{}:{}".format(url.replace("ws", "http"), port)
-        elif "http" in url:
+        elif url.startswith("http"):
             self.ws_url = "{}:{}/Articut/WebSocket".format(url.replace("http", "ws"), port)
             self.url = "{}:{}".format(url, port)
         else:

@@ -41,10 +41,10 @@ except: #供外部載入時使用。
 class MP_Articut:
     def __init__(self, url="http://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None):
         self.port = port
-        if "http" not in url:
-            self.url = "http://{}:{}".format(url, port)
-        else:
+        if url.startswith("http"):
             self.url = "{}:{}".format(url, port)
+        else:
+            self.url = "http://{}:{}".format(url, port)
         self.bulkSize = bulkSize
         self.processes = cpu_count()
         if self.processes > 8:

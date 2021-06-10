@@ -41,7 +41,7 @@ except: #供外部載入時使用。
     #print("Please use pip/conda install graphene-python to install the module and reload ArticutAPI.")
 
 class Articut:
-    def __init__(self, username="", apikey="", version="latest", level="lv2"):
+    def __init__(self, username="", apikey="", version="latest", level="lv2", url="https://api.droidtown.co"):
         '''
         username = ""    # 你註冊時的 email。若留空，則會使用每小時更新 2000 字的公用帳號。
         apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每小時更新 2000 字的公用帳號。
@@ -55,7 +55,7 @@ class Articut:
             self.username = username
             self.apikey = apikey
 
-        self.url = "https://api.droidtown.co"
+        self.url = url
 
         self.version = version
         self.level = level
