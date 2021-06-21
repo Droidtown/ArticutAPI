@@ -9,6 +9,16 @@ except:
 import os
 import re
 
+def mergeBulkResult(inputLIST):
+    resultLIST = []
+    resultExtend = resultLIST.extend
+    for x in filter(None, inputLIST):
+        try:
+            if x["status"]:    # 只取成功的結果
+                resultExtend(x["result_list"])
+        except:
+            pass
+    return resultLIST
 
 class ArticutPOS:
     def __init__(self):
@@ -371,7 +381,14 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        articleLIST = list(set([self.tagPurger(a.group(0)) for a in self.articlePat.finditer("".join(self.articutResult["result_pos"]))]))
+        articleLIST = []
+        if type(self.articutResult) is list:
+            self.articutResult = mergeBulkResult(self.articutResult)
+            articleAppend = articleLIST.append
+            for x in self.articutResult:
+                articleAppend(list(set([self.tagPurger(a.group(0)) for a in self.articlePat.finditer("".join(x["result_pos"]))])))
+        else:
+            articleLIST = list(set([self.tagPurger(a.group(0)) for a in self.articlePat.finditer("".join(self.articutResult["result_pos"]))]))
         return articleLIST
 
     def getCrime(self, parseResultDICT={}):
@@ -380,8 +397,17 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        crimePosLIST = set([c.group(0) for c in self.crimePat.finditer("".join(self.articutResult["result_pos"]))])
-        crimeTextLIST = [self.tagPurger(c) for c in crimePosLIST]
+
+        crimeTextLIST = []
+        if type(self.articutResult) is list:
+            self.articutResult = mergeBulkResult(self.articutResult)
+            crimeTextAppend = crimeTextLIST.append
+            for x in self.articutResult:
+                crimePosLIST = set([c.group(0) for c in self.crimePat.finditer("".join(x["result_pos"]))])
+                crimeTextAppend([self.tagPurger(c) for c in crimePosLIST])
+        else:
+            crimePosLIST = set([c.group(0) for c in self.crimePat.finditer("".join(self.articutResult["result_pos"]))])
+            crimeTextLIST = [self.tagPurger(c) for c in crimePosLIST]
         return crimeTextLIST
 
     def getCriminalResponsibility(self, parseResultDICT={}):
@@ -392,8 +418,17 @@ class LawsToolkit:
         if parseResultDICT:
             self.articutResult = parseResultDICT
         try:
-            crPosLIST = set([c.group(0) for c in self.criminalResponsibilityPat.finditer("".join(self.articutResult["result_pos"]))])
-            crTextLIST = [self.tagPurger(c) for c in crPosLIST]
+            crTextLIST = []
+            if type(self.articutResult) is list:
+                self.articutResult = mergeBulkResult(self.articutResult)
+                crTextAppend = crTextLIST.append
+                for x in self.articutResult:
+                    crPosLIST = set([c.group(0) for c in self.criminalResponsibilityPat.finditer("".join(x["result_pos"]))])
+                    crTextAppend([self.tagPurger(c) for c in crPosLIST])
+            else:
+                crPosLIST = set([c.group(0) for c in self.criminalResponsibilityPat.finditer("".join(self.articutResult["result_pos"]))])
+                crTextLIST = [self.tagPurger(c) for c in crPosLIST]
+            print("getCriminalResponsibility() To be deprecated soon.")
             return crTextLIST
         except KeyError:
             return []
@@ -411,8 +446,18 @@ class LawsToolkit:
         '''
         if parseResultDICT:
             self.articutResult = parseResultDICT
-        erPosLIST = set([e.group(0) for e in self.eventRefPat.finditer("".join(self.articutResult["result_pos"]))])
-        erTextLIST = [self.tagPurger(e) for e in erPosLIST]
+
+        erTextLIST = []
+        if type(self.articutResult) is list:
+            self.articutResult = mergeBulkResult(self.articutResult)
+            erTextAppend = erTextLIST.append
+            for x in self.articutResult:
+                erPosLIST = set([e.group(0) for e in self.eventRefPat.finditer("".join(x["result_pos"]))])
+                erTextAppend([self.tagPurger(e) for e in erPosLIST])
+        else:
+            erPosLIST = set([e.group(0) for e in self.eventRefPat.finditer("".join(self.articutResult["result_pos"]))])
+            erTextLIST = [self.tagPurger(e) for e in erPosLIST]
+
         return erTextLIST
 
 class UserDefinedDictToolkit:

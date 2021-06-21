@@ -72,8 +72,10 @@ class WordExtractionTFIDF(object):
         return lst
 
     def extractKeyword(self, inputSTR, topK, withWeight, allowPOS):
-        self.thd = topK/100.0
-
+        # self.thd = topK/100.0                   # 取結果的前 topK% 個詞
+        self.thd = topK                           # 取結果的前 topK 個詞
+        if self.thd < 0: self.thd = 20
+        
         # get word list
         wordLIST = inputSTR.split("/")            # wordLIST = ["沒有", "人", ...]
 
@@ -87,7 +89,8 @@ class WordExtractionTFIDF(object):
         rst = self.sortByTfidf(evalDICT)
 
         # filter by threshold
-        keyWordLIST = rst[:round(self.thd*len(rst))]
+        # keyWordLIST = rst[:round(self.thd*len(rst))]  # 搭配 self.thd = topK/100.0
+        keyWordLIST = rst[:self.thd]                    # 搭配 self.thd = topK
 
         # return key word list
         if withWeight is False:
@@ -209,13 +212,15 @@ class WordExtractionTextRank(object):
         #                 ['決定', 3.4637188376903927],
         #                 ['手', 2.959546855830475],
         #                 ['人', 2.9595468558304745]]
+        if iterTimesINT < 0:
+            iterTimesINT = 20
         if withWeight is False:
             tmpLIST = []
             for w in wordRankLIST:
                 tmpLIST.append(w[0])
-            return tmpLIST
+            return tmpLIST[:iterTimesINT]
         else:
-            return wordRankLIST
+            return wordRankLIST[:iterTimesINT]
 
 class AnalyseManager(object):
     def __init__(self):
@@ -245,9 +250,9 @@ class AnalyseManager(object):
 
     def extract_tags(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Alias of extractTags() for developers from older CWS solutions.
-        return self.extractTags(resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'))
+        return self.extractTags(resultDICT, topK, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'))
 
-    def textrank(self, resultDICT, topK=10, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
+    def textrank(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Key word extraction and rank by the TextRank algorithm
         # Alias of jieba textrank()
         # topK = iterative times
