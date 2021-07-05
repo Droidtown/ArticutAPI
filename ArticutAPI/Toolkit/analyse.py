@@ -75,7 +75,7 @@ class WordExtractionTFIDF(object):
         # self.thd = topK/100.0                   # 取結果的前 topK% 個詞
         self.thd = topK                           # 取結果的前 topK 個詞
         if self.thd < 0: self.thd = 20
-        
+
         # get word list
         wordLIST = inputSTR.split("/")            # wordLIST = ["沒有", "人", ...]
 
@@ -250,7 +250,7 @@ class AnalyseManager(object):
 
     def extract_tags(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Alias of extractTags() for developers from older CWS solutions.
-        return self.extractTags(resultDICT, topK, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v'))
+        return self.extractTags(resultDICT, topK, withWeight, allowPOS=('ns', 'n', 'vn', 'v'))
 
     def textrank(self, resultDICT, topK=20, withWeight=False, allowPOS=('ns', 'n', 'vn', 'v')):
         # Key word extraction and rank by the TextRank algorithm
