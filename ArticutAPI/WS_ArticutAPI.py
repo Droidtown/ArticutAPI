@@ -102,10 +102,9 @@ class WS_Articut:
                 print("WebSocket[Bulk] Connection Failed.", e)
         return self.ws.connected
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
         if self._wsCreateConnection():
-            payload = {"input_str": inputSTR,
-                       "level": level,
+            payload = {"level": level,
                        "chemical": chemicalBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
@@ -119,13 +118,72 @@ class WS_Articut:
             if timeRef:
                 payload["time_ref"] = str(timeRef)
 
+            if autoBreakBOOL:
+                inputLIST = self._getInputLIST(inputSTR)
+            else:
+                inputLIST = [inputSTR]
+
             try:
-                self.ws.send(json.dumps(payload))
-                result = json.loads(self.ws.recv())
-                return result
+                resultDICT = {}
+                count = 0
+                for x in inputLIST:
+                    payload["input_str"] = x
+                    self.ws.send(json.dumps(payload))
+                    result = json.loads(self.ws.recv())
+                    if not result["status"]:
+                        return result
+
+                    if resultDICT:
+                        resultDICT["exec_time"] += result["exec_time"]
+                        if level in ("lv1", "lv2"):
+                            resultDICT["result_obj"].extend(result["result_obj"])
+                            resultDICT["result_pos"].extend(result["result_pos"])
+                            resultDICT["result_segmentation"].extend(result["result_segmentation"])
+                        else:
+                            resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in result["input"]])
+                            resultDICT["entity"].extend(result["entity"])
+                            resultDICT["event"].extend(result["event"])
+                            resultDICT["person"].extend(result["person"])
+                            resultDICT["site"].extend(result["site"])
+                            resultDICT["time"].extend(result["time"])
+                            resultDICT["user_defined"].extend(result["user_defined"])
+                            resultDICT["utterance"].extend(result["utterance"])
+                            resultDICT["number"] = {**resultDICT["number"], **result["number"]}
+                            resultDICT["unit"] = {**resultDICT["unit"], **result["unit"]}
+                    else:
+                        resultDICT = result
+                    count += len(x)
+
+                return resultDICT
             except Exception as e:
                 print("Exception", e, "\nInputSTR", inputSTR)
                 return None
+
+    def _getInputLIST(self, inputSTR):
+        '''
+        取得長度不大於 MAX_LEN 的 input 列表
+        '''
+        MAX_LEN = 5000
+        BREAK_LIST = ["。", "？", "！", "?", "!", "\n"]
+
+        inputLIST = []
+        while True:
+            if len(inputSTR) > MAX_LEN:
+                tempSTR = inputSTR[:MAX_LEN]
+                index = 0
+                for x in BREAK_LIST:
+                    lastIndex = tempSTR.rfind(x) + 1
+                    if lastIndex > index:
+                        index = lastIndex
+                if index == 0:
+                    index = MAX_LEN
+                inputLIST.append(inputSTR[:index])
+                inputSTR = inputSTR[index:]
+            else:
+                inputLIST.append(inputSTR)
+                break
+
+        return inputLIST
 
     def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         resultLIST = []

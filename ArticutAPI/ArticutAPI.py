@@ -80,7 +80,7 @@ class Articut:
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
         if level not in ("lv1", "lv2", "lv3"):
             level = self.level
 
@@ -89,8 +89,7 @@ class Articut:
         self.chemicalBOOL=chemicalBOOL
         url = "{}/Articut/API/".format(self.url)
         if level in ("lv1", "lv2"):
-            payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
-                       "username": self.username,                     #String Type：使用者帳號 email
+            payload = {"username": self.username,                     #String Type：使用者帳號 email
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                        "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
@@ -98,8 +97,7 @@ class Articut:
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
         else:
-            payload = {"input_str": inputSTR,                         #String Type：要做斷詞處理的中文句子。
-                       "username": self.username,                     #String Type：使用者帳號 email
+            payload = {"username": self.username,                     #String Type：使用者帳號 email
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
                        "level": level,                                #String Type：指定為 lv3 語意斷詞。
@@ -129,12 +127,72 @@ class Articut:
                 print(str(e))
                 return {"status": False, "msg": "UserDefinedDICT Parsing ERROR. Please check your the format and encoding."}
 
-        result = requests.post(url, json=payload)
-        if result.status_code == 200:
-            result = result.json()
-            result["product"] = "{}/product/".format(self.url)
-            result["document"] = "{}/document/".format(self.url)
-        return result
+        if autoBreakBOOL:
+            inputLIST = self._getInputLIST(inputSTR)
+        else:
+            inputLIST = [inputSTR]
+
+        resultDICT = {}
+        count = 0
+        for x in inputLIST:
+            payload["input_str"] = x    #String Type：要做斷詞處理的中文句子。
+            result = requests.post(url, json=payload)
+            if result.status_code == 200:
+                result = result.json()
+                if not result["status"]:
+                    return result
+
+                if resultDICT:
+                    resultDICT["exec_time"] += result["exec_time"]
+                    resultDICT["word_count_balance"] = result["word_count_balance"]
+                    if level in ("lv1", "lv2"):
+                        resultDICT["result_obj"].extend(result["result_obj"])
+                        resultDICT["result_pos"].extend(result["result_pos"])
+                        resultDICT["result_segmentation"] += "/{}".format(result["result_segmentation"])
+                    else:
+                        resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in result["input"]])
+                        resultDICT["entity"].extend(result["entity"])
+                        resultDICT["event"].extend(result["event"])
+                        resultDICT["person"].extend(result["person"])
+                        resultDICT["site"].extend(result["site"])
+                        resultDICT["time"].extend(result["time"])
+                        resultDICT["user_defined"].extend(result["user_defined"])
+                        resultDICT["utterance"].extend(result["utterance"])
+                        resultDICT["number"] = {**resultDICT["number"], **result["number"]}
+                        resultDICT["unit"] = {**resultDICT["unit"], **result["unit"]}
+                else:
+                    resultDICT = result
+                count += len(x)
+            else:
+                return result
+
+        return resultDICT
+
+    def _getInputLIST(self, inputSTR):
+        '''
+        取得長度不大於 MAX_LEN 的 input 列表
+        '''
+        MAX_LEN = 5000
+        BREAK_LIST = ["。", "？", "！", "?", "!", "\n"]
+
+        inputLIST = []
+        while True:
+            if len(inputSTR) > MAX_LEN:
+                tempSTR = inputSTR[:MAX_LEN]
+                index = 0
+                for x in BREAK_LIST:
+                    lastIndex = tempSTR.rfind(x) + 1
+                    if lastIndex > index:
+                        index = lastIndex
+                if index == 0:
+                    index = MAX_LEN
+                inputLIST.append(inputSTR[:index])
+                inputSTR = inputSTR[index:]
+            else:
+                inputLIST.append(inputSTR)
+                break
+
+        return inputLIST
 
     def versions(self):
         url = "{}/Articut/Versions/".format(self.url)
