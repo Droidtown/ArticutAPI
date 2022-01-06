@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+from time import sleep
 import os
 import re
 
@@ -46,6 +47,10 @@ class Articut:
         username = ""    # 你註冊時的 email。若留空，則會使用每小時更新 2000 字的公用帳號。
         apikey = ""      # 您完成付費後取得的 apikey 值。若留空，則會使用每小時更新 2000 字的公用帳號。
         '''
+        self.MAX_LEN = 5000
+        self.RETRY_COUNT = 1
+        self.RETRY_DELAY = 10 # 10 sec
+
         try:
             with open("./account.info", "r") as f:
                 userDICT = json.loads(f.read())
@@ -136,35 +141,50 @@ class Articut:
         count = 0
         for x in inputLIST:
             payload["input_str"] = x    #String Type：要做斷詞處理的中文句子。
-            result = requests.post(url, json=payload)
-            if result.status_code == 200:
-                result = result.json()
-                if not result["status"]:
-                    return result
+            retry_count = 0
+            while True:
+                try:
+                    result = requests.post(url, json=payload)
+                    if result.status_code == 200:
+                        result = result.json()
+                        if not result["status"]:
+                            return result
 
-                if resultDICT:
-                    resultDICT["exec_time"] += result["exec_time"]
-                    resultDICT["word_count_balance"] = result["word_count_balance"]
-                    if level in ("lv1", "lv2"):
-                        resultDICT["result_obj"].extend(result["result_obj"])
-                        resultDICT["result_pos"].extend(result["result_pos"])
-                        resultDICT["result_segmentation"] += "/{}".format(result["result_segmentation"])
+                        if resultDICT:
+                            resultDICT["exec_time"] += result["exec_time"]
+                            resultDICT["word_count_balance"] = result["word_count_balance"]
+                            if level in ("lv1", "lv2"):
+                                resultDICT["result_obj"].extend(result["result_obj"])
+                                resultDICT["result_pos"].extend(result["result_pos"])
+                                resultDICT["result_segmentation"] += "/{}".format(result["result_segmentation"])
+                            else:
+                                resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in result["input"]])
+                                resultDICT["entity"].extend(result["entity"])
+                                resultDICT["event"].extend(result["event"])
+                                resultDICT["person"].extend(result["person"])
+                                resultDICT["site"].extend(result["site"])
+                                resultDICT["time"].extend(result["time"])
+                                resultDICT["user_defined"].extend(result["user_defined"])
+                                resultDICT["utterance"].extend(result["utterance"])
+                                resultDICT["number"] = {**resultDICT["number"], **result["number"]}
+                                resultDICT["unit"] = {**resultDICT["unit"], **result["unit"]}
+                        else:
+                            resultDICT = result
+                        count += len(x)
                     else:
-                        resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in result["input"]])
-                        resultDICT["entity"].extend(result["entity"])
-                        resultDICT["event"].extend(result["event"])
-                        resultDICT["person"].extend(result["person"])
-                        resultDICT["site"].extend(result["site"])
-                        resultDICT["time"].extend(result["time"])
-                        resultDICT["user_defined"].extend(result["user_defined"])
-                        resultDICT["utterance"].extend(result["utterance"])
-                        resultDICT["number"] = {**resultDICT["number"], **result["number"]}
-                        resultDICT["unit"] = {**resultDICT["unit"], **result["unit"]}
-                else:
-                    resultDICT = result
-                count += len(x)
-            else:
-                return result
+                        return result
+
+                    # 成功取得結果跳出 while 迴圈
+                    break
+
+                except Exception as e:
+                    print("[ERROR] {} {}\n=> {}".format(retry_count, str(e), payload["input_str"]))
+                    # 最多嘗試 RETRY_COUNT 次
+                    if retry_count < self.RETRY_COUNT:
+                        retry_count += 1
+                        sleep(self.RETRY_DELAY)
+                    else:
+                        return {"status": False, "msg": "Connection timeout."}
 
         return resultDICT
 
@@ -172,20 +192,19 @@ class Articut:
         '''
         取得長度不大於 MAX_LEN 的 input 列表
         '''
-        MAX_LEN = 5000
         BREAK_LIST = ["。", "？", "！", "?", "!", "\n"]
 
         inputLIST = []
         while True:
-            if len(inputSTR) > MAX_LEN:
-                tempSTR = inputSTR[:MAX_LEN]
+            if len(inputSTR) > self.MAX_LEN:
+                tempSTR = inputSTR[:self.MAX_LEN]
                 index = 0
                 for x in BREAK_LIST:
                     lastIndex = tempSTR.rfind(x) + 1
                     if lastIndex > index:
                         index = lastIndex
                 if index == 0:
-                    index = MAX_LEN
+                    index = self.MAX_LEN
                 inputLIST.append(inputSTR[:index])
                 inputSTR = inputSTR[index:]
             else:
@@ -317,6 +336,7 @@ class Articut:
 
 if __name__ == "__main__":
     from pprint import pprint
+
 
     #inputSTR = "你計劃過地球人類補完計劃" #parse() Demo
     #inputSTR = "2018 年 7 月 26 日" #getTimeLIST() Demo
