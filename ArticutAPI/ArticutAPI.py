@@ -178,7 +178,6 @@ class Articut:
                     break
 
                 except Exception as e:
-                    print("[ERROR] {} {}\n=> {}".format(retry_count, str(e), payload["input_str"]))
                     # 最多嘗試 RETRY_COUNT 次
                     if retry_count < self.RETRY_COUNT:
                         retry_count += 1
