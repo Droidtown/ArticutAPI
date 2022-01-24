@@ -352,176 +352,173 @@ if __name__ == "__main__":
 
     print("inputSTR:{}\n".format(inputSTR))
 
-    resultDICT = articut.parse(inputSTR, level="lv2", userDefinedDictFILE="dict.json", openDataPlaceAccessBOOL=False, wikiDataBOOL=False)
-    pprint(resultDICT)
-
     #檢查儲存的結果是否已存在
-    #resultFilePath = "articutResult.json"
-    #resultExistBOOL = False
-    #try:
-        #with open(resultFilePath, "r", encoding="utf-8") as resultFile:
-            #resultDICT = json.loads(resultFile.read())
-            ## inputSTR 去除空白及斜線
-            ## result_segmentation 去除斜線
-            #if inputSTR.replace(' ', '').replace("/", "") == resultDICT["result_segmentation"].replace("/", ""):
-                #resultExistBOOL = True
-    #except:
-        #pass
+    resultFilePath = "articutResult.json"
+    resultExistBOOL = False
+    try:
+        with open(resultFilePath, "r", encoding="utf-8") as resultFile:
+            resultDICT = json.loads(resultFile.read())
+            # inputSTR 去除空白及斜線
+            # result_segmentation 去除斜線
+            if inputSTR.replace(' ', '').replace("/", "") == resultDICT["result_segmentation"].replace("/", ""):
+                resultExistBOOL = True
+    except:
+        pass
 
-    ##取得斷詞結果
-    #if not resultExistBOOL:
-        #resultDICT = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=False, wikiDataBOOL=False)
+    #取得斷詞結果
+    if not resultExistBOOL:
+        resultDICT = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=False, wikiDataBOOL=False)
 
-        ##儲存斷詞結果
-        #try:
-            #with open(resultFilePath, "w", encoding="utf-8") as resultFile:
-                #json.dump(resultDICT, resultFile, ensure_ascii=False)
-                #print("斷詞結果儲存成功")
-        #except Exception as e:
-            #print("斷詞結果儲存失敗：{}".format(e))
+        #儲存斷詞結果
+        try:
+            with open(resultFilePath, "w", encoding="utf-8") as resultFile:
+                json.dump(resultDICT, resultFile, ensure_ascii=False)
+                print("斷詞結果儲存成功")
+        except Exception as e:
+            print("斷詞結果儲存失敗：{}".format(e))
 
-    #print("\n斷詞結果：")
-    #pprint(resultDICT["result_segmentation"])
-    #print("\n標記結果：")
-    #pprint(resultDICT["result_pos"])
+    print("\n斷詞結果：")
+    pprint(resultDICT["result_segmentation"])
+    print("\n標記結果：")
+    pprint(resultDICT["result_pos"])
 
-    #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
-    #versions = articut.versions()
-    #print("\n##Avaliable Versions:")
-    #pprint(versions)
+    列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
+    versions = articut.versions()
+    print("\n##Avaliable Versions:")
+    pprint(versions)
 
-    ##列出所有的 content word.
-    #contentWordLIST = articut.getContentWordLIST(resultDICT)
-    #print("\n##ContentWord:")
-    #pprint(contentWordLIST)
+    #列出所有的 content word.
+    contentWordLIST = articut.getContentWordLIST(resultDICT)
+    print("\n##ContentWord:")
+    pprint(contentWordLIST)
 
-    ##列出所有的化學類名詞.
-    #chemicalLIST = articut.getChemicalLIST(resultDICT)
-    #print("\n##Chemical:")
-    #pprint(chemicalLIST)
+    #列出所有的化學類名詞.
+    chemicalLIST = articut.getChemicalLIST(resultDICT)
+    print("\n##Chemical:")
+    pprint(chemicalLIST)
 
-    ##列出所有的人名 (不含代名詞).
-    #personLIST = articut.getPersonLIST(resultDICT, includePronounBOOL=False)
-    #print("\n##Person (Without Pronoun):")
-    #pprint(personLIST)
-    #personLIST = articut.getPersonLIST(resultDICT, includePronounBOOL=True)
-    #print("\n##Person (With Pronoun):")
-    #pprint(personLIST)
+    #列出所有的人名 (不含代名詞).
+    personLIST = articut.getPersonLIST(resultDICT, includePronounBOOL=False)
+    print("\n##Person (Without Pronoun):")
+    pprint(personLIST)
+    personLIST = articut.getPersonLIST(resultDICT, includePronounBOOL=True)
+    print("\n##Person (With Pronoun):")
+    pprint(personLIST)
 
-    ##列出所有的 verb word. (動詞)
-    #verbStemLIST = articut.getVerbStemLIST(resultDICT)
-    #print("\n##Verb:")
-    #pprint(verbStemLIST)
+    #列出所有的 verb word. (動詞)
+    verbStemLIST = articut.getVerbStemLIST(resultDICT)
+    print("\n##Verb:")
+    pprint(verbStemLIST)
 
-    ##列出所有的 noun word. (名詞)
-    #nounStemLIST = articut.getNounStemLIST(resultDICT)
-    #print("\n##Noun:")
-    #pprint(nounStemLIST)
+    #列出所有的 noun word. (名詞)
+    nounStemLIST = articut.getNounStemLIST(resultDICT)
+    print("\n##Noun:")
+    pprint(nounStemLIST)
 
-    ##列出所有的 time (時間)
-    #timeLIST = articut.getTimeLIST(resultDICT)
-    #print("\n##Time:")
-    #pprint(timeLIST)
+    #列出所有的 time (時間)
+    timeLIST = articut.getTimeLIST(resultDICT)
+    print("\n##Time:")
+    pprint(timeLIST)
 
-    ##列出所有的 location word. (地方名稱)
-    #locationStemLIST = articut.getLocationStemLIST(resultDICT)
-    #print("\n##Location:")
-    #pprint(locationStemLIST)
+    #列出所有的 location word. (地方名稱)
+    locationStemLIST = articut.getLocationStemLIST(resultDICT)
+    print("\n##Location:")
+    pprint(locationStemLIST)
 
-    ##允許 Articut 調用字典，列出所有政府開放資料中列為觀光地點名稱的字串。(地點名稱)
-    #placeLIST = articut.getOpenDataPlaceLIST(resultDICT)
-    #print("\n##Place:")
-    #pprint(placeLIST)
+    #允許 Articut 調用字典，列出所有政府開放資料中列為觀光地點名稱的字串。(地點名稱)
+    placeLIST = articut.getOpenDataPlaceLIST(resultDICT)
+    print("\n##Place:")
+    pprint(placeLIST)
 
-    ##允許 Articut 調用 WikiData 字典，列出所有 WikiData 條目名稱的字串。
-    #wikiDataLIST = articut.getWikiDataLIST(resultDICT)
-    #print("\n##WikiData:")
-    #pprint(wikiDataLIST)
+    #允許 Articut 調用 WikiData 字典，列出所有 WikiData 條目名稱的字串。
+    wikiDataLIST = articut.getWikiDataLIST(resultDICT)
+    print("\n##WikiData:")
+    pprint(wikiDataLIST)
 
-    ##列出所有的 CLAUSE 問句
-    #questionLIST = articut.getQuestionLIST(resultDICT)
-    #print("\n##Question:")
-    #pprint(questionLIST)
+    #列出所有的 CLAUSE 問句
+    questionLIST = articut.getQuestionLIST(resultDICT)
+    print("\n##Question:")
+    pprint(questionLIST)
 
-    ##列出所有的台灣地址
-    #addTWLIST = articut.getAddTWLIST(resultDICT)
-    #print("\n##Address:")
-    #pprint(addTWLIST)
+    #列出所有的台灣地址
+    addTWLIST = articut.getAddTWLIST(resultDICT)
+    print("\n##Address:")
+    pprint(addTWLIST)
 
-    ##使用 TF-IDF 演算法
-    #tfidfResult = articut.analyse.extract_tags(resultDICT)
-    #print("\n##TF-IDF:")
-    #pprint(tfidfResult)
+    #使用 TF-IDF 演算法
+    tfidfResult = articut.analyse.extract_tags(resultDICT)
+    print("\n##TF-IDF:")
+    pprint(tfidfResult)
 
-    ##使用 Textrank 演算法
-    #textrankResult = articut.analyse.textrank(resultDICT)
-    #print("\n##Textrank:")
-    #pprint(textrankResult)
+    #使用 Textrank 演算法
+    textrankResult = articut.analyse.textrank(resultDICT)
+    print("\n##Textrank:")
+    pprint(textrankResult)
 
-    ##使用 localRE 工具取得地址分段細節
-    #countyResult = articut.localRE.getAddressCounty(resultDICT)
-    #print("\n##localRE: 縣")
-    #pprint(countyResult)
+    #使用 localRE 工具取得地址分段細節
+    countyResult = articut.localRE.getAddressCounty(resultDICT)
+    print("\n##localRE: 縣")
+    pprint(countyResult)
 
-    #cityResult = articut.localRE.getAddressCity(resultDICT)
-    #print("\n##localRE: 市")
-    #pprint(cityResult)
+    cityResult = articut.localRE.getAddressCity(resultDICT)
+    print("\n##localRE: 市")
+    pprint(cityResult)
 
-    #districtResult = articut.localRE.getAddressDistrict(resultDICT)
-    #print("\n##localRE: 區")
-    #pprint(districtResult)
+    districtResult = articut.localRE.getAddressDistrict(resultDICT)
+    print("\n##localRE: 區")
+    pprint(districtResult)
 
-    #townshipResult = articut.localRE.getAddressTownship(resultDICT)
-    #print("\n##localRE: 鄉里")
-    #pprint(townshipResult)
+    townshipResult = articut.localRE.getAddressTownship(resultDICT)
+    print("\n##localRE: 鄉里")
+    pprint(townshipResult)
 
-    #townResult = articut.localRE.getAddressTown(resultDICT)
-    #print("\n##localRE: 鎮")
-    #pprint(townResult)
+    townResult = articut.localRE.getAddressTown(resultDICT)
+    print("\n##localRE: 鎮")
+    pprint(townResult)
 
-    #villageResult = articut.localRE.getAddressVillage(resultDICT)
-    #print("\n##localRE: 村")
-    #pprint(villageResult)
+    villageResult = articut.localRE.getAddressVillage(resultDICT)
+    print("\n##localRE: 村")
+    pprint(villageResult)
 
-    #neighborhoodResult = articut.localRE.getAddressNeighborhood(resultDICT)
-    #print("\n##localRE: 鄰")
-    #pprint(neighborhoodResult)
+    neighborhoodResult = articut.localRE.getAddressNeighborhood(resultDICT)
+    print("\n##localRE: 鄰")
+    pprint(neighborhoodResult)
 
-    #roadResult = articut.localRE.getAddressRoad(resultDICT)
-    #print("\n##localRE: 路")
-    #pprint(roadResult)
+    roadResult = articut.localRE.getAddressRoad(resultDICT)
+    print("\n##localRE: 路")
+    pprint(roadResult)
 
-    #sectionResult = articut.localRE.getAddressSection(resultDICT)
-    #print("\n##localRE: 段")
-    #pprint(sectionResult)
+    sectionResult = articut.localRE.getAddressSection(resultDICT)
+    print("\n##localRE: 段")
+    pprint(sectionResult)
 
-    #alleyResult = articut.localRE.getAddressAlley(resultDICT)
-    #print("\n##localRE: 巷、弄")
-    #pprint(alleyResult)
+    alleyResult = articut.localRE.getAddressAlley(resultDICT)
+    print("\n##localRE: 巷、弄")
+    pprint(alleyResult)
 
-    #numberResult = articut.localRE.getAddressNumber(resultDICT)
-    #print("\n##localRE: 號")
-    #pprint(numberResult)
+    numberResult = articut.localRE.getAddressNumber(resultDICT)
+    print("\n##localRE: 號")
+    pprint(numberResult)
 
-    #floorResult = articut.localRE.getAddressFloor(resultDICT)
-    #print("\n##localRE: 樓")
-    #pprint(floorResult)
+    floorResult = articut.localRE.getAddressFloor(resultDICT)
+    print("\n##localRE: 樓")
+    pprint(floorResult)
 
-    #roomResult = articut.localRE.getAddressRoom(resultDICT)
-    #print("\n##localRE: 室")
-    #pprint(roomResult)
+    roomResult = articut.localRE.getAddressRoom(resultDICT)
+    print("\n##localRE: 室")
+    pprint(roomResult)
 
-    ##列出所有的貨幣金額
-    #currencyResult = articut.getCurrencyLIST(resultDICT)
-    #print("\n##currencyLIST:")
-    #pprint(currencyResult)
+    #列出所有的貨幣金額
+    currencyResult = articut.getCurrencyLIST(resultDICT)
+    print("\n##currencyLIST:")
+    pprint(currencyResult)
 
-    #inputSTR = "前天你說便宜的油還在海上，怎麼兩天後就到港口了？"
-    #lv3result = articut.parse(inputSTR, level="lv3",
-                              #userDefinedDictFILE=None,
-                              #openDataPlaceAccessBOOL=False,
-                              #wikiDataBOOL=False,
-                              #indexWithPOS=False,
-                              #timeRef=None,
-                              #pinyin="BOPOMOFO")
-    #pprint(lv3result)
+    inputSTR = "前天你說便宜的油還在海上，怎麼兩天後就到港口了？"
+    lv3result = articut.parse(inputSTR, level="lv3",
+                              userDefinedDictFILE=None,
+                              openDataPlaceAccessBOOL=False,
+                              wikiDataBOOL=False,
+                              indexWithPOS=False,
+                              timeRef=None,
+                              pinyin="BOPOMOFO")
+    pprint(lv3result)
