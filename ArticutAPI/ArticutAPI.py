@@ -382,7 +382,7 @@ if __name__ == "__main__":
     print("\n標記結果：")
     pprint(resultDICT["result_pos"])
 
-    列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
+    #列出目前可使用的 Articut 版本選擇。通常版本號愈大，完成度愈高。
     versions = articut.versions()
     print("\n##Avaliable Versions:")
     pprint(versions)
