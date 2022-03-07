@@ -439,7 +439,7 @@ if __name__ == "__main__":
     questionLIST = articut.getQuestionLIST(resultDICT)
     print("\n##Question:")
     pprint(questionLIST)
-
+    #resultDICT["result_pos"] = ['<KNOWLEDGE_addTW>南投縣南投市中興路二街64號</KNOWLEDGE_addTW>']
     #列出所有的台灣地址
     addTWLIST = articut.getAddTWLIST(resultDICT)
     print("\n##Address:")
