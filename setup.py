@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ArticutAPI",
-    version="1.2.1",
+    version="1.2.2",
     author="Droidtown Linguistic Tech. Co. Ltd.",
     author_email="info@droidtown.co",
     description="Articut NLP system provides not only finest results on Chinese word segmentaion (CWS), Part-of-Speech tagging (POS) and Named Entity Recogintion tagging (NER), but also the fastest online API service in the NLP industry.",
