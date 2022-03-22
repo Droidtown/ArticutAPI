@@ -183,7 +183,8 @@ class MP_Articut:
         resultAppend = resultLIST.append
         #print(inputLIST2)
         for i, inputLIST in enumerate(inputLIST2):
-            resultAppend(pool.apply_async(self._run, (i, inputLIST, level, chemicalBOOL, userDefinedDICT, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
+            resultAppend(pool.apply_async(self._run, (i, inputLIST, level,
+                userDefinedDICT, chemicalBOOL, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
         pool.close()
         pool.join()
 
