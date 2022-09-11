@@ -6,7 +6,7 @@ import re
 class GenericNER:
     def __init__(self, locale=None):
         self.mainDishSTR = "([乳包味啡嗲奶心手排果柳棗椒油湯漿炒焿煎煙燒爐瓜皮盅盤米粄粉粑粥粽粿糊糍粑糕糖糬糰線羹翅翼肉肚肺肝膽腐腦腩腳腸胃腿胗芛薏花茄茶草莓菊菜蓮蔗蔥薑蒜薩薯蘆蕉蜜筍檳豆豉栗菇虱蚵蛋卵蝦蟹螺貝蟳血角酒酥醬趖銼鍋雜頭飩飯飴餃飩餅麵麩餐骨鬆鬚魚鯧鰻鮪鮭魽鯛鰾鱉龜雞鴨鵝牛豬羊兔鼠鴿豚鷄堡]|"
-        self.sideDishSTR = "[丸冰圓塊卷捲粄條扒仔乾]|[俄德法美日義英西歐中台泰越韓粵港]式|星州|客家|花枝|鴛鴦|石斑|黑輪|伯勞|藥燉|愛玉|珍珠|熱狗|阿給|燒賣|料理|飲料|糖[水醋]|鳳梨|蜜餞|花生|[壽土吐]司|便當|飯盒|鍋貼|扁食|雲吞|刺身|山蘇|多士|咖哩|沙拉|沙母|沙公|海參|鴨賞|旗魚|燒賣|海鮮|河鮮|龍珠|鮟鱇|牛河|熊掌|糕渣|自助餐|沙威[馬瑪]|三明治|沙淇瑪|原住民|棺材板|官財板|地瓜球|綠豆椪|冰淇淋|佛跳牆|[洋和][菓果]子)"
+        self.sideDishSTR = "[丸冰圓塊卷捲粄條扒仔乾塔]|[俄德法美日義英西歐中台泰越韓粵港]式|星州|客家|花枝|鴛鴦|石斑|黑輪|伯勞|藥燉|愛玉|珍珠|熱狗|阿給|燒賣|料理|飲料|糖[水醋]|鳳梨|蜜餞|花生|[壽土吐]司|便當|飯盒|鍋貼|扁食|雲吞|刺身|山蘇|多士|咖哩|沙拉|沙母|沙公|海參|鴨賞|旗魚|燒賣|海鮮|河鮮|龍珠|鮟鱇|牛河|熊掌|糕渣|自助餐|可頌|沙威[馬瑪]|三明治|沙淇瑪|原住民|棺材板|官財板|地瓜球|綠豆椪|巧克力|吉拿[富棒]|冰淇淋|佛跳牆|[洋和][菓果]子)"
         self.cookMethodSTR = "[煎煮燉炒炸蒸煨魯滷漬醃炊爆燒拌剝湯焢焗烘烤佐釀涮火]"
         self.cookModSTR = "([麻辣酸清]|酥[脆炸]|[蔥薑蒜]爆|[干乾紅]燒){1,2}"
         self.extenedLIST = [("串燒", "(<ACTION_verb>串燒</ACTION_verb>)"),
@@ -19,7 +19,6 @@ class GenericNER:
                             ("叉燒", "(<ENTITY_oov>叉</ENTITY_oov><ACTION_verb>燒</ACTION_verb>)"),
                             ("卷煎", "(<ENTITY_oov>卷</ENTITY_oov><ACTION_verb>煎</ACTION_verb>)"),
                             ("阿拜", "(<ENTITY_nouny>阿</ENTITY_nouny><ACTION_verb>拜</ACTION_verb>)"),
-                            ("吉拿富", "(<MODIFIER>吉</MODIFIER><ACTION_verb>拿富</ACTION_verb>)"),
                             #<日式食物名：動詞在後>
                             ("手捲", "(<ENTITY_oov>手</ENTITY_oov><ACTION_verb>捲</ACTION_verb>)"),
                             ("犬首燒", "(<ENTITY_oov>犬首</ENTITY_oov><ACTION_verb>燒</ACTION_verb>)"),
@@ -33,6 +32,7 @@ class GenericNER:
                             ("漢堡排", "(<ENTITY_oov>漢堡</ENTITY_oov><ACTION_verb>排</ACTION_verb>)"),
                             #</日式食物名：動詞在後>
                             ("宮保", "(<ENTITY_oov>宮</ENTITY_oov><ACTION_verb>保</ACTION_verb>)"),
+                            ("紙包雞", "(<ENTITY_nouny>紙</ENTITY_nouny><VerbP>包雞</VerbP>)"),
                             ("西多士", "(<ENTITY_oov>西</ENTITY_oov><ENTITY_nouny>多士</ENTITY_nouny>)"),
                             ("漢堡包", "(<ENTITY_oov>漢堡</ENTITY_oov><ACTION_verb>包</ACTION_verb>)"),
                             ("黑貓包", "(<ENTITY_nounHead>黑貓</ENTITY_nounHead><ACTION_verb>包</ACTION_verb>)"),
@@ -66,7 +66,7 @@ class GenericNER:
                             ("韭菜盒子", "(<ENTITY_oov>韭菜</ENTITY_oov><ENTITY_noun>盒子</ENTITY_noun>)"),
                             ("黯然銷魂飯", "(<MODIFIER>黯然</MODIFIER><ENTITY_nounHead>銷魂飯</ENTITY_nounHead>)")
                             ]
-        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊", "菜單", "味")
+        self.escapeTUPLE = ("原住民", "客家", "俄式", "德式", "法式", "美式", "日式", "義式", "英式", "西式", "歐式", "中式", "台式", "泰式", "越式", "韓式", "粵式", "港式", "星州", "大塊", "菜單", "味", "手掌", "牛奶紙盒")
 
         self.foodPat = re.compile("{0}|(<ACTION_verb>[^<]*?{1}+?[^<]*?</ACTION_verb>)?(<MODIFIER>{2}</MODIFIER>)?(<KNOWLEDGE_chemical>酸</KNOWLEDGE_chemical>)?(<MODIFIER_color>[黑紅]</MODIFIER_color>)?(<ENTITY_classifier>三杯</ENTITY_classifier>)?((<ENTITY_nounHead>[^<]*?{3}+[^<民]*?</ENTITY_nounHead>)|(<ENTITY_nouny>[^<]*?{3}+[^<民]*?</ENTITY_nouny>)|(<ENTITY_noun>[^<]*?{3}+[^<民]*?</ENTITY_noun>)|(<ENTITY_oov>[^<]*?{3}+[^<民]*?</ENTITY_oov>|<VerbP>{1}{3}</VerbP>))".format("|".join([p[1] for p in self.extenedLIST]), self.cookMethodSTR, self.cookModSTR, self.mainDishSTR+self.sideDishSTR))
         self.foodPatWLoc = re.compile(r"""{0}|
@@ -657,11 +657,12 @@ if __name__ == "__main__":
     testLIST = [{"result_list": [{"result_pos": ["<TIME_day>今晚</TIME_day><ACTION_verb>來</ACTION_verb><ACTION_verb>點</ACTION_verb><ENTITY_classifier>一道</ENTITY_classifier><ENTITY_nouny>法式</ENTITY_nouny><ACTION_verb>焗烤</ACTION_verb><ENTITY_nouny>龍蝦</ENTITY_nouny>"]},
                                  {"result_pos": ["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>排骨</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]},
                                  {"result_pos": ['<TIME_year>今年</TIME_year><ENTITY_num>十</ENTITY_num><ENTITY_noun>歲</ENTITY_noun><FUNC_inner>的</FUNC_inner><ENTITY_person>彼德</ENTITY_person><ACTION_verb>有</ACTION_verb><ENTITY_classifier>一個</ENTITY_classifier><ENTITY_num>八</ENTITY_num><ENTITY_noun>歲</ENTITY_noun><FUNC_inner>的</FUNC_inner><ENTITY_pronoun>弟弟</ENTITY_pronoun><FUNC_conjunction>和</FUNC_conjunction><ENTITY_classifier>一個</ENTITY_classifier><ENTITY_num>十四</ENTITY_num><ENTITY_noun>歲</ENTITY_noun><FUNC_inner>的</FUNC_inner><ENTITY_pronoun>姐姐</ENTITY_pronoun>',
-                                                 '，',
-                                                 '<ENTITY_nouny>測試人</ENTITY_nouny><ENTITY_nounHead>名</ENTITY_nounHead><ENTITY_person>蔡英文</ENTITY_person><FUNC_conjunction>與</FUNC_conjunction><ENTITY_nouny>陳</ENTITY_nouny><FUNC_inner>時</FUNC_inner><LOCATION>中共</LOCATION><MODIFIER>同</MODIFIER><ACTION_verb>參與</ACTION_verb><ENTITY_nouny>會議</ENTITY_nouny>']},
+                                                '，',
+                                                '<ENTITY_nouny>測試人</ENTITY_nouny><ENTITY_nounHead>名</ENTITY_nounHead><ENTITY_person>蔡英文</ENTITY_person><FUNC_conjunction>與</FUNC_conjunction><ENTITY_nouny>陳</ENTITY_nouny><FUNC_inner>時</FUNC_inner><LOCATION>中共</LOCATION><MODIFIER>同</MODIFIER><ACTION_verb>參與</ACTION_verb><ENTITY_nouny>會議</ENTITY_nouny>']},
                                  {'result_pos': ['<ENTITY_oov>容量</ENTITY_oov><ENTITY_measurement>1公升</ENTITY_measurement><FUNC_inner>的</FUNC_inner><ENTITY_nouny>牛奶紙盒</ENTITY_nouny><RANGE_locality>裡</RANGE_locality><MODIFIER>只</MODIFIER><MODAL>能</MODAL><ACTION_verb>裝</ACTION_verb>',
-                                                 ' ',
-                                                 '<ENTITY_measurement>995.5毫升</ENTITY_measurement><FUNC_inner>的</FUNC_inner><ENTITY_nouny>水</ENTITY_nouny>']}],
+                                                ' ',
+                                                '<ENTITY_measurement>995.5毫升</ENTITY_measurement><FUNC_inner>的</FUNC_inner><ENTITY_nouny>水</ENTITY_nouny>']}],
+
                  "status": True}]
     resultLIST = gNER.getFood(testLIST, indexWithPOS=False)
     pprint(resultLIST)
