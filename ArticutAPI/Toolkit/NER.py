@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import re
+import emoji
 
 class GenericNER:
     def __init__(self, locale=None):
@@ -102,6 +103,7 @@ class GenericNER:
         self.durationPat    = None
         self.integerPat     = None
         self.decimalPat     = None
+        self.emojiPat       = None
         self.ordinalPat     = None
         self.currencyPat = re.compile("(?<=<KNOWLEDGE_currency>)[^<]*?(?=</KNOWLEDGE_currency>)")
         self.currencyGreedyPat = re.compile("(?<=[元金幣圜圓比布索鎊盾銖令朗郎]</ENTITY_noun><ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
@@ -261,6 +263,12 @@ class GenericNER:
 
         return resultLIST
 
+    def _getDtNER(self, ArticutResultDICT, rePat, indexWithPOS=True):
+        '''
+        Dummy function rePat 非 MSRA NER 標準，沿用 _getMSRA()
+        '''
+        return self._getMSRA(ArticutResultDICT, rePat, indexWithPOS)
+
     def mergeBulkResult(self, inputLIST):
         resultLIST = []
         resultExtend = resultLIST.extend
@@ -361,6 +369,26 @@ class GenericNER:
                                              (<TIME_justtime>[^<]+?分鐘</TIME_justtime>)|(<TIME_day>[^<星禮今明昨前後]+?天</TIME_day>)|(<TIME_week>[^<周週]+?([周週]|個星期|個禮拜)</TIME_week>)|(<TIME_month>[^<周週]+?個月</TIME_week>)|(<TIME_season>[^<]+?</TIME_season>)|(<TIME_year>[^<]+?</TIME_year>)|(<TIME_decade>[^<]+?</TIME_decade>)""", re.X)
 
         resultLIST = self._getMSRA(ArticutResultDICT, self.durationPat, indexWithPOS)
+
+        return resultLIST
+
+    def getEmoji(self, ArticutResultDICT, indexWithPOS=True):
+        '''
+        取出文本中的「emoji」的符號
+        '''
+        emojiLIST = []
+        if "result_pos" in ArticutResultDICT:
+            emojiLIST = set([x["emoji"] for x in emoji.emoji_list("".join(ArticutResultDICT["result_pos"]))])
+        elif type(ArticutResultDICT) == list:
+            emojiExtend = emojiLIST.extend
+            ArticutResultLIST = self.mergeBulkResult(ArticutResultDICT)
+            for result_d in ArticutResultLIST:
+                emojiExtend([x["emoji"] for x in emoji.emoji_list("".join(result_d["result_pos"]))])
+            emojiLIST = set(emojiLIST)
+
+        self.emojiPat = re.compile("<ENTITY_oov>[{}]</ENTITY_oov>".format(emojiLIST))
+
+        resultLIST = self._getDtNER(ArticutResultDICT, self.emojiPat, indexWithPOS)
 
         return resultLIST
 
@@ -611,7 +639,7 @@ class GenericNER:
 
     def getTime(self, ArticutResultDICT, indexWithPOS=True):
         '''
-        依 MSRA (微軟亞洲研究院, Microsoft Research Lab Asia) NER 標準取出文本中的描述「時間」的字串
+        依 NER 標準取出文本中的描述「時間」的字串
         '''
         if self.timePat !=None:
             pass
@@ -669,14 +697,9 @@ if __name__ == "__main__":
 
     #foodTestDICT = {"result_pos":["<ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>排骨</ENTITY_noun><ACTION_verb>加</ACTION_verb><ENTITY_noun>藥燉</ENTITY_noun><ENTITY_noun>土虱</ENTITY_noun>", "，", "<ENTITY_nouny>花生卷</ENTITY_nouny><ACTION_verb>加</ACTION_verb><ENTITY_noun>冰淇淋</ENTITY_noun>"]}
     #foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
-    #print(foodLIST)
-
-    #foodTestDICT = {"result_pos": ["<TIME_day>今晚</TIME_day><ACTION_verb>來</ACTION_verb><ACTION_verb>點</ACTION_verb><ENTITY_classifier>一道</ENTITY_classifier><ENTITY_nouny>法式</ENTITY_nouny><ACTION_verb>焗烤</ACTION_verb><ENTITY_nouny>龍蝦</ENTITY_nouny>"]}
-    #foodLIST = gNER.getFood(foodTestDICT, withLocation=True)
-    #print(foodLIST)
-
+    #pprint(foodLIST)
 
 
     #ageTestDICT = {"result_pos":["<ENTITY_num>六</ENTITY_num><ENTITY_noun>歲</ENTITY_noun>"]}
     #ageLIST = gNER.getAge(ageTestDICT, False)
-    #print(ageLIST)
+    #pprint(ageLIST)

@@ -102,10 +102,11 @@ class WS_Articut:
                 print("WebSocket[Bulk] Connection Failed.", e)
         return self.ws.connected
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
         if self._wsCreateConnection():
             payload = {"level": level,
                        "chemical": chemicalBOOL,
+                       "emoji": emojiBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
@@ -185,13 +186,14 @@ class WS_Articut:
 
         return inputLIST
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         resultLIST = []
         if self._wsCreateConnection():
             resultAppend = resultLIST.append
             inputLen = len(inputLIST)
             payload = {"level": level,
                        "chemical": chemicalBOOL,
+                       "emoji": emojiBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,

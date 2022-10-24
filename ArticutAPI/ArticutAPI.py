@@ -87,28 +87,31 @@ class Articut:
     def __str__(self):
         return "Articut API"
 
-    def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
-        if level not in ("lv1", "lv2", "lv3"):
+    def parse(self, inputSTR, level="", userDefinedDictFILE=None, chemicalBOOL=True, emojiBOOL=True, openDataPlaceAccessBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
+        if level.lower() not in ("lv1", "lv2", "lv3"):
             level = self.level
 
         self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
         self.wikiDataBOOL=wikiDataBOOL
         self.chemicalBOOL=chemicalBOOL
+        self.emojiBOOL=emojiBOOL
         url = "{}/Articut/API/".format(self.url)
         if level in ("lv1", "lv2"):
             payload = {"username": self.username,                     #String Type：使用者帳號 email
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
-                       "level": level,                                #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                       "level": level.lower(),                        #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
                        "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
+                       "emoji": self.emojiBOOL,                       #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
         else:
             payload = {"username": self.username,                     #String Type：使用者帳號 email
                        "api_key": self.apikey,                        #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
                        "version": self.version,                       #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
-                       "level": level,                                #String Type：指定為 lv3 語意斷詞。
+                       "level": level.lower(),                        #String Type：指定為 lv3 語意斷詞。
                        "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
+                       "emoji": self.emojiBOOL,                       #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
                        "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
                        "index_with_pos":False,
@@ -367,7 +370,7 @@ if __name__ == "__main__":
 
     #取得斷詞結果
     if not resultExistBOOL:
-        resultDICT = articut.parse(inputSTR, level="lv2", openDataPlaceAccessBOOL=False, wikiDataBOOL=False)
+        resultDICT = articut.parse(inputSTR, level="lv2")
 
         #儲存斷詞結果
         try:
@@ -516,6 +519,8 @@ if __name__ == "__main__":
     inputSTR = "前天你說便宜的油還在海上，怎麼兩天後就到港口了？"
     lv3result = articut.parse(inputSTR, level="lv3",
                               userDefinedDictFILE=None,
+                              chemicalBOOL=True,
+                              emojiBOOL=True,
                               openDataPlaceAccessBOOL=False,
                               wikiDataBOOL=False,
                               indexWithPOS=False,

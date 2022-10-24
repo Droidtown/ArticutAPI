@@ -81,9 +81,10 @@ class MP_Articut:
     def __str__(self):
         return "Articut Multiprocessing API"
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
         payload = {"level": level,
                    "chemical": chemicalBOOL,
+                   "emoji": emojiBOOL,
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
                    "index_with_pos": indexWithPOS,
@@ -162,7 +163,7 @@ class MP_Articut:
 
         return inputLIST
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         inputLIST2 = []
         inputLen = len(inputLIST)
 
@@ -184,7 +185,7 @@ class MP_Articut:
         #print(inputLIST2)
         for i, inputLIST in enumerate(inputLIST2):
             resultAppend(pool.apply_async(self._run, (i, inputLIST, level,
-                userDefinedDICT, chemicalBOOL, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
+                userDefinedDICT, chemicalBOOL, emojiBOOL, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
         pool.close()
         pool.join()
 
@@ -194,10 +195,11 @@ class MP_Articut:
 
         return [x[1] for x in resultLIST]
 
-    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
         payload = {"input_list": inputLIST,
                    "level": level,
                    "chemical": chemicalBOOL,
+                   "emoji": emojiBOOL,
                    "user_defined_dict_file": userDefinedDICT,
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
