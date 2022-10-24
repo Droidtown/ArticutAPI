@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="ArticutAPI",
-    version="1.2.2",
+    version="1.3.0",
     author="Droidtown Linguistic Tech. Co. Ltd.",
     author_email="info@droidtown.co",
     description="Articut NLP system provides not only finest results on Chinese word segmentaion (CWS), Part-of-Speech tagging (POS) and Named Entity Recogintion tagging (NER), but also the fastest online API service in the NLP industry.",
@@ -39,7 +39,7 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     include_package_data=True,
-    install_requires=["requests >= 2.25.1", "graphene"],
+    install_requires=["requests >= 2.25.1", "emoji", "graphene"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
@@ -47,6 +47,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Development Status :: 5 - Production/Stable",
