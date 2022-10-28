@@ -14,6 +14,7 @@
         questionDICT    dict
 """
 
+import numpy as np
 from intentFunction import *
 
 DEBUG_Definition = True
@@ -28,6 +29,12 @@ def debugInfo(pattern, utterance, args):
 
 def getResult(pattern, utterance, args, inputUtterance, questionDICT):
     debugInfo(pattern, utterance, args)
+
+    try:
+        if inputUtterance in np.array(questionDICT["Process"])[:,0]:
+            return questionDICT
+    except:
+        pass
 
     if utterance == "[甲數]是[20]":
         questionDICT = existential("", args[0], int(args[1]), "", questionDICT)
@@ -270,6 +277,18 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
             questionDICT["Process"].append([inputUtterance, "{}={}人".format(args[0], amount)])
 
     if utterance == "[小雨]有[7元]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
+
+    if utterance == "[弟弟]有[7元]":
+        numberSTR, amount = amountSTRconvert(args[1])
+        unit = args[1].replace(numberSTR, "")
+        questionDICT = existential(args[0], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], amount, unit)])
+
+    if utterance == "[弟弟]原有[100元]":
         numberSTR, amount = amountSTRconvert(args[1])
         unit = args[1].replace(numberSTR, "")
         questionDICT = existential(args[0], "", amount, unit, questionDICT)

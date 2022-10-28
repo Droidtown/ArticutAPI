@@ -285,6 +285,11 @@ def existential(subject, entity, amount, unit, questionDICT):
     else:
         questionDICT["Entity"][unit] = [entity]
 
+    try:
+        if {unit: amount} in questionDICT["Calculation"][entity][subject]:
+            return questionDICT
+    except:
+        pass
     if entity in questionDICT["Definition"]:
         if subject in questionDICT["Definition"][entity]:
             questionDICT["Definition"][entity][subject][unit] = amount

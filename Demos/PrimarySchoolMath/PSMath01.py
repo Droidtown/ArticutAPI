@@ -190,7 +190,7 @@ def runLoki(inputSTR):
 
 if __name__ == "__main__":
     # HINT: 測試段落。
-    input_str = "小毛有10架紙飛機，小毛比大毛多摺7架紙飛機，總共有幾架紙飛機"
+    input_str = "學校買來38個排球，一班借走了10個，學校還剩下多少個？"
     resultDICT = runLoki(input_str)
     print("Result ===>")
     pprint(resultDICT)

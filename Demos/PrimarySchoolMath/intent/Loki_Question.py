@@ -29,38 +29,38 @@ def debugInfo(pattern, utterance, args):
 def getResult(pattern, utterance, args, inputUtterance, questionDICT):
     debugInfo(pattern, utterance, args)
 
-    if utterance == "共賣出幾[雙][鞋子]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
+    if utterance == "[共]賣出幾[雙][鞋子]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
-    if utterance == "一共做了多少[個][作品]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
+    if utterance == "[一共]做了多少[個][作品]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
-    if utterance == "一共吃了幾[顆][巧克力]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
+    if utterance == "[一共]吃了幾[顆][巧克力]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
-    if utterance == "總共有幾人":
+    if utterance == "[總共]有幾人":
         subject, entity, entityAmount, questionDICT = inTotal("", "", "人", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}人".format(entityAmount)])
 
-    if utterance == "總共有幾[條][小魚]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
+    if utterance == "[總共]有幾[條][小魚]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
-    if utterance == "共包了幾[個][粽子]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
+    if utterance == "[共]包了幾[個][粽子]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
-    if utterance == "一共有[氣球]多少[個]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[0], args[1], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], entityAmount, args[1])])
+    if utterance == "[一共]有[氣球]多少[個]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[1], args[2], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[2])])
 
-    if utterance == "一共做了多少[個][蝴蝶][結]":
-        entity = args[1]+args[2]
-        subject, entity, entityAmount, questionDICT = inTotal("", entity, args[0], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[0])])
+    if utterance == "[一共]做了多少[個][蝴蝶][結]":
+        entity = args[2]+args[3]
+        subject, entity, entityAmount, questionDICT = inTotal("", entity, args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
 
     if utterance == "剩下幾[個]":
         subject, entity, entityAmount, questionDICT = difference("", "", args[0], questionDICT)
@@ -122,20 +122,20 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, entityAmount, questionDICT = inTotal(args[0], args[2], args[1], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
 
-    if utterance == "[他們]總共有幾元":
+    if utterance == "[他們][總共]有幾元":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], "", "元", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}元".format(entityAmount)])
 
-    if utterance == "[蘋果]總共有幾[顆]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[0], args[1], questionDICT)
+    if utterance == "[蘋果][總共]有幾[顆]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[0], args[2], questionDICT)
         if subject == "":
-            questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
+            questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[2])])
         else:
-            questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, entity, entityAmount, args[1])])
+            questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, entity, entityAmount, args[2])])
 
-    if utterance == "[冰箱][裡]總共有幾[顆]":
-        subject, entity, entityAmount, questionDICT = inTotal(args[0]+args[1], "", args[2], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, entity, entityAmount, args[2])])
+    if utterance == "[冰箱][裡][總共]有幾[顆]":
+        subject, entity, entityAmount, questionDICT = inTotal(args[0]+args[1], "", args[3], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}_{}={}{}".format(subject, entity, entityAmount, args[3])])
 
     if utterance == "[皇后]有幾[顆][寶石]":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], args[2], args[1], questionDICT)
@@ -168,11 +168,15 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
             subject, entity, entityAmount, questionDICT = inTotal(args[0], "", "元", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}元".format(entityAmount)])
 
-    if utterance == "[哥哥]總共用多少元":
+    if utterance == "[哥哥][總共]用多少元":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], "", "元", questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}元".format(entityAmount)])
 
     if utterance == "[姊姊]踢了幾[下]":
+        subject, entity, entityAmount, questionDICT = inTotal(args[0], "", args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], entityAmount, args[1])])
+
+    if utterance == "[哥哥]有幾[塊]":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], "", args[1], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[0], entityAmount, args[1])])
 
@@ -185,6 +189,10 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[1], entityAmount, args[0])])
 
     if utterance == "[老師]還有幾[條][緞帶]":
+        subject, entity, entityAmount, questionDICT = inTotal(args[0], args[2], args[1], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
+
+    if utterance == "[阿姨]買了多少[個][月餅]":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], args[2], args[1], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(args[2], entityAmount, args[1])])
 
@@ -244,24 +252,24 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, entity, entityAmount, questionDICT = inTotal(args[0]+"班", args[2], args[1], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}班={}{}".format(args[0], entityAmount, args[1])])
 
-    if utterance == "[兩個]班一共用了多少[張]":
-        subject, entity, entityAmount, questionDICT = inTotal("", "", args[1], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
+    if utterance == "[兩個]班[一共]用了多少[張]":
+        subject, entity, entityAmount, questionDICT = inTotal("", "", args[2], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[2])])
 
     if utterance == "[黑][珠子]有幾[顆]":
         entity = args[0]+args[1]
         subject, entity, entityAmount, questionDICT = inTotal("", entity, args[2], questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[2])])
 
-    if utterance == "[兩天]共賣出幾[雙][鞋子]":
-        subject, entity, entityAmount, questionDICT = inTotal("", args[2], args[1], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
+    if utterance == "[兩天][共]賣出幾[雙][鞋子]":
+        subject, entity, entityAmount, questionDICT = inTotal("", args[3], args[2], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[2])])
 
-    if utterance == "[現在]總共有幾[顆]":
-        subject, entity, entityAmount, questionDICT = inTotal("", "", args[1], questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[1])])
+    if utterance == "[現在][總共]有幾[顆]":
+        subject, entity, entityAmount, questionDICT = inTotal("", "", args[2], questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}{}".format(entity, entityAmount, args[2])])
 
-    if utterance == "[哥哥]總共花掉多少元":
+    if utterance == "[哥哥][總共]花掉多少元":
         subject, entity, entityAmount, questionDICT = inTotal(args[0], "", "元")
         questionDICT["Process"].append([inputUtterance, "{}元".format(entityAmount)])
 

@@ -86,6 +86,12 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
 
+    if utterance == "[哥哥]比[弟弟]多[8塊]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(args[0], args[1], amount, unit)])
+
     if utterance == "[王子]比[國王]多做[9][下]":
         numberSTR, amount = amountSTRconvert(args[2])
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, args[3], questionDICT)
@@ -96,6 +102,12 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         unit = args[2].replace(numberSTR, "")
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(args[0], args[1], amount, unit)])
+
+    if utterance == "[秀秀]比[她]少吃了[3顆]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject1, subject2, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}+{}{}".format(subject1, subject2, -amount, unit)])
 
     if utterance == "[大目]比[阿草]多吃了[5塊][小披薩]":
         numberSTR, amount = amountSTRconvert(args[2])
@@ -137,6 +149,18 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
         questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
 
+    if utterance == "[黃花]比[紅花]少[9朵]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
+
+    if utterance == "[阿姨]比[媽媽]多買[14個]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], "", "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}-{}{}".format(args[0], args[1], amount, unit)])
+
     if utterance == "[小毛]比[大毛]多摺了[8架][紙飛機]":
         numberSTR, amount = amountSTRconvert(args[2])
         unit = args[2].replace(numberSTR, "")
@@ -144,6 +168,18 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
         questionDICT["Process"].append([inputUtterance, "{}={}_{}+{}{}".format(args[0], args[1], args[3], amount, unit)])
 
     if utterance == "[小毛]比[大毛]少摺了[8架][紙飛機]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], args[3], "", -amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}_{}-{}{}".format(args[0], args[1], args[3], amount, unit)])
+
+    if utterance == "[小毛]比[大毛]多摺[7架][紙飛機]":
+        numberSTR, amount = amountSTRconvert(args[2])
+        unit = args[2].replace(numberSTR, "")
+        subject, refOBJ, questionDICT = bitransitive(args[0], args[1], args[3], "", amount, unit, questionDICT)
+        questionDICT["Process"].append([inputUtterance, "{}={}_{}+{}{}".format(args[0], args[1], args[3], amount, unit)])
+
+    if utterance == "[小毛]比[大毛]少摺[7架][紙飛機]":
         numberSTR, amount = amountSTRconvert(args[2])
         unit = args[2].replace(numberSTR, "")
         subject, refOBJ, questionDICT = bitransitive(args[0], args[1], args[3], "", -amount, unit, questionDICT)
