@@ -439,7 +439,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
     if utterance == "有[8]人下車":
         numberSTR, amount = amountSTRconvert(args[0])
         subject, entity, questionDICT = transitive("", "", -amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "{}人".format(amount)])
+        questionDICT["Process"].append([inputUtterance, "-{}人".format(amount)])
 
     if utterance == "[8片][光碟]放回[CD][盒][裡]":
         numberSTR, amount = amountSTRconvert(args[0])
@@ -606,7 +606,7 @@ def getResult(pattern, utterance, args, inputUtterance, questionDICT):
     if utterance == "[上午]來了[遊客][583]人":
         numberSTR, amount = amountSTRconvert(args[2])
         subject, entity, questionDICT = transitive("", args[1], amount, "人", questionDICT)
-        questionDICT["Process"].append([inputUtterance, "+{}人".format(amount)])
+        questionDICT["Process"].append([inputUtterance, "{}+{}人".format(args[1], amount)])
 
     if utterance == "[中午]走了[107]人":
         numberSTR, amount = amountSTRconvert(args[1])
