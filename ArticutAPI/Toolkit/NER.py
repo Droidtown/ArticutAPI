@@ -386,7 +386,7 @@ class GenericNER:
                 emojiExtend([x["emoji"] for x in emoji.emoji_list("".join(result_d["result_pos"]))])
             emojiLIST = set(emojiLIST)
 
-        self.emojiPat = re.compile("<ENTITY_oov>[{}]</ENTITY_oov>".format(emojiLIST))
+        self.emojiPat = re.compile("<ENTITY_oov>({})</ENTITY_oov>".format("|".join(emojiLIST)))
 
         resultLIST = self._getDtNER(ArticutResultDICT, self.emojiPat, indexWithPOS)
 
