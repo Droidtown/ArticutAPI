@@ -10,7 +10,7 @@ import platform
 def main(moduleNameSTR):
     pythonLIST = [p for p in os.popen("where python").read().split("\n") if p !=""]
 
-    print("請選擇要安裝 request 模組的版本")
+    print("請選擇要安裝 {} 模組的版本".format(moduleNameSTR))
     for i in range(0, len(pythonLIST)):
         print("{}). {}".format(i+1, pythonLIST[i]))
 
