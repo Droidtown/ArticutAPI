@@ -209,7 +209,7 @@ class MP_Articut:
             payload["time_ref"] = str(timeRef)
         #print(payload)
         response = requests.post("{}/Articut/BulkAPI/".format(self.url), json=payload)
-        print(response)
+        #print(response)
         if response.status_code == 200:
             #print(response.json())
             return [index, response.json()]

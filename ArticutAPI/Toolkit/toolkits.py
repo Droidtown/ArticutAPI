@@ -41,7 +41,7 @@ class ArticutPOS:
         self.currencyGreedyGapPat = re.compile("(?<=^<ENTITY_num>)[^<]*?(?=</ENTITY_num>)")
         self.chemicalPat = re.compile("(?<=<KNOWLEDGE_chemical>)[^<]*?(?=</KNOWLEDGE_chemical>)")
         self.wikiDataPat = re.compile("(?<=<KNOWLEDGE_wikiData>)[^<]*?(?=</KNOWLEDGE_wikiData>)")
-        self.stripPat = re.compile("(?<=>).*?(?=<)")
+        self.stripPat = re.compile("(?<=>)[^<>]+(?=</)")
         self.clausePat = re.compile("\<CLAUSE_.*?Q\>")
         self.contentPat = re.compile("|".join([self.verbPat.pattern, self.nounPat.pattern, self.modifierPat.pattern, self.modifierPPat.pattern, self.userDefinedPat.pattern]))
 
@@ -62,6 +62,7 @@ class ArticutPOS:
                 if posLIST:
                     tmpLIST = []
                     for start, end, seg in posLIST:
+
                         posEndSTR = parseResultDICT["result_pos"][i][:start]
                         segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
                         tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))

@@ -4,11 +4,18 @@
 import json
 import re
 import unicodedata
-
+from copy import deepcopy
 from math import log10
+try:
+    from data.idf import aidf
+except:
+    from .data.idf import aidf
+
+if aidf:
+    aidfDICT = deepcopy(aidf)
 
 class WordExtractionTFIDF(object):
-    def __init__(self):
+    def __init__(self, aidf=aidf):
         self.thd = 0.06
         self.idfDICT, self.docCount = self._getIdfDict("idf.json")
 
@@ -17,15 +24,20 @@ class WordExtractionTFIDF(object):
 
     def _getIdfDict(self, fn):
         import os
-        fn = "{}/data/{}".format(os.path.dirname(os.path.abspath(__file__)),fn)
+        fn = "{}/data/{}".format(os.path.dirname(os.path.abspath(__file__)), fn)
         try:
-            aidf = json.load(open(fn, "r", encoding=("UTF-8")))
-            # idfDICT = {"":[fn id list], w:[ids, ids, ...], ...}
-            return aidf, len(aidf[""])
+            if os.path.isfile(fn):
+                aidf = json.load(open(fn, "r", encoding=("UTF-8")))
+                # idfDICT = {"":[fn id list], w:[ids, ids, ...], ...}
+                return aidf, len(aidf[""])
         except Exception as e:
             print("idf dict import error.")
             print(str(e))
-            return None
+
+        if aidfDICT:
+            return aidfDICT, len(aidfDICT[""])
+        else:
+            return {}, 0
 
     def eval(self, wct, wlst, dct, idfd):
         # wlst = {w:ct, w:ct, ...}
@@ -77,7 +89,10 @@ class WordExtractionTFIDF(object):
         if self.thd < 0: self.thd = 20
 
         # get word list
-        wordLIST = inputSTR.split("/")            # wordLIST = ["沒有", "人", ...]
+        if type(inputSTR) == list:
+            wordLIST = inputSTR
+        else:
+            wordLIST = inputSTR.split("/")            # wordLIST = ["沒有", "人", ...]
 
         # get tfDICT and get wct of the inputSTR
         tfDICT, wct = self.getTfList(wordLIST)    # tfDICT = {"沒有":1, "命運":        2, ...}
