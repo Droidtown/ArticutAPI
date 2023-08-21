@@ -104,16 +104,16 @@ pprint(locationStemLIST)
 ["<ENTITY_pronoun>你</ENTITY_pronoun><ACTION_verb>計劃</ACTION_verb><ASPECT>過</ASPECT><LOCATION>地球</LOCATION><ENTITY_oov>人類</ENTITY_oov><ACTION_verb>補完</ACTION_verb><ENTITY_nounHead>計劃</ENTITY_nounHead>"]
 
 #列出所有的 content word.
-[[(177, 179, "計劃"), (144, 145, "補"), (116, 118, "人類"), (47, 49, "計劃")]]
+[[(47, 49, '計劃'), (117, 119, '人類'), (146, 147, '補'), (196, 198, '計劃')]]
 
 #列出所有的 verb word. (動詞)
-[[(41, 43, '計劃'), (111, 112, '補')]]
+[[(47, 49, '計劃'), (146, 147, '補')]]
 
 #列出所有的 noun word. (名詞)
-[[(88, 90, '人類'), (138, 140, '計劃')]]
+[[(117, 119, '人類'), (196, 198, '計劃')]]
 
 #列出所有的 location word. (地方名稱)
-[[(62, 64, "地球")]]
+[[(91, 93, '地球')]]
 ```
 
 ### 取得 Articut 版本列表
