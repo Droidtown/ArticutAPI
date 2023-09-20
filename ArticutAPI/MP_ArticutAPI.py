@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import os
-import re
-import time
-
-try:
-    import rapidjson as json
-except:
-    import json
-
 try:
     import requests
 except Exception as e:
@@ -23,8 +14,13 @@ except Exception as e:
     else:
         print(e)
 
-from multiprocessing import cpu_count, Pool
+from pathlib import os, sys
 from pprint import pprint
+
+if getattr(sys, 'frozen', False):
+    from multiprocessing.dummy import Pool, freeze_support
+else:
+    from multiprocessing import Pool, freeze_support
 
 try:
     from Toolkit.analyse import AnalyseManager
@@ -37,18 +33,28 @@ except: #供外部載入時使用。
     from .Toolkit.toolkits import *
     from .Toolkit.NER import GenericNER
 
+import time
+try:
+    import rapidjson as json
+except:
+    import json
 
 class MP_Articut:
-    def __init__(self, url="http://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None):
+    def __init__(self, url="http://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None, processes=-1):
+        freeze_support()
         self.port = port
         if url.startswith("http"):
             self.url = "{}:{}".format(url, port)
         else:
             self.url = "http://{}:{}".format(url, port)
         self.bulkSize = bulkSize
-        self.processes = cpu_count()
-        if self.processes > 8:
-            self.processes = 8
+        defaultProcesses = os.cpu_count()
+        if processes > 0 and processes <= defaultProcesses:
+            self.processes = processes
+        else:
+            self.processes = defaultProcesses
+            if self.processes > 8:
+                self.processes = 8
 
         self.userDefinedDictFILE = None
         self.openDataPlaceAccessBOOL=False

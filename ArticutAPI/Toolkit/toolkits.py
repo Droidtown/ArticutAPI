@@ -62,7 +62,6 @@ class ArticutPOS:
                 if posLIST:
                     tmpLIST = []
                     for start, end, seg in posLIST:
-
                         posEndSTR = parseResultDICT["result_pos"][i][:start]
                         segEndSTR = "".join([x.group() for x in self.stripPat.finditer(posEndSTR)])
                         tmpLIST.append((len(segEndSTR), len(segEndSTR)+len(seg), seg))
