@@ -91,10 +91,10 @@ class Articut:
         if level.lower() not in ("lv1", "lv2", "lv3"):
             level = self.level
 
-        self.openDataPlaceAccessBOOL=openDataPlaceAccessBOOL
-        self.wikiDataBOOL=wikiDataBOOL
-        self.chemicalBOOL=chemicalBOOL
-        self.emojiBOOL=emojiBOOL
+        self.openDataPlaceAccessBOOL = openDataPlaceAccessBOOL
+        self.wikiDataBOOL = wikiDataBOOL
+        self.chemicalBOOL = chemicalBOOL
+        self.emojiBOOL = emojiBOOL
         url = "{}/Articut/API/".format(self.url)
         if level in ("lv1", "lv2"):
             payload = {"username": self.username,                     #String Type：使用者帳號 email
@@ -103,7 +103,7 @@ class Articut:
                        "level": level.lower(),                        #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
                        "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
                        "emoji": self.emojiBOOL,                       #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
-                       "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                       "opendata_place": self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL}                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
         else:
             payload = {"username": self.username,                     #String Type：使用者帳號 email
@@ -112,10 +112,10 @@ class Articut:
                        "level": level.lower(),                        #String Type：指定為 lv3 語意斷詞。
                        "chemical": self.chemicalBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
                        "emoji": self.emojiBOOL,                       #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
-                       "opendata_place":self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                       "opendata_place": self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
                        "wikidata": self.wikiDataBOOL,                 #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
-                       "index_with_pos":False,
-                       "pinyin":pinyin
+                       "index_with_pos": False,
+                       "pinyin": pinyin
             }
             if timeRef:
                 payload["time_ref"] = str(timeRef)
@@ -150,35 +150,36 @@ class Articut:
             retry_count = 0
             while True:
                 try:
-                    result = requests.post(url, json=payload)
-                    if result.status_code == 200:
-                        result = result.json()
-                        if not result["status"]:
-                            return result
+                    responseDICT = requests.post(url, json=payload)
+                    if responseDICT.status_code == 200:
+                        responseDICT = responseDICT.json()
+                        if not responseDICT["status"]:
+                            return responseDICT
 
                         if resultDICT:
-                            resultDICT["exec_time"] += result["exec_time"]
-                            resultDICT["word_count_balance"] = result["word_count_balance"]
+                            resultDICT["exec_time"] += responseDICT["exec_time"]
+                            if "word_count_balance" in responseDICT:
+                                resultDICT["word_count_balance"] = responseDICT["word_count_balance"]
                             if level in ("lv1", "lv2"):
-                                resultDICT["result_obj"].extend(result["result_obj"])
-                                resultDICT["result_pos"].extend(result["result_pos"])
-                                resultDICT["result_segmentation"] += "/{}".format(result["result_segmentation"])
+                                resultDICT["result_obj"].extend(responseDICT["result_obj"])
+                                resultDICT["result_pos"].extend(responseDICT["result_pos"])
+                                resultDICT["result_segmentation"] += "/{}".format(responseDICT["result_segmentation"])
                             else:
-                                resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in result["input"]])
-                                resultDICT["entity"].extend(result["entity"])
-                                resultDICT["event"].extend(result["event"])
-                                resultDICT["person"].extend(result["person"])
-                                resultDICT["site"].extend(result["site"])
-                                resultDICT["time"].extend(result["time"])
-                                resultDICT["user_defined"].extend(result["user_defined"])
-                                resultDICT["utterance"].extend(result["utterance"])
-                                resultDICT["number"] = {**resultDICT["number"], **result["number"]}
-                                resultDICT["unit"] = {**resultDICT["unit"], **result["unit"]}
+                                resultDICT["input"].extend([[i[0] + count, i[1] + count] for i in responseDICT["input"]])
+                                resultDICT["entity"].extend(responseDICT["entity"])
+                                resultDICT["event"].extend(responseDICT["event"])
+                                resultDICT["person"].extend(responseDICT["person"])
+                                resultDICT["site"].extend(responseDICT["site"])
+                                resultDICT["time"].extend(responseDICT["time"])
+                                resultDICT["user_defined"].extend(responseDICT["user_defined"])
+                                resultDICT["utterance"].extend(responseDICT["utterance"])
+                                resultDICT["number"] = {**resultDICT["number"], **responseDICT["number"]}
+                                resultDICT["unit"] = {**resultDICT["unit"], **responseDICT["unit"]}
                         else:
-                            resultDICT = result
+                            resultDICT = responseDICT
                         count += len(x)
                     else:
-                        return result
+                        return responseDICT
 
                     # 成功取得結果跳出 while 迴圈
                     break
@@ -222,12 +223,12 @@ class Articut:
         url = "{}/Articut/Versions/".format(self.url)
         payload = {"username":  self.username,
                    "api_key":   self.apikey}
-        result = requests.post(url, data=payload)
-        if result.status_code == 200:
-            result = result.json()
-            result["product"] = "{}/product/".format(self.url)
-            result["document"] = "{}/document/".format(self.url)
-        return result
+        responseDICT = requests.post(url, data=payload)
+        if responseDICT.status_code == 200:
+            responseDICT = responseDICT.json()
+            responseDICT["product"] = "{}/product/".format(self.url)
+            responseDICT["document"] = "{}/document/".format(self.url)
+        return responseDICT
 
     ##############################################################################
     #                                 Toolkits                                   #
@@ -350,7 +351,7 @@ if __name__ == "__main__":
     inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。他表示當初自己領著柯文哲一同探索了雙連市場與中山捷運站的小吃與商圈，還有商圈內的文創商店與日系雜物店鋪，都令柯文哲留下深刻的印象。劉克襄也認為，雙連市場內的魯肉飯、圓仔湯與切仔麵，還有九條通的日式店家、居酒屋等特色，也能讓人感受到台北舊城區不一樣的魅力。" #Articut-GraphQL Demo
     #inputSTR = "業經前案判決非法持有可發射子彈具殺傷力之槍枝罪"
     #inputSTR = "劉克襄在本次活動當中，分享了台北中山北路一日遊路線。"
-    inputSTR = "在常溫下可將銀氧化成氧化銀"
+    #inputSTR = "在常溫下可將銀氧化成氧化銀"
     articut = Articut()
 
     print("inputSTR:{}\n".format(inputSTR))
