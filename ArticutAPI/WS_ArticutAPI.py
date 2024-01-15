@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import os
-import re
-import time
-
-try:
-    import rapidjson as json
-except:
-    import json
-
 try:
     import requests
 except Exception as e:
@@ -23,7 +14,14 @@ except Exception as e:
     else:
         print(e)
 
-from pprint import pprint
+try:
+    import rapidjson as json
+except:
+    import json
+
+from hashlib import sha3_256
+from pathlib import os
+from time import time
 from websocket import enableTrace, create_connection
 
 try:
@@ -102,15 +100,19 @@ class WS_Articut:
                 print("WebSocket[Bulk] Connection Failed.", e)
         return self.ws.connected
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True, requestID=""):
         if self._wsCreateConnection():
+            if not requestID:
+                requestID = sha3_256(str(time()).encode("UTF-8")).hexdigest()
+
             payload = {"level": level,
                        "chemical": chemicalBOOL,
                        "emoji": emojiBOOL,
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
-                       "pinyin": pinyin}
+                       "pinyin": pinyin,
+                       "request_id": requestID}
             if userDefinedDICT:
                 payload["user_defined_dict_file"] = userDefinedDICT
             else:
@@ -186,9 +188,12 @@ class WS_Articut:
 
         return inputLIST
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", requestID=""):
         resultLIST = []
         if self._wsCreateConnection():
+            if not requestID:
+                requestID = sha3_256(str(time()).encode("UTF-8")).hexdigest()
+
             resultAppend = resultLIST.append
             inputLen = len(inputLIST)
             payload = {"level": level,
@@ -197,7 +202,8 @@ class WS_Articut:
                        "opendata_place": openDataPlaceBOOL,
                        "wikidata": wikiDataBOOL,
                        "index_with_pos": indexWithPOS,
-                       "pinyin": pinyin}
+                       "pinyin": pinyin,
+                       "request_id": requestID}
             if userDefinedDICT:
                 payload["user_defined_dict_file"] = userDefinedDICT
             else:
@@ -468,6 +474,7 @@ class WS_Articut:
 
 
 if __name__ == "__main__":
+    from pprint import pprint
     PORT = 8964
     URL = "127.0.0.1"
     BulkSize = 20
@@ -478,7 +485,7 @@ if __name__ == "__main__":
 
     articut = WS_Articut(url=URL, port=PORT, bulkSize=BulkSize)
 
-    startTime = time.time()
+    startTime = time()
     # 一次一句 N=1
     for inputSTR in inputLIST:
         resultDICT = articut.parse(inputSTR, "lv2")
@@ -491,4 +498,4 @@ if __name__ == "__main__":
     resultLIST = articut.mergeBulkResult(resultDICT)
     #pprint(resultLIST)
     pprint(articut.bulk_getContentWordLIST(resultLIST))
-    print("Execution Time:", round(time.time() - startTime, 4))
+    print("Execution Time:", round(time() - startTime, 4))

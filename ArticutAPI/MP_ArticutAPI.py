@@ -14,8 +14,15 @@ except Exception as e:
     else:
         print(e)
 
+try:
+    import rapidjson as json
+except:
+    import json
+
+from hashlib import sha3_256
 from pathlib import os, sys
 from pprint import pprint
+from time import time
 
 if getattr(sys, 'frozen', False):
     from multiprocessing.dummy import Pool, freeze_support
@@ -33,11 +40,6 @@ except: #供外部載入時使用。
     from .Toolkit.toolkits import *
     from .Toolkit.NER import GenericNER
 
-import time
-try:
-    import rapidjson as json
-except:
-    import json
 
 class MP_Articut:
     def __init__(self, url="http://127.0.0.1", port="8964", bulkSize=20, userDefinedDictFILE=None, processes=-1):
@@ -87,14 +89,17 @@ class MP_Articut:
     def __str__(self):
         return "Articut Multiprocessing API"
 
-    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True):
+    def parse(self, inputSTR, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", autoBreakBOOL=True, requestID=""):
+        if not requestID:
+            requestID = sha3_256(str(time()).encode("UTF-8")).hexdigest()
         payload = {"level": level,
                    "chemical": chemicalBOOL,
                    "emoji": emojiBOOL,
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
                    "index_with_pos": indexWithPOS,
-                   "pinyin": pinyin}
+                   "pinyin": pinyin,
+                   "request_id": requestID}
         if userDefinedDICT:
             payload["user_defined_dict_file"] = userDefinedDICT
         else:
@@ -169,9 +174,12 @@ class MP_Articut:
 
         return inputLIST
 
-    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def bulk_parse(self, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", requestID=""):
         inputLIST2 = []
         inputLen = len(inputLIST)
+
+        if not requestID:
+            requestID = sha3_256(str(time()).encode("UTF-8")).hexdigest()
 
         for i in range(0, inputLen, self.bulkSize):
             if i+self.bulkSize > inputLen:
@@ -191,7 +199,8 @@ class MP_Articut:
         #print(inputLIST2)
         for i, inputLIST in enumerate(inputLIST2):
             resultAppend(pool.apply_async(self._run, (i, inputLIST, level,
-                userDefinedDICT, chemicalBOOL, emojiBOOL, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS, timeRef, pinyin,),))
+                                                      userDefinedDICT, chemicalBOOL, emojiBOOL, openDataPlaceBOOL, wikiDataBOOL, indexWithPOS,
+                                                      timeRef, pinyin, requestID,),))
         pool.close()
         pool.join()
 
@@ -201,7 +210,7 @@ class MP_Articut:
 
         return [x[1] for x in resultLIST]
 
-    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO"):
+    def _run(self, index, inputLIST, level="lv2", userDefinedDICT={}, chemicalBOOL=True, emojiBOOL=True, openDataPlaceBOOL=False, wikiDataBOOL=False, indexWithPOS=False, timeRef=None, pinyin="BOPOMOFO", requestID=""):
         payload = {"input_list": inputLIST,
                    "level": level,
                    "chemical": chemicalBOOL,
@@ -210,7 +219,8 @@ class MP_Articut:
                    "opendata_place": openDataPlaceBOOL,
                    "wikidata": wikiDataBOOL,
                    "index_with_pos": indexWithPOS,
-                   "pinyin": pinyin}
+                   "pinyin": pinyin,
+                   "request_id": "%s_%d" % (requestID, index)}
         if timeRef:
             payload["time_ref"] = str(timeRef)
         #print(payload)
@@ -478,7 +488,7 @@ if __name__ == "__main__":
     inputLIST = open("{}/as_test_1k.utf8".format(os.path.dirname(os.path.abspath(__file__))), "r", encoding="UTF-8").read().split("\n")[:20]
     articut = MP_Articut(url=URL, port=PORT, bulkSize=BulkSize)
 
-    startTime = time.time()
+    startTime = time()
     # 一次一句 N=1
     for inputSTR in inputLIST:
         resultDICT = articut.parse(inputSTR, "lv2")
@@ -492,4 +502,4 @@ if __name__ == "__main__":
     #pprint(resultLIST)
     pprint(articut.bulk_getContentWordLIST(resultLIST))
 
-    print("Execution Time:", round(time.time() - startTime, 4))
+    print("Execution Time:", round(time() - startTime, 4))
