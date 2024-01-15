@@ -97,31 +97,23 @@ class Articut:
         self.chemicalBOOL = chemicalBOOL
         self.emojiBOOL = emojiBOOL
         url = "{}/Articut/API/".format(self.url)
-        if level in ("lv1", "lv2"):
-            payload = {"username": self.username,                      #String Type：使用者帳號 email
-                       "api_key": self.apikey,                         #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
-                       "version": self.version,                        #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
-                       "level": level.lower(),                         #String Type：指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
-                       "chemical": self.chemicalBOOL,                  #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
-                       "emoji": self.emojiBOOL,                        #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
-                       "opendata_place": self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
-                       "wikidata": self.wikiDataBOOL,                  #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
-                       "request_id": requestID}
-        else:
-            payload = {"username": self.username,                      #String Type：使用者帳號 email
-                       "api_key": self.apikey,                         #String Type：使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
-                       "version": self.version,                        #String Type：指定斷詞引擎版本號。預設為最新版 "latest"
-                       "level": level.lower(),                         #String Type：指定為 lv3 語意斷詞。
-                       "chemical": self.chemicalBOOL,                  #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
-                       "emoji": self.emojiBOOL,                        #Bool Type：為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
-                       "opendata_place": self.openDataPlaceAccessBOOL, #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
-                       "wikidata": self.wikiDataBOOL,                  #Bool Type：為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
-                       "index_with_pos": False,
-                       "pinyin": pinyin,
-                       "request_id": requestID}
+
+        # level in ("lv1", "lv2"):
+        payload = {"username": self.username,                      # String Type： 使用者帳號 email
+                   "api_key": self.apikey,                         # String Type： 使用者 api key。若未提供，預設使用每小時更新 2000 字的公用額度。
+                   "version": self.version,                        # String Type： 指定斷詞引擎版本號。預設為最新版 "latest"
+                   "level": level.lower(),                         # String Type： 指定為 lv1 極致斷詞 (斷得較細) 或 lv2 詞組斷詞 (斷得較粗)。
+                   "chemical": self.chemicalBOOL,                  # Bool Type： 為 True 或 False，表示是否允許 Articut 讀取 Chemical 偵測化學類名稱。
+                   "emoji": self.emojiBOOL,                        # Bool Type： 為 True 或 False，表示是否允許 Articut 偵測 Emoji 符號。
+                   "opendata_place": self.openDataPlaceAccessBOOL, # Bool Type： 為 True 或 False，表示是否允許 Articut 讀取 OpenData 中的地點名稱。
+                   "wikidata": self.wikiDataBOOL,                  # Bool Type： 為 True 或 False，表示是否允許 Articut 讀取 WikiData 中的條目名稱。
+                   "request_id": requestID}                        # String Type： Only used in ArticutDocker service for evaluation purpose.
+
+        if level in ("lv3"):
+            payload.update({"index_with_pos": indexWithPOS,
+                            "pinyin": pinyin})
             if timeRef:
                 payload["time_ref"] = str(timeRef)
-
 
         if userDefinedDictFILE:
             try:
