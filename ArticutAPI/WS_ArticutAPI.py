@@ -19,8 +19,12 @@ try:
 except:
     import json
 
+try:
+    from pathlib import os, sys
+except:
+    import os, sys
+
 from hashlib import sha3_256
-from pathlib import os
 from time import time
 from websocket import enableTrace, create_connection
 

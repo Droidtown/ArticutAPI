@@ -19,8 +19,12 @@ try:
 except:
     import json
 
+try:
+    from pathlib import os, sys
+except:
+    import os, sys
+
 from hashlib import sha3_256
-from pathlib import os, sys
 from pprint import pprint
 from time import time
 

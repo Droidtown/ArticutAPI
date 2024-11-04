@@ -10,3 +10,5 @@ except:
     from Toolkit.localRE import TaiwanAddressAnalizer
     from Toolkit.toolkits import *
     from Toolkit.NER import GenericNER
+
+#__all__ = ["Articut"]
