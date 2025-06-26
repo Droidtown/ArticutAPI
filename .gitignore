@@ -8,3 +8,7 @@ ForTest
 build
 dist
 build.md
+
+# poetry
+*.lock
+*.toml
