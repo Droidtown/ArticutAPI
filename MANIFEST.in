@@ -1,1 +1,2 @@
 include ArticutAPI/Toolkit/data/*json
+include ArticutAPI/Toolkit/data/strangerRoad.pj
