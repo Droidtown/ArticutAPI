@@ -7,24 +7,21 @@ import pickle
 import re
 
 class TaiwanAddressAnalizer:
-    def __init__(self, locale=None):
-        if locale in ("TW", "CN"):
-            pass
-        else:
-            locale="TW"
+    def __init__(self, locale="TW"):
+        self.locale = locale
         self.addTWPat = re.compile("(?<=<KNOWLEDGE_addTW>)[^<]*?(?=</KNOWLEDGE_addTW>)")
         self.TWaddPatDICT = {"countyPat"      : r"[^\s][^市]縣",
                              "cityPat"        : r"[^是在於及、，\s]{1,2}市",
                              "districtPat"    : r"那瑪夏區|[^市及、，\s]+?.社?區|[東西南北中]區",
                              "townshipPat"    : r"(?:阿里山|三地門|太麻里)鄉|..鄉|[^縣].里(?!區)",
-                             "townPat"        : r"[^\s][^\s]鎮",
+                             "townPat"        : r"[^\s][^\s區]鎮(?!區)",
                              "villagePat"     : r"(?:(?<=[縣市區鄉鎮鄰路街段])(?:[^\s縣市區鄉鎮鄰路街段]+)?新?村|[^\s][^\s]新?村)(?!路)",
                              "neighborhoodPat": r"(?:\s?[零一二三四五六七八九十廿卅０-９\d]+?\s?鄰)",
                              "roadPat"        : r"市[政場](?:[北南中]|[1-7一二三四五六七]){0,2}路|" \
-                                                r"市府路|市港[^\s]路|[新環村盛果]市[^\s]?[路街]|美村路|市民大道|市宅街|[埔菜美元西]市[路街]|" \
-                                                r"(?<=[縣市區鄉鎮里村鄰])(?:{{STRANGE_ROAD}}[^市區鄉鎮村路及鄰、，]{1,4}(?:[路街](?!里)|大道)(?:[零一二三四五六七八九十廿卅百０-９\d]+?街)?)",
+                                                r"市府路|市港[^\s]路|[新環村盛果]市[^\s]?[路街]|美村路|市民大道|市宅街|[埔菜美元西]市[路街]|鎮中路|" \
+                                                r"(?<=[縣市區鄉鎮里村鄰])(?:{{STRANGE_ROAD}}\s?[12]\d{2}\s?[縣市]道|[^市區鄉鎮村路及鄰、，]{1,4}(?:[路街](?!里)|大道)(?:[零一二三四五六七八九十廿卅百０-９\d]+?街)?)",
                              "sectionPat"     : r"\s?[零一二三四五六七八九十廿卅百０-９\d]*?\s?段",
-                             "alleyPat"       : r"(?:國中|市場|新市.|七里溪|(?:[^縣市區鄉鎮里村路街段]{1,2}|鐵路)[零一二三四五六七八九十廿卅百０-９\d]*?|\s?[零一二三四五六七八九十廿卅百０-９\d]*?)\s?巷(?:[零一二三四五六七八九十廿卅百０-９\d]*?\s?弄)?",
+                             "alleyPat"       : r"(?:國中|市場|新市.|七里溪|(?:[^縣市區鄉鎮里村路街段]{1,2}|鐵路)[零一二三四五六七八九十廿卅百０-９\d]*?|\s?[零一二三四五六七八九十廿卅百０-９\d東西南北]*?)\s?巷(?:[零一二三四五六七八九十廿卅百０-９\d]*?\s?弄)?",
                              "numberPat"      : r"(?:\s?[零一二三四五六七八九十廿卅百０-９\d]*?\s?[之\-]\s?)?\s?[零一二三四五六七八九十廿卅百０-９\d]*?\s?號(?:[之\-]\s?[零一二三四五六七八九十廿卅百０-９\d]+?)?",
                              "floorPat"       : r"\s?[零一二三四五六七八九十廿卅百０-９\d]*?\s?[fF樓]",
                              "roomPat"        : r"\s?(?:[a-zA-Z零一二三四五六七八九十廿卅百\d０-９]+?)\s?(?:室?$)"}
@@ -203,7 +200,7 @@ class TaiwanAddressAnalizer:
                 sRoadReSTR = ""
                 wordSET = set("".join(x["result_segmentation"])).intersection(self.stragerRoadPatDICT)
                 if wordSET:
-                    sRoadReSTR = fr"(?:{'|'.join([self.stragerRoadPatDICT[w] for w in wordSET if w in self.stragerRoadPatDICT])})(?=\s?\d+(?:-\d+)?\s?號)|"
+                    sRoadReSTR = fr"(?:{'|'.join([self.stragerRoadPatDICT[w] for w in wordSET if w in self.stragerRoadPatDICT])})(?=\s?[０-９\d]+(?:[之\-][０-９\d]+)?\s?號)|"
                 resultAppend(self._getAddLIST(x, self.TWaddPatDICT["roadPat"].replace("{{STRANGE_ROAD}}", sRoadReSTR)))
                 if not indexWithPOS and resultLIST:
                     resultLIST[i] = self._addIndexConverter(x, resultLIST)
@@ -211,7 +208,7 @@ class TaiwanAddressAnalizer:
             sRoadReSTR = ""
             wordSET = set("".join(ArticutResultDICT["result_segmentation"])).intersection(self.stragerRoadPatDICT)
             if wordSET:
-                sRoadReSTR = fr"(?:{'|'.join([self.stragerRoadPatDICT[w] for w in wordSET if w in self.stragerRoadPatDICT])})(?=\s?\d+(?:-\d+)?\s?號)|"
+                sRoadReSTR = fr"(?:{'|'.join([self.stragerRoadPatDICT[w] for w in wordSET if w in self.stragerRoadPatDICT])})(?=\s?[０-９\d]+(?:[之\-][０-９\d]+)?\s?號)|"
             resultLIST = self._getAddLIST(ArticutResultDICT, self.TWaddPatDICT["roadPat"].replace("{{STRANGE_ROAD}}", sRoadReSTR))
             if not indexWithPOS and resultLIST:
                 resultLIST = self._addIndexConverter(ArticutResultDICT, resultLIST)

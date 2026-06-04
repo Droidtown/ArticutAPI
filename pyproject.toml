@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "ArticutAPI"
+version = "1.4.0"
+description = "Articut NLP system provides not only finest results on Chinese word segmentaion (CWS), Part-of-Speech tagging (POS) and Named Entity Recogintion tagging (NER), but also the fastest online API service in the NLP industry."
+authors = ["Droidtown Linguistic Tech. Co. Ltd. <info@droidtown.co>"]
+readme = "README.md"
+license = "MIT"
+keywords = [
+    "NLP", "NLU", "CWS", "POS", "NER", "AI",
+    "artificial intelligence",
+    "Chinese word segmentation",
+    "computational linguistics",
+    "language",
+    "linguistics",
+    "graphQL",
+    "natural language",
+    "natural language processing",
+    "natural language understanding",
+    "parsing",
+    "part-of-speech-embdding",
+    "part-of-speech-tagger",
+    "pos-tagger",
+    "pos-tagging",
+    "syntax",
+    "tagging",
+    "text analytics"
+]
+homepage = "https://github.com/Droidtown/ArticutAPI"
+repository = "https://github.com/Droidtown/ArticutAPI"
+documentation = "https://api.droidtown.co/ArticutAPI/document/"
+
+[[tool.poetry.packages]]
+include = "ArticutAPI"
+
+[tool.poetry.dependencies]
+python = ">=3.6,<4.0"
+requests = ">=2.25.1"
+emoji = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
