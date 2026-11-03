@@ -40,8 +40,8 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=[
-        "requests >= 2.25.1",
-        "emoji",
+        "requests >= 2.34.2",
+        "emoji>=2.16.0",
         #"graphene"
     ],
     classifiers=[
