@@ -42,6 +42,8 @@ setuptools.setup(
     install_requires=[
         "requests >= 2.34.2",
         "emoji>=2.16.0",
+        "certifi>=2026.10.23",
+        "urllib3>=2.8.0",
         #"graphene"
     ],
     classifiers=[
